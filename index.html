@@ -247,16 +247,17 @@ V.pay=function(){const e=wk,f=addD(wk,6);let tot=0,due=0;
  const wn=[...new Set([...S.emp,...S.prod.filter(p=>!p.grp).flatMap(p=>p.emps||[p.emp]),...S.sales.map(x=>x.loader).filter(x=>x&&!x.startsWith('G:'))])];
  const paidOf=k=>sum(S.wp.filter(w=>w.emp==k&&w.week==e),w=>w.amt);
  const bal=(v,k)=>{const b=v-paidOf(k);tot+=v;if(b>0)due+=b;return b};
- const btn=(k,b)=>b>0.005?`<button class="s" data-n="${esc(k)}" onclick="payW(this.dataset.n,${b})">Pay</button>`:'';
- const st=b=>b>0.005?`<span class="wn">${m(b)}</span>`:'<span class="ok">Settled</span>';
+ const btn=(k,b,al)=>b>0.005||al?`<button class="s" data-n="${esc(k)}" onclick="payW(this.dataset.n,${b})">Pay</button>`:'';
+ const st=(b,v,pd)=>b>0.005?`<span class="wn">${m(b)}</span>`:b<-0.005?`<span class="ok">Advance ${m(-b)}</span>`:(v||pd)?'<span class="ok">Settled</span>':'<span class="mu">No work this week</span>';
  const gr=gn.map(n=>{const k='G:'+n,g=S.groups.find(x=>x.name==n),mc=g?g.members.length:0,P=S.prod.filter(p=>p.grp==n&&inR(p.date,e,f)),L=S.sales.filter(x=>x.loader==k&&inR(x.date,e,f)),pw=sum(P,p=>p.qty*p.rate),lw=sum(L,x=>x.loaded*x.lrate),b=bal(pw+lw,k);
-  return row(['\ud83d\udc65 '+esc(n),mc||'\u2014',q(sum(P,p=>p.qty)),m(pw),q(sum(L,x=>x.loaded)),m(lw),`<b>${m(pw+lw)}</b>`,mc?m((pw+lw)/mc):'\u2014',m(paidOf(k)),st(b),btn(k,b)],['','r','r','r','r','r','r','r','r','r',''])}).join('');
+  return row(['\ud83d\udc65 '+esc(n),mc||'\u2014',q(sum(P,p=>p.qty)),m(pw),q(sum(L,x=>x.loaded)),m(lw),`<b>${m(pw+lw)}</b>`,mc?m((pw+lw)/mc):'\u2014',m(paidOf(k)),st(b,pw+lw,paidOf(k)),btn(k,b,1)],['','r','r','r','r','r','r','r','r','r',''])}).join('');
  const wr=wn.map(n=>{const P=S.prod.filter(p=>!p.grp&&(p.emps||[p.emp]).includes(n)&&inR(p.date,e,f)),L=S.sales.filter(x=>x.loader==n&&inR(x.date,e,f)),pw=sum(P,p=>sh(p)*p.rate),lw=sum(L,x=>x.loaded*x.lrate),b=bal(pw+lw,n);if(!(pw+lw)&&!paidOf(n))return '';
-  return row([esc(n),q(sum(P,sh)),m(pw),q(sum(L,x=>x.loaded)),m(lw),`<b>${m(pw+lw)}</b>`,m(paidOf(n)),st(b),btn(n,b)],['','r','r','r','r','r','r','r',''])}).join('');
+  return row([esc(n),q(sum(P,sh)),m(pw),q(sum(L,x=>x.loaded)),m(lw),`<b>${m(pw+lw)}</b>`,m(paidOf(n)),st(b,pw+lw,paidOf(n)),btn(n,b)],['','r','r','r','r','r','r','r',''])}).join('');
  const ph=[...S.wp].sort((a,b)=>b.date<a.date?-1:1).slice(0,40).map(w=>row([w.date,esc(w.emp.replace(/^G:/,'\ud83d\udc65 ')),w.week,m(w.amt),delB('wp',w.id)],['','','','r',''])).join('');
  return `<div class="cd"><h2>Weekly pay</h2><div class="f"><div><label>Week starting (Monday)</label><input type="date" id="wk" value="${wk}" onchange="wk=mon(this.value);render()"></div>
  <div><label>Add worker</label><input id="en" placeholder="Name"></div><button class="b" onclick="addEmp()">Add worker</button></div>
  <p class="k">Week: ${e} to ${f}. Pay = bricks \u00d7 rate at the time + bricks loaded \u00d7 loading rate. Work entered for a <b>group</b> is paid to the group as a whole; work entered for ticked individuals is paid to those workers.</p></div>
+ <div class="cd"><h2>Pay a group or worker</h2><div class="f"><div><label>Pay to</label><select id="wpy">${gn.length?`<optgroup label="Groups">${gn.map(n=>`<option value="G:${esc(n)}">\ud83d\udc65 ${esc(n)}</option>`).join('')}</optgroup>`:''}<optgroup label="Individuals">${S.emp.map(n=>`<option>${esc(n)}</option>`).join('')}</optgroup></select></div><div><label>Amount</label><input type="number" id="wpa" step="any"></div><div><label>Payment date</label><input type="date" id="wpd" value="${today()}"></div><button class="b" onclick="payNow()">Record payment</button></div><p class="k">Recorded against the week shown above (${e} to ${f}). Use it for advances or part payments; the balances below update. If a group shows "No work this week", no production or loading was saved for that group in this week \u2013 check the week date above.</p></div>
  <div class="cd"><h2>Group pay</h2>${tbl(['Group','Members','Bricks / units','Production pay','Loaded','Loading pay','Total','Per member (equal)','Paid','Balance',''],gr)}</div>
  <div class="cd"><h2>Individual workers</h2>${tbl(['Worker','Bricks / units (share)','Production wage','Loaded','Loading wage','Total','Paid','Balance',''],wr)}
  <p class="k">Workers: ${S.emp.map(n=>`${esc(n)} <a href="#" onclick="rmEmp('${esc(n)}');return false">\u2715</a>`).join(' \u00b7 ')||'none'}</p></div>
@@ -286,7 +287,7 @@ function prT(){const t=T().find(x=>x.id==val('ps'));if(t)$('pr').placeholder=t.w
 function addProd(){const em=[...document.querySelectorAll('.pc:checked')].map(c=>c.value),z=val('ps'),t=T().find(x=>x.id==z)||{name:TN(z),kind:'brick',wage:0},wkn=t.kind=='work',qt=num('pq'),cm=num('pcm');
  if(!em.length)return alert('Select at least one worker');if(qt<=0)return alert('Enter the quantity');if(!wkn&&cm<=0)return alert('Enter cement bags used');
  const bm=wkn?0:val('pmm')!==''?num('pmm'):cm*S.set.rm,bs=wkn?0:val('pss')!==''?num('pss'):cm*S.set.rs;
- S.prod.push(Object.assign({id:uid(),date:val('pd'),emps:em,emp:em.join(', '),size:z,sn:t.name,qty:qt,rate:val('pr')!==''?num('pr'):t.wage,u:wkn?{c:0,m:0,s:0}:{c:cm,m:bk(bm),s:bk(bs)},grp:pg,note:val('pnote')||''},wkn?{k:'work'}:{bu:{m:bm,s:bs,l:S.set.bk}}));pg='';save();render()}
+ S.prod.push(Object.assign({id:uid(),date:val('pd'),emps:em,emp:em.join(', '),size:z,sn:t.name,qty:qt,rate:val('pr')!==''?num('pr'):t.wage,u:wkn?{c:0,m:0,s:0}:{c:cm,m:bk(bm),s:bk(bs)},grp:pg||((S.groups.find(g=>g.members.length==em.length&&g.members.every(x=>em.includes(x)))||{}).name||''),note:val('pnote')||''},wkn?{k:'work'}:{bu:{m:bm,s:bs,l:S.set.bk}}));pg='';save();render()}
 function sl(){const t=sum(TB(),b=>num('q_'+b.id)*num('r_'+b.id));$('st').value=t;$('sload').placeholder=sum(TB(),b=>num('q_'+b.id))}
 function addSale(){const it=TB().map(b=>({size:b.id,name:b.name,qty:num('q_'+b.id),rate:num('r_'+b.id)})).filter(i=>i.qty>0);
  if(!it.length||!val('sc').trim())return alert('Enter customer and quantity');const tot=sum(it,i=>i.qty*i.rate),qt=sum(it,i=>i.qty),id=uid();
@@ -310,7 +311,8 @@ function addEmp(){const n=val('en').trim();if(n&&!S.emp.includes(n)){S.emp.push(
 function rmEmp(n){if(confirm('Remove '+n+' from list? Past records stay.')){S.emp=S.emp.filter(x=>x!=n);save();render()}}
 function rcv(id){const s=S.sales.find(x=>x.id==id),b=s.total-paid(id),a=parseFloat(prompt('Amount received from '+s.cust+' (balance '+b+')',b));
  if(a>0){S.pay.push({id:uid(),sid:id,date:today(),amt:a});const nb=b-a;if(nb>0.005){const d=prompt('Next follow-up date (YYYY-MM-DD)',s.due||'');if(d)s.due=d}save();render()}}
-function payW(n,b){const a=parseFloat(prompt('Pay '+n.replace(/^G:/,'group ')+' (balance '+b+')',b));if(a>0){S.wp.push({id:uid(),emp:n,week:wk,date:today(),amt:a});save();render()}}
+function payNow(){const k=val('wpy'),a=num('wpa');if(!k||a<=0)return alert('Choose who to pay and enter the amount');S.wp.push({id:uid(),emp:k,week:wk,date:val('wpd'),amt:a});save();render()}
+function payW(n,b){const a=parseFloat(prompt('Pay '+n.replace(/^G:/,'group ')+' (balance '+Math.max(b,0)+')',b>0?b:''));if(a>0){S.wp.push({id:uid(),emp:n,week:wk,date:today(),amt:a});save();render()}}
 function addExp(){if(!num('xa')||!val('xc').trim())return alert('Enter category and amount');S.exp.push({id:uid(),date:val('xd'),cat:val('xc').trim(),amt:num('xa'),note:val('xn')});save();render()}
 function saveSet(){const s=S.set;s.biz=val('s_biz');s.cur=val('s_cur');['load','warn'].forEach(k=>s[k]=num('s_'+k));
  s.oc=num('s_oc')||7;s.bk=num('s_bk')||15;s.rm=num('s_rm');s.rs=num('s_rs');s.lc={m:num('s_lm')||1,s:num('s_ls')||1};save();render();alert('Saved')}
