@@ -43,7 +43,7 @@ window.FIREBASE_CONFIG={apiKey:"AIzaSyDwPCcD09xEHZg1uOEZiWpk7JqyXvyBAFM",authDom
 <div id="modal"></div>
 <script>
 const K='brickunit_v1';
-const D={groups:[],vendors:[],vp:[],set:{cv:{m:{ft:100,bg:20},s:{ft:100,bg:20}},rm:1,rs:1,biz:'My Brick Unit',cur:'₹',w4:1.5,w6:2,load:0.5,p4:8,p6:11,warn:3,
+const D={groups:[],vendors:[],vp:[],set:{lc:{m:100,s:100},bk:15,oc:7,rm:1,rs:1,biz:'My Brick Unit',cur:'₹',w4:1.5,w6:2,load:0.5,p4:8,p6:11,warn:3,
  rec:{4:{n:1000,c:10,m:30,s:20},6:{n:1000,c:14,m:40,s:28}}},emp:[],prod:[],pur:[],sales:[],pay:[],exp:[],wp:[]};
 let S=structuredClone(D);
 const COLS=['prod','pur','sales','pay','exp','wp','vp','groups','vendors'];
@@ -72,6 +72,7 @@ function softRender(){const m=$('main'),vals={};m.querySelectorAll('input[id],se
  if($('um')&&vals.um&&vals.um!='c')uChg();
  for(const id in vals){const e=$(id);if(e&&id!='bk')e[e.type=='checkbox'?'checked':'value']=vals[id]}
  m.querySelectorAll('input[type=checkbox]').forEach((e,i)=>{if(i<cks.length)e.checked=cks[i]});
+ if($('um'))uPv();
  if(fid&&$(fid))$(fid).focus()}
 window.softRender=softRender;
 function render(){$('ttl').textContent=S.set.biz;
@@ -163,7 +164,7 @@ set(){const s=S.set;return `<div class="cd"><h2>Business & rates</h2><div class=
  <div><label>Wage / 4 inch brick</label><input type="number" id="s_w4" step="any" value="${s.w4}"></div><div><label>Wage / 6 inch brick</label><input type="number" id="s_w6" step="any" value="${s.w6}"></div>
  <div><label>Loading charge / brick</label><input type="number" id="s_load" step="any" value="${s.load}"></div><div><label>Sale price 4 inch (default)</label><input type="number" id="s_p4" step="any" value="${s.p4}"></div>
  <div><label>Sale price 6 inch (default)</label><input type="number" id="s_p6" step="any" value="${s.p6}"></div><div><label>Reorder warning (days left)</label><input type="number" id="s_warn" value="${s.warn}"></div></div></div>
- <div class="cd"><h2>Material usage per 1 cement bag</h2><p class="k">Granite metal and sand (in loads) deducted for every 1 cement bag used in production. Fractions allowed (e.g. 0.05). Changes apply to new entries only.</p><div class="f"><div><label>Granite metal loads per 1 cement bag</label><input type="number" id="s_rm" step="any" value="${s.rm}"></div><div><label>Granite sand loads per 1 cement bag</label><input type="number" id="s_rs" step="any" value="${s.rs}"></div><div><label>Feet in 1 load – granite metal</label><input type="number" id="s_fm" step="any" value="${s.cv.m.ft}"></div><div><label>Bags in 1 load – granite metal</label><input type="number" id="s_bm" step="any" value="${s.cv.m.bg}"></div><div><label>Feet in 1 load – granite sand</label><input type="number" id="s_fs" step="any" value="${s.cv.s.ft}"></div><div><label>Bags in 1 load – granite sand</label><input type="number" id="s_bs" step="any" value="${s.cv.s.bg}"></div></div><p class="k">The feet/bags per load are used to convert purchases entered in feet or bags into loads. Sample values – set yours.</p>
+ <div class="cd"><h2>Granite metal and sand – measuring</h2><p class="k">Metal and sand are stored in cubic feet (cu ft). Trucks bring loads and each load can differ, so you enter the cu ft per load on every purchase (the values below are only the default). Production usage is entered in buckets.</p><div class="f"><div><label>Bucket size (litres)</label><input type="number" id="s_bk" step="any" value="${s.bk}" oninput="cvt()"></div><div><label>Metal buckets per 1 cement bag</label><input type="number" id="s_rm" step="any" value="${s.rm}" oninput="cvt()"></div><div><label>Sand buckets per 1 cement bag</label><input type="number" id="s_rs" step="any" value="${s.rs}" oninput="cvt()"></div><div><label>Default cu ft per load – metal</label><input type="number" id="s_lm" step="any" value="${s.lc.m}"></div><div><label>Default cu ft per load – sand</label><input type="number" id="s_ls" step="any" value="${s.lc.s}"></div><div><label>Reorder cover (days of stock to buy)</label><input type="number" id="s_oc" value="${s.oc}"></div></div><p class="k" id="cvt"><b>${cvTxt(s.bk,s.rm,s.rs)}</b></p><p class="k">1 cu ft = 28.3 litres. These are sample values – set yours and change them any time. New production entries use the new values; old entries keep the values they were saved with.</p>
  ${[].map(z=>`<div class="f" style="margin-bottom:8px"><div><label>${z} inch: bricks (N)</label><input type="number" id="n${z}" value="${s.rec[z].n}"></div><div><label>Cement bags</label><input type="number" id="c${z}" step="any" value="${s.rec[z].c}"></div><div><label>Granite metal bags</label><input type="number" id="m${z}" step="any" value="${s.rec[z].m}"></div><div><label>Granite sand bags</label><input type="number" id="s${z}" step="any" value="${s.rec[z].s}"></div></div>`).join('')}
  <button class="b" onclick="saveSet()">Save settings</button> <span class="k">Changes apply to new entries only.</span></div>
  <div class="cd"><h2>Vendors</h2><div class="f"><div><label>Vendor name</label><input id="vn"></div><div><label>Supplies</label><div>${MAT.map(([k,n])=>`<label style="display:inline-flex;gap:4px;margin-right:10px;color:var(--tx);font-size:14px"><input type="checkbox" class="vc" value="${k}" style="width:auto">${n}</label>`).join('')}</div></div><button class="b" onclick="addVendor()">Add vendor</button></div>${tbl(['Vendor','Supplies',''],S.vendors.map(v=>row([esc(v.name),v.mats.map(k=>MAT.find(x=>x[0]==k)[1]).join(', '),delB('vendors',v.id)])).join(''))}<p class="k">Weekly payments and balances per vendor are in the Vendors tab.</p></div>
@@ -171,56 +172,61 @@ set(){const s=S.set;return `<div class="cd"><h2>Business & rates</h2><div class=
  <textarea id="bk" rows="4">${esc(JSON.stringify(S))}</textarea><p><button class="b" onclick="restore()">Restore from text</button></p></div>`}};
 
 const sh=p=>p.qty/(p.emps||[p.emp]).length;
-const UN={c:'bags',m:'loads',s:'loads'};
+const UN={c:'bags',m:'cu ft',s:'cu ft'};
+const bk=n=>n*S.set.bk/28.3168;
 const chk=(c,n)=>`<label style="display:inline-flex;gap:5px;align-items:center;margin:0 12px 6px 0;font-size:14px;color:var(--tx)"><input type="checkbox" class="${c}" value="${esc(n)}" style="width:auto">${esc(n)}</label>`;
 V.prod=function(){
- const rows=[...S.prod].sort((a,b)=>b.date<a.date?-1:1).slice(0,40).map(p=>row([p.date,esc((p.emps||[p.emp]).join(', ')),p.size+' inch',q(p.qty),q(p.u.c),q(p.u.m),q(p.u.s),m(p.qty*p.rate),delB('prod',p.id)],['','','','r','r','r','r','r'])).join('');
+ const rows=[...S.prod].sort((a,b)=>b.date<a.date?-1:1).slice(0,40).map(p=>row([p.date,esc((p.emps||[p.emp]).join(', ')),p.size+' inch',q(p.qty),q(p.u.c),q(p.u.m)+(p.bu?' ('+q(p.bu.m)+' bkt)':''),q(p.u.s)+(p.bu?' ('+q(p.bu.s)+' bkt)':''),m(p.qty*p.rate),delB('prod',p.id)],['','','','r','r','r','r','r'])).join('');
  const gl=S.groups.map(g=>row([esc(g.name),esc(g.members.join(', ')),delB('groups',g.id)])).join('');
  return `<div class="cd"><h2>Daily production entry</h2>${S.emp.length?`<label>Workers (tick, or tap a group)</label><div style="margin-bottom:6px">${S.groups.map(g=>`<button class="s" onclick="pickG('${g.id}')">👥 ${esc(g.name)}</button> `).join('')}</div><div>${S.emp.map(n=>chk('pc',n)).join('')}</div>
  <div class="f"><div><label>Date</label><input type="date" id="pd" value="${today()}"></div>
  <div><label>Brick size</label><select id="ps"><option value="4">4 inch</option><option value="6">6 inch</option></select></div>
  <div><label>Total bricks made</label><input type="number" id="pq" min="0"></div>
  <div><label>Cement bags used today</label><input type="number" id="pcm" step="any" oninput="pv()"></div>
- <div><label>Granite metal loads (optional)</label><input type="number" id="pmm" step="any" placeholder="auto"></div>
- <div><label>Granite sand loads (optional)</label><input type="number" id="pss" step="any" placeholder="auto"></div>
+ <div><label>Granite metal – buckets used</label><input type="number" id="pmm" step="any" oninput="this.dataset.d=this.value===''?'':1;pv()"></div>
+ <div><label>Granite sand – buckets used</label><input type="number" id="pss" step="any" oninput="this.dataset.d=this.value===''?'':1;pv()"></div>
  <div><label>Rate/brick (override)</label><input type="number" id="pr" step="any" placeholder="default"></div><button class="b" onclick="addProd()">Add</button></div>
- <p class="k" id="pv">Metal and sand are auto-deducted from the cement bags used (${S.set.rm} load metal and ${S.set.rs} load sand per bag — change in Settings). Wage is split equally among the selected workers.</p>`:`<p class="mu">Add workers first in the Weekly payroll tab.</p>`}</div>
+ <p class="k" id="pv">Defaults: 1 cement bag = ${S.set.rm} bucket(s) of metal (${bk(S.set.rm).toFixed(2)} cu ft) + ${S.set.rs} bucket(s) of sand (${bk(S.set.rs).toFixed(2)} cu ft); 1 bucket = ${S.set.bk} L = ${(S.set.bk/28.3168).toFixed(2)} cu ft. The bucket boxes fill in automatically from the cement bags — change them if that day was different. Defaults are set in Settings. Wage is split equally among the selected workers.</p>`:`<p class="mu">Add workers first in the Weekly payroll tab.</p>`}</div>
  <div class="cd"><h2>Worker groups</h2>${S.emp.length?`<div class="f"><div><label>Group name</label><input id="gname" placeholder="e.g. Team A"></div><button class="b" onclick="saveGroup()">Save group</button></div><div style="margin-top:8px">${S.emp.map(n=>chk('gc',n)).join('')}</div>`:''}${tbl(['Group','Members',''],gl)}</div>
- <div class="cd"><h2>Recent production</h2>${tbl(['Date','Workers','Size','Bricks','Cement (bags)','Metal (loads)','Sand (loads)','Wage',''],rows)}</div>`};
-function pv(){const c=num('pcm');$('pv').textContent='Auto deduction: '+q(c*S.set.rm)+' load granite metal, '+q(c*S.set.rs)+' load granite sand (leave the optional boxes empty to use these).'}
+ <div class="cd"><h2>Recent production</h2>${tbl(['Date','Workers','Size','Bricks','Cement (bags)','Metal (cu ft)','Sand (cu ft)','Wage',''],rows)}</div>`};
+function pv(){const c=num('pcm');[['pmm',S.set.rm],['pss',S.set.rs]].forEach(([id,k])=>{const e=$(id);if(!e.dataset.d)e.value=c?+(c*k).toFixed(2):''});
+ const a=num('pmm'),b=num('pss');$('pv').textContent=c?'Using '+q(a)+' buckets metal ('+q(bk(a))+' cu ft) and '+q(b)+' buckets sand ('+q(bk(b))+' cu ft) for '+q(c)+' cement bags. 1 bucket = '+S.set.bk+' L = '+(S.set.bk/28.3168).toFixed(2)+' cu ft.':'Enter the cement bags used and the metal and sand buckets fill in from your defaults.'}
 function pickG(id){const g=S.groups.find(x=>x.id==id);document.querySelectorAll('.pc').forEach(c=>c.checked=g.members.includes(c.value))}
 function saveGroup(){const n=val('gname').trim(),mb=[...document.querySelectorAll('.gc:checked')].map(c=>c.value);if(!n||!mb.length)return alert('Enter a group name and tick its workers');S.groups.push({id:uid(),name:n,members:mb});save();render()}
 function addProd(){const em=[...document.querySelectorAll('.pc:checked')].map(c=>c.value),z=val('ps'),qt=num('pq'),cm=num('pcm');
- if(!em.length)return alert('Select at least one worker');if(qt<=0)return alert('Enter bricks made');if(cm<=0)return alert('Enter cement bags used');
- S.prod.push({id:uid(),date:val('pd'),emps:em,emp:em.join(', '),size:z,qty:qt,rate:val('pr')!==''?num('pr'):S.set['w'+z],u:{c:cm,m:val('pmm')!==''?num('pmm'):cm*S.set.rm,s:val('pss')!==''?num('pss'):cm*S.set.rs}});save();render()}
+ if(!em.length)return alert('Select at least one worker');if(qt<=0)return alert('Enter bricks made');if(cm<=0)return alert('Enter cement bags used');const bm=val('pmm')!==''?num('pmm'):cm*S.set.rm,bs=val('pss')!==''?num('pss'):cm*S.set.rs;
+ S.prod.push({id:uid(),date:val('pd'),emps:em,emp:em.join(', '),size:z,qty:qt,rate:val('pr')!==''?num('pr'):S.set['w'+z],u:{c:cm,m:bk(bm),s:bk(bs)},bu:{m:bm,s:bs,l:S.set.bk}});save();render()}
 const SN={c:'cement',m:'metal',s:'sand'};
 let vw=mon(today());
 const vNames=()=>[...new Set([...S.vendors.map(v=>v.name),...S.pur.map(p=>p.vendor).filter(Boolean)])];
 const vBought=n=>sum(S.pur.filter(p=>p.vendor==n),p=>p.cost),vPaid=n=>sum(S.vp.filter(p=>p.vendor==n),p=>p.amt),vOwed=()=>sum(vNames(),n=>vBought(n)-vPaid(n));
-const uOpts=k=>k=='c'?[['bag','Bags']]:[['load','Loads'],['ft','Feet'],['bag','Bags']];
+const uOpts=k=>k=='c'?[['bag','Bags']]:[['load','Loads (truck)'],['ft','Cubic feet'],['bkt','Buckets']];
 const vOpts=k=>[...S.vendors.filter(x=>x.mats.includes(k)).map(x=>x.name),'Other / not listed'].map(n=>`<option>${esc(n)}</option>`).join('');
-const toBase=(k,u,n)=>k=='c'||u=='load'?n:u=='ft'?n/S.set.cv[k].ft:n/S.set.cv[k].bg;
-function uChg(){const k=val('um');$('uu').innerHTML=uOpts(k).map(([a,b])=>`<option value="${a}">${b}</option>`).join('');$('uv').innerHTML=vOpts(k);uPv()}
-function uPv(){const k=val('um'),n=num('uq'),b=toBase(k,val('uu'),n);$('upv').textContent=n?'= '+q(b)+' '+UN[k]+(k!='c'?' (about '+q(b*S.set.cv[k].ft)+' ft)':''):''}
-function addPur(){const k=val('um'),u=val('uu'),n=num('uq');if(!n)return alert('Enter quantity');S.pur.push({id:uid(),date:val('ud'),mat:k,vendor:val('uv'),qty:toBase(k,u,n),cost:num('uc'),en:n,eu:u});save();render()}
+const toBase=(k,u,n,lc)=>k=='c'?n:u=='load'?n*lc:u=='bkt'?bk(n):n;
+function uChg(){const k=val('um');$('uu').innerHTML=uOpts(k).map(([a,b])=>`<option value="${a}">${b}</option>`).join('');$('uv').innerHTML=vOpts(k);if(k!='c')$('ulc').value=S.set.lc[k];uPv()}
+function uPv(){const k=val('um'),u=val('uu'),n=num('uq'),ld=k!='c'&&u=='load';$('ulw').style.display=ld?'':'none';const b=toBase(k,u,n,num('ulc'));$('upv').textContent=n?'= '+q(b)+' '+UN[k]+(k!='c'?' (about '+q(b*28.3168/S.set.bk)+' buckets)':''):''}
+function addPur(){const k=val('um'),u=val('uu'),n=num('uq'),lc=num('ulc');if(!n)return alert('Enter quantity');if(k!='c'&&u=='load'&&lc<=0)return alert('Enter the cubic feet in this load');
+ S.pur.push(Object.assign({id:uid(),date:val('ud'),mat:k,vendor:val('uv'),qty:toBase(k,u,n,lc),cost:num('uc'),en:n,eu:u},k!='c'&&u=='load'?{lc}:{}));save();render()}
 function addVendor(){const n=val('vn').trim(),mt=[...document.querySelectorAll('.vc:checked')].map(c=>c.value);if(!n||!mt.length)return alert('Enter vendor name and tick what they supply');S.vendors.push({id:uid(),name:n,mats:mt});save();render()}
 function payV(n,b){const a=parseFloat(prompt('Pay '+n+' (balance '+b+')',b));if(a>0){S.vp.push({id:uid(),vendor:n,date:today(),amt:a});save();render()}}
-V.stock=function(){const st=stock(),U=(P,k)=>sum(P,p=>p.u[k]||0),cv=S.set.cv;
- const hist=[...S.pur].sort((a,b)=>b.date<a.date?-1:1).slice(0,30).map(p=>row([p.date,MAT.find(x=>x[0]==p.mat)[1],esc(p.vendor),p.en?q(p.en)+' '+({bag:'bags',load:'loads',ft:'ft'})[p.eu]:'—',q(p.qty)+' '+UN[p.mat],m(p.cost),m(p.qty?p.cost/p.qty:0),delB('pur',p.id)],['','','','r','r','r','r'])).join('');
- const dr=Array.from({length:14},(_,i)=>addD(today(),-i)).map(d=>{const P=S.prod.filter(p=>p.date==d);return row([d,q(sum(P,p=>p.qty)),q(U(P,'c')),q(U(P,'m'))+' ('+q(U(P,'m')*cv.m.ft)+' ft)',q(U(P,'s'))+' ('+q(U(P,'s')*cv.s.ft)+' ft)'],['','r','r','r','r'])}).join('');
+V.stock=function(){const st=stock(),U=(P,k)=>sum(P,p=>p.u[k]||0),bu=x=>x*28.3168/S.set.bk,gx=(k,v)=>q(v)+' ('+q(bu(v))+' bkt)';
+ const ent=p=>!p.en?'\u2014':p.eu=='load'?q(p.en)+' loads \u00d7 '+q(p.lc)+' cu ft':q(p.en)+' '+({bag:'bags',ft:'cu ft',bkt:'buckets',load:'loads'})[p.eu];
+ const hist=[...S.pur].sort((a,b)=>b.date<a.date?-1:1).slice(0,30).map(p=>row([p.date,MAT.find(x=>x[0]==p.mat)[1],esc(p.vendor),ent(p),q(p.qty)+' '+UN[p.mat],m(p.cost),m(p.qty?p.cost/p.qty:0),delB('pur',p.id)],['','','','r','r','r','r'])).join('');
+ const dr=Array.from({length:14},(_,i)=>addD(today(),-i)).map(d=>{const P=S.prod.filter(p=>p.date==d);return row([d,q(sum(P,p=>p.qty)),q(U(P,'c')),gx('m',U(P,'m')),gx('s',U(P,'s'))],['','r','r','r','r'])}).join('');
  const mr=[...new Set(S.prod.map(p=>p.date.slice(0,7)))].sort().reverse().slice(0,12).map(x=>{const P=S.prod.filter(p=>p.date.slice(0,7)==x),dn=new Set(P.map(p=>p.date)).size||1,c=U(P,'c'),me=U(P,'m'),sa=U(P,'s'),br=sum(P,p=>p.qty);
-  return row([x,dn,q(br),q(c),q(me)+' loads ('+q(me*cv.m.ft)+' ft)',q(sa)+' loads ('+q(sa*cv.s.ft)+' ft)',q(c/dn)+' bags · '+q(me/dn)+' · '+q(sa/dn)+' loads',c?q(br/c):'—'],['','r','r','r','r','r','r','r'])}).join('');
- return `<div class="cd"><h2>Current stock</h2>${tbl(['Material','Received','Used','In stock','Avg cost/unit','Avg use/day (14 d)','Days left'],MAT.map(([k,n])=>{const x=st[k];return row([n+' ('+UN[k]+')',q(x.b),q(x.u),`<b>${q(x.left)}</b>`+(k=='c'?'':' ('+q(x.left*cv[k].ft)+' ft)'),m(x.avg),q(x.use),x.dl===null?'—':q(Math.max(x.dl,0))],['','r','r','r','r','r',x.low?'bad':''])}).join(''))}
- <p class="k">Cement is counted in bags; granite metal and sand in loads (feet shown using your feet-per-load setting). Reminder triggers when stock will last ${S.set.warn} days or less.</p></div>
+  return row([x,dn,q(br),q(c),gx('m',me),gx('s',sa),q(c/dn)+' bags \u00b7 '+q(me/dn)+' \u00b7 '+q(sa/dn)+' cu ft',c?q(br/c):'\u2014'],['','r','r','r','r','r','r','r'])}).join('');
+ return `<div class="cd"><h2>Current stock</h2>${tbl(['Material','Received','Used','In stock','Avg cost/unit','Avg use/day (14 d)','Days left','Suggested order'],MAT.map(([k,n])=>{const x=st[k];return row([n+' ('+UN[k]+')',q(x.b),q(x.u),`<b>${q(x.left)}</b>`+(k=='c'?'':' ('+q(bu(x.left))+' bkt)'),m(x.avg),q(x.use),x.dl===null?'\u2014':q(Math.max(x.dl,0)),(()=>{const nd=x.use*S.set.oc-x.left;return x.use>0&&nd>0?(k=='c'?q(Math.ceil(nd))+' bags':q(nd)+' cu ft (\u2248 '+q(nd/S.set.lc[k])+' loads)'):'\u2014'})()],['','r','r','r','r','r',x.low?'bad':'',''])}).join(''))}
+ <p class="k">Cement is counted in bags. Granite metal and sand are counted in cubic feet (cu ft); bkt = ${S.set.bk} litre buckets. Reminder triggers when stock will last ${S.set.warn} days or less. Suggested order = average daily use × ${S.set.oc} days − stock in hand (loads use your default cu ft per load).</p></div>
  <div class="cd"><h2>Record purchase</h2><div class="f"><div><label>Date</label><input type="date" id="ud" value="${today()}"></div>
  <div><label>Material</label><select id="um" onchange="uChg()">${MAT.map(([k,n])=>`<option value="${k}">${n}</option>`).join('')}</select></div>
  <div><label>Vendor</label><select id="uv">${vOpts('c')}</select></div>
  <div><label>Quantity</label><input type="number" id="uq" step="any" oninput="uPv()"></div>
  <div><label>Measured in</label><select id="uu" onchange="uPv()">${uOpts('c').map(([a,b])=>`<option value="${a}">${b}</option>`).join('')}</select></div>
+ <div id="ulw" style="display:none"><label>Cubic feet in 1 load</label><input type="number" id="ulc" step="any" value="${S.set.lc.m}" oninput="uPv()"></div>
  <div><label>Total cost</label><input type="number" id="uc" step="any"></div><button class="b" onclick="addPur()">Add</button></div>
- <p class="k" id="upv"></p><p class="k">Add vendors in Settings. For sand/metal choose Loads, Feet or Bags; it is converted to loads automatically. To correct stock after a physical count, add a negative quantity with cost 0.</p></div>
- <div class="cd"><h2>Daily usage (last 14 days)</h2>${tbl(['Date','Bricks','Cement (bags)','Granite metal','Granite sand'],dr)}<p class="k">Usage comes from the cement bags you enter in Production, with metal and sand deducted by your per-bag ratio.</p></div>
- <div class="cd"><h2>Monthly usage</h2>${tbl(['Month','Days worked','Bricks','Cement (bags)','Granite metal','Granite sand','Avg per working day','Bricks per cement bag'],mr)}</div>
+ <p class="k" id="upv"></p><p class="k">For sand and metal choose Loads and enter how many cubic feet that truck load had (each load can differ). You can also enter cubic feet or buckets directly. To correct stock after a physical count, add a negative quantity with cost 0.</p></div>
+ <div class="cd"><h2>Daily usage (last 14 days)</h2>${tbl(['Date','Bricks','Cement (bags)','Granite metal (cu ft)','Granite sand (cu ft)'],dr)}<p class="k">Usage comes from the cement bags you enter in Production, with metal and sand deducted by your per-bag bucket ratio.</p></div>
+ <div class="cd"><h2>Monthly usage</h2>${tbl(['Month','Days worked','Bricks','Cement (bags)','Granite metal (cu ft)','Granite sand (cu ft)','Avg per working day','Bricks per cement bag'],mr)}</div>
  <div class="cd"><h2>Purchase history</h2>${tbl(['Date','Material','Vendor','Entered','Stock qty','Cost','Per unit',''],hist)}</div>`};
 V.ven=function(){const a=vw,b=addD(vw,6),names=vNames();let wt=0;
  const rows=names.map(n=>{const P=S.pur.filter(p=>p.vendor==n&&inR(p.date,a,b)),ds=MAT.map(([k])=>{const x=sum(P.filter(p=>p.mat==k),p=>p.qty);return x>0?q(x)+' '+UN[k]+' '+SN[k]:''}).filter(Boolean).join(', ')||'—';
@@ -232,6 +238,8 @@ V.ven=function(){const a=vw,b=addD(vw,6),names=vNames();let wt=0;
  ${tbl(['Vendor','Received this week','Bill this week','Paid this week','Total balance to pay',''],rows)}<p><b>This week’s bills: ${m(wt)} · Total owed to all vendors: ${m(vOwed())}</b></p></div>
  <div class="cd"><h2>This week’s deliveries</h2>${tbl(['Date','Vendor','Material','Quantity','Cost'],dl)}</div>
  <div class="cd"><h2>Payments made</h2>${tbl(['Date','Vendor','Amount',''],ph)}</div>`};
+const cvTxt=(l,rm,rs)=>{const b=(+l||0)/28.3168;return '1 bucket = '+(+l||0)+' litres = '+b.toFixed(2)+' cu ft. 1 cement bag uses '+(+rm||0)+' bucket(s) of metal = '+((+rm||0)*b).toFixed(2)+' cu ft and '+(+rs||0)+' bucket(s) of sand = '+((+rs||0)*b).toFixed(2)+' cu ft.'};
+function cvt(){$('cvt').innerHTML='<b>'+cvTxt(num('s_bk'),num('s_rm'),num('s_rs'))+'</b>'}
 /* ---- actions ---- */
 function addEmp(){const n=val('en').trim();if(n&&!S.emp.includes(n)){S.emp.push(n);save();render()}}
 function rmEmp(n){if(confirm('Remove '+n+' from list? Past records stay.')){S.emp=S.emp.filter(x=>x!=n);save();render()}}
@@ -246,7 +254,7 @@ function rcv(id){const s=S.sales.find(x=>x.id==id),b=s.total-paid(id),a=parseFlo
 function payW(n,b){const a=parseFloat(prompt('Pay '+n+' (balance '+b+')',b));if(a>0){S.wp.push({id:uid(),emp:n,week:wk,date:today(),amt:a});save();render()}}
 function addExp(){if(!num('xa')||!val('xc').trim())return alert('Enter category and amount');S.exp.push({id:uid(),date:val('xd'),cat:val('xc').trim(),amt:num('xa'),note:val('xn')});save();render()}
 function saveSet(){const s=S.set;s.biz=val('s_biz');s.cur=val('s_cur');['w4','w6','load','p4','p6','warn'].forEach(k=>s[k]=num('s_'+k));
- s.rm=num('s_rm');s.rs=num('s_rs');s.cv={m:{ft:num('s_fm')||1,bg:num('s_bm')||1},s:{ft:num('s_fs')||1,bg:num('s_bs')||1}};save();render();alert('Saved')}
+ s.oc=num('s_oc')||7;s.bk=num('s_bk')||15;s.rm=num('s_rm');s.rs=num('s_rs');s.lc={m:num('s_lm')||1,s:num('s_ls')||1};save();render();alert('Saved')}
 function restore(){try{const x=JSON.parse(val('bk'));if(!x.set)throw 0;if(confirm('Replace ALL data in the cloud database with this backup?')){S=Object.assign(structuredClone(D),x);S.set=Object.assign({},D.set,S.set);save();render()}}catch(e){alert('That backup text is not valid')}}
 function inv(id){const s=S.sales.find(x=>x.id==id),p=paid(id),M=$('modal');
  M.innerHTML=`<div><h2 style="margin:0">${esc(S.set.biz)}</h2><div style="color:#666">Invoice ${s.no} · ${s.date}</div><p><b>${esc(s.cust)}</b><br>${esc(s.phone||'')}</p>
