@@ -43,7 +43,7 @@ window.FIREBASE_CONFIG={apiKey:"AIzaSyDwPCcD09xEHZg1uOEZiWpk7JqyXvyBAFM",authDom
 <div id="modal"></div>
 <script>
 const K='brickunit_v1';
-const D={groups:[],vendors:[],vp:[],set:{lc:{m:100,s:100},bk:15,oc:7,rm:1,rs:1,biz:'My Brick Unit',cur:'₹',w4:1.5,w6:2,load:0.5,p4:8,p6:11,warn:3,
+const D={groups:[],vendors:[],vp:[],set:{lc:{m:100,s:100},bk:15,oc:7,rm:1,rs:1,biz:'My Brick Unit',cur:'₹',w4:1.5,w6:2,load:0.5,p4:8,p6:11,warn:3,badj:[],
  rec:{4:{n:1000,c:10,m:30,s:20},6:{n:1000,c:14,m:40,s:28}}},emp:[],prod:[],pur:[],sales:[],pay:[],exp:[],wp:[]};
 let S=structuredClone(D);
 const COLS=['prod','pur','sales','pay','exp','wp','vp','groups','vendors'];
@@ -64,7 +64,7 @@ const sum=(a,f)=>a.reduce((t,x)=>t+f(x),0);
 const inR=(d,a,b)=>d>=a&&d<=b;
 const MAT=[['c','Cement'],['m','Granite metal 1/4 inch'],['s','Granite sand']];
 let tab='dash',wk=mon(today()),pf='2000-01-01',pt='2999-12-31',pm=today().slice(0,7);
-const TABS=[['dash','Dashboard'],['prod','Production'],['stock','Raw materials'],['ven','Vendors'],['sales','Sales & invoices'],['pay','Weekly payroll'],['exp','Expenses'],['pnl','Profit & loss'],['set','Settings']];
+const TABS=[['dash','Dashboard'],['prod','Production'],['bst','Brick stock'],['stock','Raw materials'],['ven','Vendors'],['sales','Sales & invoices'],['pay','Weekly payroll'],['exp','Expenses'],['pnl','Profit & loss'],['set','Settings']];
 const go=t=>{tab=t;render()};
 function softRender(){const m=$('main'),vals={};m.querySelectorAll('input[id],select[id],textarea[id]').forEach(e=>vals[e.id]=e.type=='checkbox'?e.checked:e.value);
  const cks=[...m.querySelectorAll('input[type=checkbox]')].map(e=>e.checked),fid=document.activeElement&&document.activeElement.id;
@@ -108,6 +108,7 @@ dash(){const st=stock(),t=today(),tp=S.prod.filter(p=>p.date==t),r=recv(),mo=pnl
  <div class="cd"><div class="k">Total to collect</div><div class="v ${r.length?'wn':''}">${m(sum(r,x=>x.bal))}</div></div>
  <div class="cd"><div class="k">This month net profit</div><div class="v ${mo.net<0?'bad':'ok'}">${m(mo.net)}</div></div>
  <div class="cd"><div class="k">Month revenue</div><div class="v">${m(mo.rev)}</div></div><div class="cd"><div class="k">Owed to vendors</div><div class="v ${vOwed()>0.005?'wn':''}">${m(vOwed())}</div></div></div>
+ <div class="cd"><h2>Brick stock (ready to sell)</h2>${bstTbl(true)}</div>
  <div class="cd"><h2>Raw material stock</h2>${tbl(['Material','In stock','Avg use/day','Days left'],MAT.map(([k,n])=>row([n,q(st[k].left)+' '+UN[k],q(st[k].use),st[k].dl===null?'—':q(Math.max(st[k].dl,0))],['','','',st[k].low?'bad':'ok'])).join(''))}</div>`},
 prod(){const rows=[...S.prod].sort((a,b)=>b.date<a.date?-1:1).slice(0,40).map(p=>row([p.date,esc(p.emp),p.size+' inch',q(p.qty),m(p.rate),m(p.qty*p.rate),delB('prod',p.id)],['','','','r','r','r'])).join('');
  return `<div class="cd"><h2>Daily production entry</h2>${S.emp.length?`<div class="f"><div><label>Date</label><input type="date" id="pd" value="${today()}"></div>
@@ -293,7 +294,9 @@ function addProd(){const em=[...document.querySelectorAll('.pc:checked')].map(c=
  S.prod.push(Object.assign({id:uid(),date:val('pd'),emps:em,emp:em.join(', '),size:z,sn:t.name,qty:qt,rate:val('pr')!==''?num('pr'):t.wage,u:wkn?{c:0,m:0,s:0}:{c:cm,m:bk(bm),s:bk(bs)},grp:pg||((S.groups.find(g=>g.members.length==em.length&&g.members.every(x=>em.includes(x)))||{}).name||''),note:val('pnote')||''},wkn?{k:'work'}:{bu:{m:bm,s:bs,l:S.set.bk}}));pg='';save();render()}
 function sl(){const t=sum(TB(),b=>num('q_'+b.id)*num('r_'+b.id));$('st').value=t;$('sload').placeholder=sum(TB(),b=>num('q_'+b.id))}
 function addSale(){const it=TB().map(b=>({size:b.id,name:b.name,qty:num('q_'+b.id),rate:num('r_'+b.id)})).filter(i=>i.qty>0);
- if(!it.length||!val('sc').trim())return alert('Enter customer and quantity');const tot=sum(it,i=>i.qty*i.rate),qt=sum(it,i=>i.qty),id=uid();
+ if(!it.length||!val('sc').trim())return alert('Enter customer and quantity');const bl=bstock(),over=it.filter(i=>{const x=bl.find(y=>y.id==String(i.size));return (x?x.left:0)<i.qty});
+ if(over.length&&!confirm('Stock is lower than this sale for: '+over.map(i=>i.name+' (in stock '+q((bl.find(y=>y.id==String(i.size))||{left:0}).left)+')').join(', ')+'.\nSave the sale anyway?'))return;
+ const tot=sum(it,i=>i.qty*i.rate),qt=sum(it,i=>i.qty),id=uid();
  const no='INV-'+String(1+Math.max(0,...S.sales.map(x=>parseInt(String(x.no).replace(/\D/g,''))||0))).padStart(4,'0');
  S.sales.push({id,no,date:val('sd'),cust:val('sc').trim(),phone:val('sp'),items:it,total:tot,loaded:val('sload')!==''?num('sload'):qt,loaders:ldsel(),loader:ldsel()[0]||'',lrate:S.set.load,due:val('sf')});
  if(num('sa')>0)S.pay.push({id:uid(),sid:id,date:val('sd'),amt:Math.min(num('sa'),tot)});save();render();inv(id)}
@@ -309,6 +312,41 @@ V.sales=function(){const r=recv(),t=today();
  <p><button class="b" onclick="addSale()">Save sale</button></p></div>
  <div class="cd"><h2>Payments to follow up</h2>${tbl(['Invoice','Customer','Phone','Total','Balance','Follow-up',''],rr)}</div>
  <div class="cd"><h2>Invoices</h2>${tbl(['No.','Date','Customer','Loaded by','Bricks','Total','Status',''],li)}</div>`};
+
+/* ---- brick stock ---- */
+const bAdj=()=>S.set.badj||[];
+function bstock(){const t=today(),ms=t.slice(0,7)+'-01',o={};
+ const g=id=>{id=String(id);return o[id]||(o[id]={id,name:TN(id),prod:0,today:0,month:0,sold:0,adj:0,left:0})};
+ TB().forEach(b=>g(b.id));
+ S.prod.filter(p=>p.k!='work').forEach(p=>{const x=g(p.size);if(p.sn)x.name=TN(p.size)==String(p.size)?p.sn:x.name;x.prod+=+p.qty||0;if(p.date==t)x.today+=+p.qty||0;if(p.date>=ms&&p.date<=t)x.month+=+p.qty||0});
+ S.sales.forEach(s=>(s.items||[]).forEach(i=>{const x=g(i.size);if(i.name&&TN(i.size)==String(i.size))x.name=i.name;x.sold+=+i.qty||0}));
+ bAdj().forEach(a=>{g(a.size).adj+=+a.qty||0});
+ Object.values(o).forEach(x=>x.left=x.prod-x.sold+x.adj);
+ return Object.values(o).filter(x=>x.prod||x.sold||x.adj||TB().some(b=>String(b.id)==x.id))}
+function bstTbl(short){const L=bstock(),T0=k=>sum(L,x=>x[k]);
+ if(!L.length)return '<p class="mu">No brick sizes yet.</p>';
+ const rows=L.map(x=>short?row([esc(x.name),q(x.today),q(x.prod),q(x.sold),`<b>${q(x.left)}</b>`],['','r','r','r','r '+(x.left<0?'bad':'ok')]):row([esc(x.name),q(x.today),q(x.month),q(x.prod),q(x.sold),(x.adj>0?'+':'')+q(x.adj),`<b>${q(x.left)}</b>`],['','r','r','r','r','r','r '+(x.left<0?'bad':'ok')])).join('');
+ const tot=short?row(['<b>Total</b>',`<b>${q(T0('today'))}</b>`,`<b>${q(T0('prod'))}</b>`,`<b>${q(T0('sold'))}</b>`,`<b>${q(T0('left'))}</b>`],['','r','r','r','r']):row(['<b>Total</b>',`<b>${q(T0('today'))}</b>`,`<b>${q(T0('month'))}</b>`,`<b>${q(T0('prod'))}</b>`,`<b>${q(T0('sold'))}</b>`,`<b>${(T0('adj')>0?'+':'')+q(T0('adj'))}</b>`,`<b>${q(T0('left'))}</b>`],['','r','r','r','r','r','r']);
+ return tbl(short?['Size','Made today','Made (total)','Sold','In stock']:['Size','Made today','Made this month','Made (total)','Sold','Count correction','In stock'],rows+tot)}
+V.bst=function(){const L=bstock(),neg=L.filter(x=>x.left<0);
+ const hist=[...bAdj()].sort((a,b)=>b.date<a.date?-1:1).map(a=>row([a.date,esc(TN(a.size)),(a.qty>0?'+':'')+q(a.qty),esc(a.note||''),`<button class="s" onclick="delAdj('${a.id}')">\u2715</button>`],['','','r','',''])).join('');
+ return `${neg.map(x=>`<div class="al">\u26a0 <b>${esc(x.name)}</b> stock is ${q(x.left)} \u2013 more was sold than recorded as made. Check Production entries or do a physical count below.</div>`).join('')}
+ <div class="cd"><h2>Brick stock by size</h2>${bstTbl(false)}
+ <p class="k">In stock = bricks made (Production tab) \u2212 bricks sold (Sales tab) \u00b1 count corrections. "Other work" types such as stacking or cleaning are not counted.</p></div>
+ <div class="cd"><h2>Correct stock after a physical count</h2>
+ <div class="f"><div><label>Date</label><input type="date" id="bd" value="${today()}"></div>
+ <div><label>Brick size</label><select id="bs">${TB().map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('')}</select></div>
+ <div><label>Actual bricks counted in the yard</label><input type="number" id="bc" min="0" step="any"></div>
+ <div><label>Note (optional)</label><input id="bn" placeholder="e.g. broken, opening stock"></div>
+ <button class="b" onclick="addAdj()">Set stock</button></div>
+ <p class="k">The app works out the difference between your count and the system stock and saves it as a correction, so totals made and sold stay untouched. Use this also to enter your opening stock before you started using the app.</p></div>
+ <div class="cd"><h2>Count corrections</h2>${tbl(['Date','Size','Change','Note',''],hist)}</div>`};
+function addAdj(){const id=val('bs');if(!id)return alert('Choose a brick size');if(val('bc')==='')return alert('Enter the bricks counted');
+ const cur=(bstock().find(x=>x.id==String(id))||{left:0}).left,c=num('bc'),d=c-cur;
+ if(!d)return alert('Count matches the system stock \u2013 nothing to correct.');
+ if(!confirm(TN(id)+': system stock is '+q(cur)+', you counted '+q(c)+'.\nSave a correction of '+(d>0?'+':'')+q(d)+'?'))return;
+ S.set.badj=[...bAdj(),{id:uid(),date:val('bd'),size:String(id),qty:d,note:val('bn')||''}];save();render()}
+function delAdj(id){if(confirm('Delete this correction?')){S.set.badj=bAdj().filter(a=>a.id!=id);save();render()}}
 /* ---- actions ---- */
 function addEmp(){const n=val('en').trim();if(n&&!S.emp.includes(n)){S.emp.push(n);save();render()}}
 function rmEmp(n){if(confirm('Remove '+n+' from list? Past records stay.')){S.emp=S.emp.filter(x=>x!=n);save();render()}}
