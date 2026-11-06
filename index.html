@@ -27,17 +27,29 @@ button.s{background:none;border:1px solid var(--bd);color:var(--tx);border-radiu
 #modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:20px;z-index:20}
 #modal>div{background:#fff;color:#222;border-radius:10px;padding:22px;max-width:560px;width:100%}
 #modal th,#modal td{border-color:#ddd}
-@media print{#app{display:none}#modal{position:static;background:none;padding:0}.nob{display:none}}
+#app{display:none}body.in #app{display:block}
+#login{display:flex;min-height:100vh;align-items:center;justify-content:center;padding:20px}body.in #login{display:none}
+.lc{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:22px;max-width:360px;width:100%}.lc input{margin-bottom:10px}
+@media print{body.in #app{display:none}#modal{position:static;background:none;padding:0}.nob{display:none}}
 </style></head><body>
-<div id="app"><header><h1 id="ttl">Brick Unit Manager</h1></header><nav id="nav"></nav><main id="main"></main></div>
+<script>
+/* ===== STEP 1: paste your Firebase web app config here (Firebase console > Project settings > Your apps) ===== */
+window.FIREBASE_CONFIG={apiKey:"AIzaSyDwPCcD09xEHZg1uOEZiWpk7JqyXvyBAFM",authDomain:"kay-kay-brick--demo.firebaseapp.com",projectId:"kay-kay-brick--demo",storageBucket:"kay-kay-brick--demo.firebasestorage.app",messagingSenderId:"313290859134",appId:"1:313290859134:web:b125668f06ed5c07dc2e2f"};
+</script>
+<div id="login"><div class="lc"><h1>Brick Unit Manager</h1><p class="k">Sign in to continue</p>
+<label>Email</label><input id="le" type="email" autocomplete="username"><label>Password</label><input id="lp" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+<p id="lerr" class="bad"></p><button class="b" onclick="doLogin()">Sign in</button> <button class="s" onclick="doReset()">Forgot password</button></div></div>
+<div id="app"><header><h1 id="ttl">Brick Unit Manager</h1><div id="who" class="k" style="margin-top:4px"></div></header><nav id="nav"></nav><main id="main"></main></div>
 <div id="modal"></div>
 <script>
 const K='brickunit_v1';
 const D={groups:[],vendors:[],vp:[],set:{cv:{m:{ft:100,bg:20},s:{ft:100,bg:20}},rm:1,rs:1,biz:'My Brick Unit',cur:'₹',w4:1.5,w6:2,load:0.5,p4:8,p6:11,warn:3,
  rec:{4:{n:1000,c:10,m:30,s:20},6:{n:1000,c:14,m:40,s:28}}},emp:[],prod:[],pur:[],sales:[],pay:[],exp:[],wp:[]};
 let S=structuredClone(D);
-try{const x=JSON.parse(localStorage.getItem(K));if(x)S=Object.assign(S,x);S.set=Object.assign({},D.set,S.set)}catch(e){}
-const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+const COLS=['prod','pur','sales','pay','exp','wp','vp','groups','vendors'];
+const save=()=>{try{window.cloudPush&&window.cloudPush()}catch(e){console.error(e);alert('Save error: '+(e.code||'')+' '+(e.message||e))}};
+window.getS=()=>S;window.COLS=COLS;window.DSET=D.set;
+window.resetS=()=>{S=structuredClone(D);render()};
 const $=i=>document.getElementById(i),val=i=>$(i).value,num=i=>parseFloat($(i).value)||0;
 const tz=new Date().getTimezoneOffset()*60000;
 const iso=d=>new Date(d.getTime()-tz).toISOString().slice(0,10);
@@ -54,6 +66,14 @@ const MAT=[['c','Cement'],['m','Granite metal 1/4 inch'],['s','Granite sand']];
 let tab='dash',wk=mon(today()),pf='2000-01-01',pt='2999-12-31',pm=today().slice(0,7);
 const TABS=[['dash','Dashboard'],['prod','Production'],['stock','Raw materials'],['ven','Vendors'],['sales','Sales & invoices'],['pay','Weekly payroll'],['exp','Expenses'],['pnl','Profit & loss'],['set','Settings']];
 const go=t=>{tab=t;render()};
+function softRender(){const m=$('main'),vals={};m.querySelectorAll('input[id],select[id],textarea[id]').forEach(e=>vals[e.id]=e.type=='checkbox'?e.checked:e.value);
+ const cks=[...m.querySelectorAll('input[type=checkbox]')].map(e=>e.checked),fid=document.activeElement&&document.activeElement.id;
+ render();
+ if($('um')&&vals.um&&vals.um!='c')uChg();
+ for(const id in vals){const e=$(id);if(e&&id!='bk')e[e.type=='checkbox'?'checked':'value']=vals[id]}
+ m.querySelectorAll('input[type=checkbox]').forEach((e,i)=>{if(i<cks.length)e.checked=cks[i]});
+ if(fid&&$(fid))$(fid).focus()}
+window.softRender=softRender;
 function render(){$('ttl').textContent=S.set.biz;
  $('nav').innerHTML=TABS.map(t=>`<button class="${t[0]==tab?'on':''}" onclick="go('${t[0]}')">${t[1]}</button>`).join('');
  $('main').innerHTML=V[tab]();}
@@ -147,7 +167,7 @@ set(){const s=S.set;return `<div class="cd"><h2>Business & rates</h2><div class=
  ${[].map(z=>`<div class="f" style="margin-bottom:8px"><div><label>${z} inch: bricks (N)</label><input type="number" id="n${z}" value="${s.rec[z].n}"></div><div><label>Cement bags</label><input type="number" id="c${z}" step="any" value="${s.rec[z].c}"></div><div><label>Granite metal bags</label><input type="number" id="m${z}" step="any" value="${s.rec[z].m}"></div><div><label>Granite sand bags</label><input type="number" id="s${z}" step="any" value="${s.rec[z].s}"></div></div>`).join('')}
  <button class="b" onclick="saveSet()">Save settings</button> <span class="k">Changes apply to new entries only.</span></div>
  <div class="cd"><h2>Vendors</h2><div class="f"><div><label>Vendor name</label><input id="vn"></div><div><label>Supplies</label><div>${MAT.map(([k,n])=>`<label style="display:inline-flex;gap:4px;margin-right:10px;color:var(--tx);font-size:14px"><input type="checkbox" class="vc" value="${k}" style="width:auto">${n}</label>`).join('')}</div></div><button class="b" onclick="addVendor()">Add vendor</button></div>${tbl(['Vendor','Supplies',''],S.vendors.map(v=>row([esc(v.name),v.mats.map(k=>MAT.find(x=>x[0]==k)[1]).join(', '),delB('vendors',v.id)])).join(''))}<p class="k">Weekly payments and balances per vendor are in the Vendors tab.</p></div>
- <div class="cd"><h2>Backup</h2><p class="k">Data is stored in this browser only. Copy the text below and keep it safe; paste a backup and press Restore to load it.</p>
+ <div class="cd"><h2>Backup</h2><p class="k">Your data is stored in the cloud database and shared by everyone who signs in. This text is a safety copy; restoring it replaces all current data.</p>
  <textarea id="bk" rows="4">${esc(JSON.stringify(S))}</textarea><p><button class="b" onclick="restore()">Restore from text</button></p></div>`}};
 
 const sh=p=>p.qty/(p.emps||[p.emp]).length;
@@ -215,13 +235,10 @@ V.ven=function(){const a=vw,b=addD(vw,6),names=vNames();let wt=0;
 /* ---- actions ---- */
 function addEmp(){const n=val('en').trim();if(n&&!S.emp.includes(n)){S.emp.push(n);save();render()}}
 function rmEmp(n){if(confirm('Remove '+n+' from list? Past records stay.')){S.emp=S.emp.filter(x=>x!=n);save();render()}}
-function addProd(){const z=val('ps'),qt=num('pq');if(qt<=0)return alert('Enter bricks made');const r=S.set.rec[z],f=qt/r.n;
- S.prod.push({id:uid(),date:val('pd'),emp:val('pe'),size:z,qty:qt,rate:val('pr')!==''?num('pr'):S.set['w'+z],u:{c:f*r.c,m:f*r.m,s:f*r.s}});save();render()}
-function addPur(){if(!num('uq'))return alert('Enter quantity');S.pur.push({id:uid(),date:val('ud'),mat:val('um'),vendor:val('uv'),qty:num('uq'),cost:num('uc')});save();render()}
 function sl(){const t=num('q4')*num('r4')+num('q6')*num('r6');$('st').value=t;if(!val('sload'))$('sload').placeholder=num('q4')+num('q6')}
 function addSale(){const it=[{size:4,qty:num('q4'),rate:num('r4')},{size:6,qty:num('q6'),rate:num('r6')}].filter(i=>i.qty>0);
  if(!it.length||!val('sc').trim())return alert('Enter customer and quantity');const tot=sum(it,i=>i.qty*i.rate),qt=sum(it,i=>i.qty),id=uid();
- const no='INV-'+String(S.sales.length+1+(S.sales.length?0:0)).padStart(4,'0');
+ const no='INV-'+String(1+Math.max(0,...S.sales.map(s=>parseInt(String(s.no).replace(/\D/g,''))||0))).padStart(4,'0');
  S.sales.push({id,no,date:val('sd'),cust:val('sc').trim(),phone:val('sp'),items:it,total:tot,loaded:val('sload')!==''?num('sload'):qt,loader:val('sby'),lrate:S.set.load,due:val('sf')});
  if(num('sa')>0)S.pay.push({id:uid(),sid:id,date:val('sd'),amt:Math.min(num('sa'),tot)});save();render();inv(id)}
 function rcv(id){const s=S.sales.find(x=>x.id==id),b=s.total-paid(id),a=parseFloat(prompt('Amount received from '+s.cust+' (balance '+b+')',b));
@@ -230,7 +247,7 @@ function payW(n,b){const a=parseFloat(prompt('Pay '+n+' (balance '+b+')',b));if(
 function addExp(){if(!num('xa')||!val('xc').trim())return alert('Enter category and amount');S.exp.push({id:uid(),date:val('xd'),cat:val('xc').trim(),amt:num('xa'),note:val('xn')});save();render()}
 function saveSet(){const s=S.set;s.biz=val('s_biz');s.cur=val('s_cur');['w4','w6','load','p4','p6','warn'].forEach(k=>s[k]=num('s_'+k));
  s.rm=num('s_rm');s.rs=num('s_rs');s.cv={m:{ft:num('s_fm')||1,bg:num('s_bm')||1},s:{ft:num('s_fs')||1,bg:num('s_bs')||1}};save();render();alert('Saved')}
-function restore(){try{const x=JSON.parse(val('bk'));if(!x.set)throw 0;if(confirm('Replace all current data?')){S=Object.assign(structuredClone(D),x);save();render()}}catch(e){alert('That backup text is not valid')}}
+function restore(){try{const x=JSON.parse(val('bk'));if(!x.set)throw 0;if(confirm('Replace ALL data in the cloud database with this backup?')){S=Object.assign(structuredClone(D),x);S.set=Object.assign({},D.set,S.set);save();render()}}catch(e){alert('That backup text is not valid')}}
 function inv(id){const s=S.sales.find(x=>x.id==id),p=paid(id),M=$('modal');
  M.innerHTML=`<div><h2 style="margin:0">${esc(S.set.biz)}</h2><div style="color:#666">Invoice ${s.no} · ${s.date}</div><p><b>${esc(s.cust)}</b><br>${esc(s.phone||'')}</p>
  <table style="width:100%;border-collapse:collapse"><tr><th align="left">Item</th><th align="right">Qty</th><th align="right">Rate</th><th align="right">Amount</th></tr>
@@ -239,4 +256,37 @@ function inv(id){const s=S.sales.find(x=>x.id==id),p=paid(id),M=$('modal');
  <tr><td colspan="3" align="right"><b>Balance</b></td><td align="right"><b>${m(s.total-p)}</b></td></tr></table>
  <p class="nob"><button class="b" onclick="print()">Print</button> <button class="s" onclick="$('modal').style.display='none'">Close</button></p></div>`;M.style.display='flex'}
 render();
-</script></body></html>
+</script>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager,collection,doc,setDoc,deleteDoc,onSnapshot} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const E=id=>document.getElementById(id),cfg=window.FIREBASE_CONFIG;
+if(!cfg||String(cfg.apiKey).startsWith('PASTE')){E('lerr').textContent='Setup needed: paste your Firebase config at the top of this file.';window.doLogin=window.doReset=()=>{}}
+else{
+const app=initializeApp(cfg),auth=getAuth(app);
+const db=initializeFirestore(app,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()}),ignoreUndefinedProperties:true});
+const COLS=window.COLS,P=c=>'units/main/'+c,synced={};
+const J=o=>JSON.stringify(o,(k,v)=>v&&typeof v==='object'&&!Array.isArray(v)?Object.fromEntries(Object.entries(v).sort(([a],[b])=>a<b?-1:a>b?1:0)):v);
+let cfgJ='',unsubs=[];
+let lastErr=0;const err=e=>{console.error(e);if(Date.now()-lastErr<3000)return;lastErr=Date.now();alert(e&&e.code==='permission-denied'?'Permission denied: your Firestore rules are not published, or this email is not allowed. Data was NOT saved.':'Cloud error: '+(e&&e.code||'')+' '+(e&&e.message||e))};
+window.cloudPush=()=>{const S=window.getS();
+ COLS.forEach(c=>{const mp=synced[c]||(synced[c]=new Map()),cur=new Set();
+  (S[c]||[]).forEach(x=>{cur.add(x.id);const j=J(x);if(mp.get(x.id)!==j){mp.set(x.id,j);setDoc(doc(db,P(c),x.id),x).catch(err)}});
+  [...mp.keys()].forEach(id=>{if(!cur.has(id)){mp.delete(id);deleteDoc(doc(db,P(c),id)).catch(err)}})});
+ const cj=J({set:S.set,emp:S.emp});if(cj!==cfgJ){cfgJ=cj;setDoc(doc(db,'units/main/meta/config'),{set:S.set,emp:S.emp}).catch(err)}};
+function start(){
+ COLS.forEach(c=>{synced[c]=new Map();unsubs.push(onSnapshot(collection(db,P(c)),snap=>{const a=[],mp=new Map();
+  snap.forEach(d=>{const x=d.data();x.id=d.id;a.push(x);mp.set(d.id,J(x))});synced[c]=mp;window.getS()[c]=a;if(!snap.metadata.hasPendingWrites)window.softRender()},err))});
+ unsubs.push(onSnapshot(doc(db,'units/main/meta/config'),d=>{const S=window.getS();
+  if(d.exists()){const x=d.data();S.set=Object.assign({},window.DSET,x.set||{});S.emp=x.emp||[];cfgJ=J({set:S.set,emp:S.emp});if(!d.metadata.hasPendingWrites)window.softRender()}
+  else if(!d.metadata.fromCache)window.cloudPush()},err))}
+onAuthStateChanged(auth,u=>{
+ if(u){document.body.classList.add('in');E('who').textContent='\u2601 '+u.email+'  ';const b=document.createElement('button');b.className='s';b.textContent='Log out';b.onclick=()=>signOut(auth);E('who').appendChild(b);start();window.render()}
+ else{unsubs.forEach(f=>f());unsubs=[];window.resetS();document.body.classList.remove('in');E('who').textContent=''}});
+window.doLogin=()=>{E('lerr').textContent='';signInWithEmailAndPassword(auth,E('le').value.trim(),E('lp').value).catch(e=>{E('lerr').textContent=/invalid|wrong|user-not-found/.test(e.code)?'Wrong email or password.':'Sign-in failed: '+(e.code||e.message)})};
+window.doReset=()=>{const em=E('le').value.trim();if(!em){E('lerr').textContent='Type your email first, then press Forgot password.';return}
+ sendPasswordResetEmail(auth,em).then(()=>{E('lerr').textContent='Password reset email sent (check spam).'}).catch(e=>{E('lerr').textContent='Could not send: '+(e.code||e.message)})};
+}
+</script>
+</body></html>
