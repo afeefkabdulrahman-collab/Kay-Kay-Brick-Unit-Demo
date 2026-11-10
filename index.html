@@ -1,46 +1,236 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Brick Unit Manager</title>
+<title>Brick Unit ERP</title>
 <style>
-:root{--bg:#faf7f2;--cd:#fff;--tx:#2a2420;--mu:#7a6f66;--bd:#e6dfd5;--ac:#b4472a;--ok:#2e7d4f;--wn:#c77d0a;--bad:#c0392b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1c1917;--cd:#27221f;--tx:#f1ebe4;--mu:#a39a90;--bd:#3a332e;--ac:#e0765a;--ok:#5cc08a;--wn:#e9a23b;--bad:#ef6f61;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#1c1917;--cd:#27221f;--tx:#f1ebe4;--mu:#a39a90;--bd:#3a332e;--ac:#e0765a;--ok:#5cc08a;--wn:#e9a23b;--bad:#ef6f61;color-scheme:dark}
-*{box-sizing:border-box}html,body{margin:0}body{background:var(--bg);color:var(--tx);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
-header{padding:14px 16px 6px}h1{font-size:19px;margin:0}h2{font-size:16px;margin:0 0 10px}
-nav{display:flex;gap:6px;overflow-x:auto;padding:6px 16px 10px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5}
-nav button{white-space:nowrap;border:1px solid var(--bd);background:var(--cd);color:var(--tx);padding:7px 12px;border-radius:20px;cursor:pointer}
-nav button.on{background:var(--ac);border-color:var(--ac);color:#fff}
-main{padding:4px 16px 40px;max-width:980px;margin:auto}
-.cd{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:14px}
-.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-.k{font-size:12px;color:var(--mu)}.v{font-size:20px;font-weight:600}
-label{display:block;font-size:12px;color:var(--mu);margin-bottom:2px}
-input,select,textarea{width:100%;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit}
-.f{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;align-items:end}
-button.b{background:var(--ac);color:#fff;border:0;border-radius:8px;padding:9px 14px;cursor:pointer;font:inherit}
-button.s{background:none;border:1px solid var(--bd);color:var(--tx);border-radius:6px;padding:3px 8px;cursor:pointer;font-size:12px}
-.sc{overflow-x:auto}a.s{border:1px solid var(--bd);border-radius:6px;padding:3px 8px;font-size:12px;text-decoration:none;color:var(--tx);display:inline-block}
-#modal input,#modal select,#modal textarea{background:#fff;color:#222;border-color:#ccc}#modal label{color:#555}table{border-collapse:collapse;width:100%}th,td{padding:7px 8px;border-bottom:1px solid var(--bd);text-align:left;white-space:nowrap;font-size:14px}th{font-size:12px;color:var(--mu);font-weight:500}
+/* ===== Brick Unit ERP · design system ===== */
+:root{--bg:#f2f4f9;--cd:#ffffff;--tx:#17203a;--mu:#67718c;--bd:#e4e8f2;--ac:#4f46e5;--ac2:#7c3aed;--ok:#15803d;--wn:#b45309;--bad:#dc2626;--tint:rgba(79,70,229,.09);--sh:0 1px 2px rgba(23,32,58,.05),0 4px 16px rgba(23,32,58,.07);--r:14px;color-scheme:light}
+:root[data-theme="dark"]{--bg:#0d1220;--cd:#161d30;--tx:#e7ebf5;--mu:#8b94ad;--bd:#26304b;--ac:#818cf8;--ac2:#a78bfa;--ok:#4ade80;--wn:#fbbf24;--bad:#f87171;--tint:rgba(129,140,248,.14);--sh:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+h1{font-size:19px;margin:0}h2{font-size:15px;font-weight:650;margin:0 0 12px}b,strong{font-weight:650}
+/* ---- page anatomy: header → KPIs → sections ---- */
+#topbar h1{font-size:13px;font-weight:600;color:var(--mu);letter-spacing:.01em}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px 18px;flex-wrap:wrap;margin-bottom:20px}
+.pt{font-size:25px;font-weight:750;letter-spacing:-.03em;margin:0;display:flex;align-items:center;gap:12px}
+.pt .ic{width:42px;height:42px;flex:none;border-radius:13px;display:grid;place-items:center;color:#fff;box-shadow:0 4px 10px rgba(23,32,58,.14)}
+.pt .ic svg{width:22px;height:22px}
+.ps{margin:6px 0 0 0 52px;color:var(--mu);font-size:13.5px;max-width:70ch}
+.cd h2{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--tx);opacity:.85;margin:0 0 12px;display:flex;align-items:center;gap:10px;white-space:nowrap}
+.cd h2::after{content:"";flex:1;height:1px;background:var(--bd)}
+.g>.cd{border-top:3px solid var(--ac)}
+.g>.cd .v{font-size:23px}
+.cd:has(.f){background:color-mix(in srgb,var(--bg) 45%,var(--cd))}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.toolbar input,.toolbar select{width:auto;flex:0 1 auto;max-width:230px}
+.toolbar .k{margin:0 2px}
+.fq{min-width:170px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:16px;align-items:start;margin-bottom:16px}
+.cols>.cd{margin-bottom:0}
+/* ---- app launcher home (iPhone / Zoho-style curved tiles) ---- */
+.g1{background:linear-gradient(135deg,#6366f1,#8b5cf6)}
+.g2{background:linear-gradient(135deg,#0ea5e9,#06b6d4)}
+.g3{background:linear-gradient(135deg,#10b981,#0d9488)}
+.g4{background:linear-gradient(135deg,#f59e0b,#f97316)}
+.g5{background:linear-gradient(135deg,#ec4899,#f43f5e)}
+.g6{background:linear-gradient(135deg,#14b8a6,#0891b2)}
+#homeBtn{display:flex;align-items:center;gap:10px;width:100%;border:0;background:var(--tint);color:var(--ac);padding:9px 11px;border-radius:10px;cursor:pointer;font:inherit;font-size:14px;font-weight:600;margin:0 0 6px}
+#homeBtn svg{width:18px;height:18px;flex:none}
+#homeBtn:hover{filter:brightness(.96)}
+.hero{position:relative;overflow:hidden;border-radius:20px;padding:24px 26px;background:linear-gradient(135deg,#4f46e5,#7c3aed 55%,#a855f7);color:#fff;margin-bottom:26px;box-shadow:var(--sh)}
+.hero::before,.hero::after{content:"";position:absolute;border-radius:50%}
+.hero::before{width:230px;height:230px;right:-70px;top:-100px;background:rgba(255,255,255,.13)}
+.hero::after{width:150px;height:150px;right:130px;bottom:-80px;background:rgba(255,255,255,.09)}
+.hero>*{position:relative}
+.hero .hk{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+.hero .hb{font-size:26px;font-weight:750;letter-spacing:-.02em;margin:5px 0 2px}
+.hero .hd{font-size:13px;opacity:.85}
+.hchips{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.hchip{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:11px;padding:8px 13px;font-size:11.5px}
+.hchip b{display:block;font-size:15px;margin-top:1px}
+.hbtn{background:#fff;color:var(--ac);border:0;border-radius:10px;padding:9px 16px;font:inherit;font-weight:650;cursor:pointer;box-shadow:var(--sh)}
+.appcat{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin:24px 2px 10px;display:flex;align-items:center;gap:10px;white-space:nowrap}
+.appcat::after{content:"";flex:1;height:1px;background:var(--bd)}
+.apps{display:grid;grid-template-columns:repeat(auto-fill,minmax(172px,1fr));gap:12px}
+.lchips{display:flex;gap:8px;flex-wrap:wrap;margin:-8px 0 14px}
+.lchips button{border:1px solid var(--bd);background:var(--cd);border-radius:999px;padding:7px 13px;font:inherit;font-size:13px;color:var(--tx);cursor:pointer;display:inline-flex;gap:7px;align-items:center;transition:border-color .15s,background .15s,color .15s}
+.lchips button b{font-weight:600;font-size:11px;background:var(--bg);color:var(--mu);border-radius:999px;padding:1px 8px}
+.lchips button:hover{border-color:var(--ac)}
+.lchips button.on{background:var(--ac);border-color:var(--ac);color:#fff}
+.lchips button.on b{background:rgba(255,255,255,.25);color:#fff}
+.lwrap{columns:2 560px;column-gap:18px}
+.appsec{break-inside:avoid;display:inline-block;width:100%;vertical-align:top;border:1px solid var(--bd);border-radius:20px;background:var(--cd);padding:8px 12px 14px;margin:0 0 18px;box-shadow:var(--sh)}
+.appsec .appcat{margin:8px 2px 12px}
+.appcat b{font-weight:600;font-size:10px;letter-spacing:0;text-transform:none;color:var(--mu);background:var(--bg);border-radius:999px;padding:2px 8px}
+.app{display:flex;flex-direction:column;align-items:flex-start;gap:11px;background:var(--cd);border:1px solid var(--bd);border-radius:18px;padding:16px;cursor:pointer;font:inherit;color:var(--tx);text-align:left;transition:transform .16s,box-shadow .16s,border-color .16s}
+.app:hover{transform:translateY(-3px);box-shadow:0 10px 28px rgba(23,32,58,.15);border-color:color-mix(in srgb,var(--ac) 35%,var(--bd))}
+.app:active{transform:translateY(-1px)}
+.ai{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;color:#fff;box-shadow:0 4px 10px rgba(23,32,58,.16)}
+.ai svg{width:23px;height:23px}
+.an{font-weight:650;font-size:14px}
+.ad{font-size:12px;color:var(--mu);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.astat{margin-top:auto;padding-top:9px;border-top:1px dashed var(--bd);font-size:11px;color:var(--mu);width:100%}
+.astat b{color:var(--ac);font-size:13px;margin-right:3px}
+#menuBtn svg{width:16px;height:16px}
+#themeBtn svg{width:13px;height:13px;vertical-align:-2px;margin-right:5px}
+button.s svg{width:12px;height:12px;vertical-align:-1.5px}
+@media(max-width:640px){.apps{grid-template-columns:repeat(2,1fr)}.hero{padding:20px}}
+/* ---- employee badges & chips ---- */
+.bdg{display:inline-block;font-size:9.5px;font-weight:700;padding:2.5px 8px;border-radius:6px;background:var(--tint);color:var(--ac);text-transform:uppercase;letter-spacing:.05em;margin-left:6px;vertical-align:1px;white-space:nowrap}
+.bdg.off{background:color-mix(in srgb,var(--mu) 15%,transparent);color:var(--mu)}
+.bdg.tm{background:color-mix(in srgb,var(--ok) 12%,transparent);color:var(--ok)}
+.wchip{display:inline-block;font-size:11px;padding:2.5px 9px;border-radius:999px;border:1px solid var(--bd);color:var(--mu);margin:1px 4px 1px 0;white-space:nowrap}
+.wlb{display:inline-flex;gap:6px;align-items:center;margin:0 16px 6px 0;font-size:14px;color:var(--tx)}
+.wlb input{width:auto}
+/* ---- shell: sidebar + content ---- */
+#app{display:none}
+body.in #app{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}
+#sidebar{position:sticky;top:0;height:100vh;overflow-y:auto;background:var(--cd);border-right:1px solid var(--bd);padding:16px 12px 12px;display:flex;flex-direction:column;gap:2px}
+.brand{display:flex;align-items:center;gap:10px}
+#sidebar .brand{padding:2px 10px 14px}
+.logo{width:37px;height:37px;flex:none;border-radius:11px;background:linear-gradient(135deg,var(--ac),var(--ac2));display:grid;place-items:center;color:#fff;box-shadow:var(--sh)}
+.logo svg{width:19px;height:19px}
+.brand b{font-size:14px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brand .tag{margin-left:auto;flex:none;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--ac);background:var(--tint);border-radius:6px;padding:2px 6px}
+#nav{display:flex;flex-direction:column;gap:2px}
+#nav .cat{font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--mu);padding:14px 10px 5px}
+#nav button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:none;color:var(--tx);padding:8px 10px;border-radius:10px;cursor:pointer;font:inherit;font-size:14px;position:relative;white-space:nowrap}
+#nav button .ic{flex:none;width:20px;height:20px;display:grid;place-items:center}
+#nav button .ic svg{width:19px;height:19px}
+#nav button:hover{background:var(--tint)}
+#nav button.on{background:var(--tint);color:var(--ac);font-weight:600}
+#nav button.on::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:3px;background:linear-gradient(180deg,var(--ac),var(--ac2))}
+.sideFoot{margin-top:auto;padding:12px 6px 4px;display:flex;flex-direction:column;gap:8px}
+.sideFoot .k{font-size:11px}
+#content{display:flex;flex-direction:column;min-width:0}
+#topbar{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:12px;padding:11px 18px;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--bd)}
+#menuBtn{display:none}
+#who{margin-left:auto;font-size:13px;color:var(--mu);display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+main{padding:20px;max-width:1080px;width:100%;margin:0 auto}
+#overlay{display:none;position:fixed;inset:0;background:rgba(9,13,26,.45);z-index:38}
+/* ---- login ---- */
+#login{display:none;min-height:100vh;align-items:center;justify-content:center;padding:20px;background:radial-gradient(900px 480px at 15% -5%,var(--tint),transparent),radial-gradient(800px 520px at 105% 105%,color-mix(in srgb,var(--ac2) 12%,transparent),transparent),var(--bg)}
+body:not(.in) #login{display:flex}
+.lc{background:var(--cd);border:1px solid var(--bd);border-radius:18px;padding:26px;max-width:372px;width:100%;box-shadow:var(--sh)}
+.lc input{margin-bottom:12px}
+/* ---- cards, stats, forms ---- */
+.cd{background:var(--cd);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin-bottom:16px;box-shadow:var(--sh)}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.g .cd{margin-bottom:0;padding:14px 16px}
+.k{font-size:12px;color:var(--mu)}.v{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-top:3px}
+label{display:block;font-size:12px;font-weight:600;color:var(--mu);margin-bottom:4px}
+input,select,textarea{width:100%;padding:9px 11px;border:1px solid var(--bd);border-radius:10px;background:var(--cd);color:var(--tx);font:inherit;transition:border-color .15s,box-shadow .15s}
+textarea{min-height:72px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--ac);box-shadow:0 0 0 3px var(--tint)}
+input:disabled,textarea:disabled{opacity:.55;background:var(--bg)}
+.f{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;align-items:end}
+/* ---- buttons ---- */
+button.b{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border:0;border-radius:10px;padding:10px 16px;cursor:pointer;font:inherit;font-weight:600;box-shadow:var(--sh);transition:filter .15s,transform .1s}
+button.b:hover{filter:brightness(1.07)}button.b:active{transform:translateY(1px)}
+button.s,a.s{background:var(--cd);border:1px solid var(--bd);color:var(--tx);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:12.5px;text-decoration:none;display:inline-block;line-height:1.4;transition:border-color .15s,color .15s}
+button.s:hover,a.s:hover{border-color:var(--ac);color:var(--ac)}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+/* ---- tables ---- */
+.sc{overflow-x:auto}
+table{border-collapse:collapse;width:100%}
+th,td{padding:9px 10px;border-bottom:1px solid var(--bd);text-align:left;white-space:nowrap;font-size:13.5px}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--mu);font-weight:600;background:color-mix(in srgb,var(--bg) 55%,var(--cd))}
+th:first-child{border-top-left-radius:8px}th:last-child{border-top-right-radius:8px}
+tr:last-child td{border-bottom:0}td{background:var(--cd)}
+table tr:hover td{background:color-mix(in srgb,var(--ac) 4%,transparent)}
+/* ---- status colors, alerts ---- */
 .r{text-align:right}.ok{color:var(--ok)}.bad{color:var(--bad)}.wn{color:var(--wn)}.mu{color:var(--mu)}
-.al{padding:9px 12px;border-radius:8px;margin-bottom:8px;background:color-mix(in srgb,var(--bad) 12%,transparent);border:1px solid color-mix(in srgb,var(--bad) 35%,transparent)}
-.al.w{background:color-mix(in srgb,var(--wn) 12%,transparent);border-color:color-mix(in srgb,var(--wn) 40%,transparent)}
-#modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:20px;z-index:20}
-#modal>div{background:#fff;color:#222;border-radius:10px;padding:22px;max-width:560px;width:100%}
-#modal th,#modal td{border-color:#ddd}
-#app{display:none}body.in #app{display:block}
-#login{display:flex;min-height:100vh;align-items:center;justify-content:center;padding:20px}body.in #login{display:none}
-.lc{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:22px;max-width:360px;width:100%}.lc input{margin-bottom:10px}
-@media print{body.in #app{display:none}#modal{position:static;background:none;padding:0}.nob{display:none}}
+.al{padding:11px 14px;border-radius:10px;margin-bottom:10px;background:color-mix(in srgb,var(--bad) 10%,transparent);border:1px solid color-mix(in srgb,var(--bad) 30%,transparent);border-left:4px solid var(--bad)}
+.al.w{background:color-mix(in srgb,var(--wn) 12%,transparent);border-color:color-mix(in srgb,var(--wn) 35%,transparent);border-left-color:var(--wn)}
+/* ---- modal ---- */
+#modal{position:fixed;inset:0;background:rgba(9,13,26,.55);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:24px 16px;z-index:60}
+#modal>div{background:var(--cd);color:var(--tx);border:1px solid var(--bd);border-radius:16px;padding:22px;max-width:600px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.3);animation:mpop .18s ease}
+@keyframes mpop{from{opacity:0;transform:translateY(12px) scale(.985)}}
+#modal th,#modal td{border-color:var(--bd)}
+/* ---- responsive: sidebar becomes a drawer ---- */
+@media(max-width:920px){
+ body.in #app{grid-template-columns:1fr}
+ #sidebar{position:fixed;left:0;top:0;bottom:0;width:262px;z-index:40;transform:translateX(-104%);transition:transform .22s ease;box-shadow:0 0 44px rgba(0,0,0,.28)}
+ body.navOpen #sidebar{transform:none}
+ body.navOpen #overlay{display:block}
+ #menuBtn{display:grid;place-items:center;font-size:15px}
+ main{padding:14px}
+ #topbar{padding:10px 12px}#who{font-size:12px}
+}
+/* ---- design system v2: segmented tabs, rich tables, dialogs, charts ---- */
+.toolbar{gap:6px}
+.toolbar button.b,.toolbar button.s{border-radius:9px;padding:7px 13px;font-size:13px}
+.toolbar .seg{display:inline-flex;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:3px;gap:2px}
+.toolbar .seg button{border:0;background:none;border-radius:7px;padding:5px 12px;font-size:13px;cursor:pointer;color:var(--mu);font-weight:600}
+.toolbar .seg button.on{background:var(--cd);color:var(--tx);box-shadow:0 1px 3px rgba(23,32,58,.12)}
+table thead th{position:sticky;top:0;z-index:2}
+tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--bg) 45%,var(--cd))}
+tbody tr:hover td{background:color-mix(in srgb,var(--ac) 6%,transparent)}
+#modal{align-items:center}
+#modal>div{border-radius:14px;max-width:640px;width:100%;max-height:calc(100vh - 48px);overflow:auto;animation:mpop .16s cubic-bezier(.2,.9,.3,1.2)}
+.dlghead{display:flex;align-items:center;gap:11px;margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid var(--bd)}
+.dlghead .ic{width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;color:#fff}
+.dlghead .ic svg{width:17px;height:17px}
+.dlghead b{font-size:16px}
+.dlghead .k{margin:2px 0 0}
+.dlgclose{margin-left:auto;flex:none}
+.dlgfoot{display:flex;gap:8px;justify-content:flex-end;margin:16px 0 0}
+.qa{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--cd);border:1px solid var(--bd);border-radius:14px;padding:13px 16px;margin-bottom:14px;box-shadow:var(--sh)}
+.qa>.ic{width:38px;height:38px;flex:none;border-radius:11px;display:grid;place-items:center;color:#fff}
+.qa>.ic svg{width:18px;height:18px}
+.qat{flex:1;min-width:180px}
+.qat b{display:block;font-size:14.5px}
+.qat .k{margin:1px 0 0}
+.qa>.b{flex:none;white-space:nowrap;margin-left:auto}
+.chart{display:flex;align-items:flex-end;gap:4px;height:110px;margin-top:6px}
+.chart .bar{flex:1;min-width:7px;border-radius:4px 4px 0 0;background:linear-gradient(180deg,var(--ac),color-mix(in srgb,var(--ac2) 70%,var(--ac)));position:relative}
+.chart .bar:hover::after{content:attr(data-t);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);font-size:10.5px;padding:3px 7px;border-radius:6px;white-space:nowrap;z-index:3}
+.chart .bar.zero{background:color-mix(in srgb,var(--mu) 22%,transparent)}
+.ax{display:flex;gap:4px;margin-top:5px}
+.ax span{flex:1;min-width:7px;text-align:center;font-size:9px;color:var(--mu)}
+.app.off{cursor:default;opacity:.62}
+.app.off:hover{transform:none;box-shadow:var(--sh)}
+.app.off .ai{background:color-mix(in srgb,var(--mu) 16%,var(--cd));color:var(--mu);box-shadow:none}
+.app.off .soon{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--wn);background:color-mix(in srgb,var(--wn) 13%,transparent);border-radius:6px;padding:2px 7px;margin-top:auto;align-self:flex-start}
+.vatln{display:flex;justify-content:space-between;gap:16px;padding:2px 0;font-size:13px;color:var(--mu)}
+
+/* ---- print (invoices / statements): always light, even in dark mode ---- */
+@media print{body.in #app{display:none}#modal{position:static;background:none;padding:0;backdrop-filter:none}#modal>div{box-shadow:none;border:0;max-width:100%}.nob{display:none}
+ :root{--cd:#fff;--tx:#1a1a1a;--mu:#555;--bd:#ddd;background:#fff}
+ #modal input,#modal select,#modal textarea{background:#fff;color:#1a1a1a}}
 </style></head><body>
 <script>
 /* ===== STEP 1: paste your Firebase web app config here (Firebase console > Project settings > Your apps) ===== */
 window.FIREBASE_CONFIG={apiKey:"AIzaSyDwPCcD09xEHZg1uOEZiWpk7JqyXvyBAFM",authDomain:"kay-kay-brick--demo.firebaseapp.com",projectId:"kay-kay-brick--demo",storageBucket:"kay-kay-brick--demo.firebasestorage.app",messagingSenderId:"313290859134",appId:"1:313290859134:web:b125668f06ed5c07dc2e2f"};
 </script>
-<div id="login"><div class="lc"><h1>KAY KAY BRICK UNIT</h1><p class="k">Sign in to continue</p>
+<div id="login"><div class="lc">
+<div class="brand"><div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="2" y="4" width="8" height="4" rx="1.2"/><rect x="14" y="4" width="8" height="4" rx="1.2"/><rect x="8" y="10" width="8" height="4" rx="1.2"/><rect x="2" y="16" width="8" height="4" rx="1.2"/><rect x="14" y="16" width="8" height="4" rx="1.2"/></svg></div><b>KAY KAY BRICK UNIT</b></div>
+<p class="k" style="margin:6px 0 16px">Sign in to continue</p>
 <label>Email</label><input id="le" type="email" autocomplete="username"><label>Password</label><input id="lp" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
-<p id="lerr" class="bad"></p><button class="b" onclick="doLogin()">Sign in</button> <button class="s" onclick="doReset()">Forgot password</button></div></div>
-<div id="app"><header><h1 id="ttl">Brick Unit Manager</h1><div id="who" class="k" style="margin-top:4px"></div></header><nav id="nav"></nav><main id="main"></main><footer class="k" style="text-align:center;padding:0 0 30px">Brick Unit Manager · version 6 Nov 2026</footer></div>
+<p id="lerr" class="bad" style="min-height:20px;margin:2px 0 12px"></p>
+<button class="b" style="width:100%" onclick="doLogin()">Sign in</button>
+<p style="text-align:center;margin:12px 0 0"><button class="s" onclick="doReset()">Forgot password?</button></p></div></div>
+<div id="app">
+<aside id="sidebar">
+ <div class="brand"><div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="2" y="4" width="8" height="4" rx="1.2"/><rect x="14" y="4" width="8" height="4" rx="1.2"/><rect x="8" y="10" width="8" height="4" rx="1.2"/><rect x="2" y="16" width="8" height="4" rx="1.2"/><rect x="14" y="16" width="8" height="4" rx="1.2"/></svg></div><b id="brandName">Brick Unit</b><span class="tag">ERP</span></div>
+ <button id="homeBtn" onclick="go('home')"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="5" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><circle cx="5" cy="19" r="2"/><circle cx="12" cy="19" r="2"/><circle cx="19" cy="19" r="2"/></svg><span>Apps</span></button>
+ <nav id="nav"></nav>
+ <div class="sideFoot">
+  <button class="s" id="themeBtn" style="text-align:center" onclick="tglTheme()"><span>Dark mode</span></button>
+  <span class="k">Brick Unit ERP · v8 · Nov 2026</span>
+ </div>
+</aside>
+<div id="content">
+ <header id="topbar">
+  <button id="menuBtn" class="s" onclick="document.body.classList.toggle('navOpen')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  <h1 id="ttl">Brick Unit Manager</h1>
+  <div id="who" class="k"></div>
+ </header>
+ <main id="main"></main>
+ <footer class="k" style="text-align:center;padding:0 0 28px">Brick Unit ERP · restructured from the legacy single-page app · Nov 2026</footer>
+</div>
+</div>
+<div id="overlay" onclick="document.body.classList.remove('navOpen')"></div>
 <div id="modal"></div>
 <script>
 const K='brickunit_v1';
@@ -64,9 +254,55 @@ const q=n=>(+n||0).toLocaleString(undefined,{maximumFractionDigits:1});
 const sum=(a,f)=>a.reduce((t,x)=>t+f(x),0);
 const inR=(d,a,b)=>d>=a&&d<=b;
 const MAT=[['c','Cement'],['m','Granite metal 1/4 inch'],['s','Granite sand']];
-let tab='dash',wk=mon(today()),pf='2000-01-01',pt='2999-12-31',pm=today().slice(0,7);
-const TABS=[['dash','Dashboard'],['prod','Production'],['bst','Brick stock'],['stock','Raw materials'],['ven','Vendors'],['sales','New sale'],['acct','Accounts'],['pay','Weekly payroll'],['exp','Expenses'],['pnl','Profit & loss'],['set','Settings']];
-const go=t=>{tab=t;render()};
+let tab='home',wk=mon(today()),pf='2000-01-01',pt='2999-12-31',pm=today().slice(0,7);
+/* lucide-style stroke icons (the shadcn/ui icon set) — no emoji anywhere */
+const SVG=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const IC={
+ grid:{g:'g1',s:SVG('<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/>')},
+ factory:{g:'g2',s:SVG('<path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M17 20h-6v-4a2 2 0 0 1-2-2"/><path d="M2 20h2"/>')},
+ bricks:{g:'g3',s:SVG('<rect x="2" y="4" width="8" height="4" rx="1.5"/><rect x="14" y="4" width="8" height="4" rx="1.5"/><rect x="8" y="10" width="8" height="4" rx="1.5"/><rect x="2" y="16" width="8" height="4" rx="1.5"/><rect x="14" y="16" width="8" height="4" rx="1.5"/>')},
+ package:{g:'g2',s:SVG('<path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>')},
+ receipt:{g:'g4',s:SVG('<path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/>')},
+ wallet:{g:'g1',s:SVG('<path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>')},
+ truck:{g:'g5',s:SVG('<path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18h-5"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.62l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/>')},
+ users:{g:'g6',s:SVG('<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>')},
+ banknote:{g:'g4',s:SVG('<rect width="20" height="12" x="2" y="6" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/>')},
+ chart:{g:'g5',s:SVG('<path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>')},
+ idcard:{g:'g6',s:SVG('<rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8" cy="10.5" r="2"/><path d="M5 16c.7-1.4 5.3-1.4 6 0"/><path d="M14 9h4M14 12h4M14 15h4"/>')},
+ book:{g:'g1',s:SVG('<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>')},
+ warehouse:{g:'g2',s:SVG('<path d="M22 8.35V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8.35A2 2 0 0 1 3.26 6.5l8-3.2a2 2 0 0 1 1.48 0l8 3.2A2 2 0 0 1 22 8.35Z"/><path d="M6 18h12v-6H6Z"/><path d="M6 10h12M9 15h2M13 15h3"/>')},
+ percent:{g:'g4',s:SVG('<line x1="19" x2="5" y1="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>')},
+ plug:{g:'g3',s:SVG('<path d="M9 7V2"/><path d="M15 7V2"/><path d="M12 22v-5"/><path d="M6 7h12v4a6 6 0 0 1-12 0Z"/>')},
+ shield:{g:'g5',s:SVG('<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>')},
+ sliders:{g:'g3',s:SVG('<line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/>')},
+ brick:SVG('<rect x="2" y="4" width="8" height="4" rx="1.2"/><rect x="14" y="4" width="8" height="4" rx="1.2"/><rect x="8" y="10" width="8" height="4" rx="1.2"/><rect x="2" y="16" width="8" height="4" rx="1.2"/><rect x="14" y="16" width="8" height="4" rx="1.2"/>'),
+ x:SVG('<path d="M18 6 6 18M6 6l12 12"/>'),
+ moon:SVG('<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>'),
+ sun:SVG('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>')};
+
+/* ERP module registry: [categoryId, category label, [[moduleId, label, iconKey], ...]] */
+const MODULES=[
+ ['ov','Overview',[['dash','Dashboard','grid']]],
+ ['mfg','Manufacturing & stock',[['prod','Production','factory'],['bst','Brick stock','bricks'],['stock','Raw materials','package'],['inv','Inventory','warehouse']]],
+ ['crm','Sales & CRM',[['sales','New sale / invoice','receipt'],['acct','Accounts receivable','wallet']]],
+ ['proc','Procurement',[['ven','Vendors & purchases','truck']]],
+ ['ppl','People & payroll',[['emp','Employees','idcard'],['pay','Workers & weekly pay','users']]],
+ ['fin','Finance',[['acc','Accounting','book'],['exp','Expenses','banknote'],['pnl','Profit & loss','chart'],['tax','Tax & VAT','percent']]],
+ ['adm','Administration',[['rol','Roles & audit','shield'],['set','Settings & backup','sliders'],['int','Integrations','plug']]]];
+/* registerModule(catId,[id,name,icon]) moves a module from PLANNED into its
+   category with a live view — kept for modules added after this build. */
+const PLANNED=[];
+window.registerModule=(catId,[id,nm,ic])=>{const c=MODULES.find(x=>x[0]==catId);if(!c)return;
+ const pi=PLANNED.findIndex(x=>x[0]==id);if(pi>=0)PLANNED.splice(pi,1);
+ if(!c[2].some(m=>m[0]==id))c[2].push([id,nm,ic])};
+const MFLAT=()=>MODULES.flatMap(c=>c[2]);
+const SUB={home:'Every module of your ERP — tap an app to open it.',emp:'Master list of your staff — owners, workers and helpers, their roles, contact details and the work they do.',dash:'One page for the whole unit — production, stock, cash, and what needs attention today.',prod:'Record each day’s production. Raw materials are deducted automatically from your recipe.',bst:'Bricks made minus bricks sold, with count corrections for the yard.',stock:'Cement, granite metal and granite sand — levels, usage, and purchase entry.',ven:'What you received this week, what you paid, and what you still owe.',sales:'Raise an invoice, take payment, and keep follow-up dates.',acct:'Who owes you money, with follow-ups, statements and payment history.',pay:'Weekly wages for groups and individual workers, with balances and advances.',exp:'Running costs — electricity, fuel, rent and anything else.',pnl:'Profit for the month and where the cash went.',acc:'Double-entry journal and trial balance, worked out live from every sale, purchase, payment and expense.',inv:'Everything you hold — bricks and raw materials, valued, with movements and alerts.',tax:'VAT worked out from your invoices and purchases, quarter by quarter.',int:'WhatsApp payment reminders, data download and connections.',rol:'A living audit trail from every entry, plus who is signed in.',set:'Business details, rates, brick sizes, vendors and backup.'};
+let Q={}; /* per-module search & filter state (cleared on navigation) */
+const go=t=>{tab=t;Q={};document.body.classList.remove('navOpen');render();scrollTo(0,0)};
+const mQ=(...f)=>{const s=ckey(Q.q||'');return!s||f.some(x=>ckey(String(x??'')).includes(s))};
+const mD=d=>(!Q.from||d>=Q.from)&&(!Q.to||d<=Q.to);
+const drng=()=>`<input type="date" value="${Q.from||''}" onchange="Q.from=this.value;render()"><span class="k">to</span><input type="date" value="${Q.to||''}" onchange="Q.to=this.value;render()">`;
+const fbar=(ph,extra='')=>`<div class="toolbar"><input class="fq" placeholder="Search ${ph}\u2026" value="${esc(Q.q||'')}" oninput="Q.q=this.value;softRender()">${extra}${Q.q||Q.from||Q.to||extra?`<button class="s" onclick="Q={};render()">Clear</button>`:''}</div>`;
 function softRender(){const m=$('main'),vals={};m.querySelectorAll('input[id],select[id],textarea[id]').forEach(e=>vals[e.id]=e.type=='checkbox'?e.checked:e.value);
  const cks=[...m.querySelectorAll('input[type=checkbox]')].map(e=>e.checked),fid=document.activeElement&&document.activeElement.id;
  render();
@@ -76,11 +312,19 @@ function softRender(){const m=$('main'),vals={};m.querySelectorAll('input[id],se
  if($('um'))uPv();
  if(fid&&$(fid))$(fid).focus()}
 window.softRender=softRender;
-function render(){$('ttl').textContent=S.set.biz;
- $('nav').innerHTML=TABS.map(t=>`<button class="${t[0]==tab?'on':''}" onclick="go('${t[0]}')">${t[1]}</button>`).join('');
- $('main').innerHTML=V[tab]();}
+/* theme (light/dark) with persistence */
+const themeInit=()=>{try{return localStorage.getItem('bkm_theme')}catch(e){return''}};
+const applyTheme=t=>{document.documentElement.dataset.theme=t;try{localStorage.setItem('bkm_theme',t)}catch(e){}const b=$('themeBtn');if(b)b.innerHTML=(t=='dark'?IC.sun:IC.moon)+' '+(t=='dark'?'Light mode':'Dark mode')};
+window.tglTheme=()=>applyTheme(document.documentElement.dataset.theme=='dark'?'light':'dark');
+applyTheme(themeInit()||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'));
+function render(){const md=tab=='home'?['home','Apps','apps']:MFLAT().find(x=>x[0]==tab)||MFLAT()[0];
+ $('ttl').textContent=md[1];$('brandName').textContent=S.set.biz;document.title=S.set.biz+' · Brick Unit ERP';
+ $('homeBtn').classList.toggle('on',tab=='home');
+ $('nav').innerHTML=MODULES.map(([cid,cname,mods])=>`<div class="cat">${cname}</div>`+mods.map(([id,nm,ic])=>`<button class="${id==tab?'on':''}" onclick="go('${id}')"><span class="ic">${IC[ic].s}</span><span>${nm}</span></button>`).join('')).join('');
+ const head=tab=='home'?'':`<div class="page-head"><h1 class="pt"><span class="ic ${IC[md[2]].g}">${IC[md[2]].s}</span>${md[1]}</h1><p class="ps">${SUB[tab]||''}</p></div>`;
+ $('main').innerHTML=head+V[tab]();if(tab=='prod'&&$('ps'))hlWork();}
 const del=(k,id)=>{if(confirm('Delete this entry?')){S[k]=S[k].filter(x=>x.id!=id);save();render()}};
-const delB=(k,id)=>`<button class="s" onclick="del('${k}','${id}')">✕</button>`;
+const delB=(k,id)=>`<button class="s" onclick="del('${k}','${id}')" aria-label="Delete">${IC.x}</button>`;
 
 /* ---- calculations ---- */
 function stock(){const o={};const days=Math.min(14,Math.max(1,S.prod.length?Math.round((new Date(today())-new Date(S.prod.map(p=>p.date).sort()[0]))/864e5)+1:1));
@@ -98,83 +342,123 @@ const recv=()=>S.sales.map(s=>({s,bal:s.total-paid(s.id)})).filter(x=>x.bal>0.00
 
 /* ---- views ---- */
 const row=(h,cls)=>`<tr>${h.map((c,i)=>`<td class="${cls&&cls[i]||''}">${c}</td>`).join('')}</tr>`;
-const tbl=(hd,rows)=>`<div class="sc"><table><tr>${hd.map(h=>`<th>${h}</th>`).join('')}</tr>${rows||`<tr><td class="mu" colspan="${hd.length}">Nothing yet</td></tr>`}</table></div>`;
+const tbl=(hd,rows)=>`<div class="sc"><table><thead><tr>${hd.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows||`<tr><td class="mu" colspan="${hd.length}">Nothing yet</td></tr>`}</tbody></table></div>`;
 const empOpts=()=>S.emp.map(e=>`<option>${esc(e)}</option>`).join('');
+const dchart=()=>{const days=Array.from({length:14},(_,i)=>addD(today(),-13+i));
+ const counts=days.map(d=>sum(S.prod.filter(p=>p.date==d&&p.k!='work'),p=>+p.qty||0));
+ const mx=Math.max(...counts,1);
+ return `<div class="chart">${counts.map((c,i)=>`<div class="bar${c?'':' zero'}" style="height:${Math.max(4,Math.round(c/mx*100))}%" data-t="${days[i].slice(5)} · ${q(c)} bricks"></div>`).join('')}</div><div class="ax">${days.map(d=>`<span>${d.slice(8)}</span>`).join('')}</div>`};
+/* ---- entry dialogs: forms live in modals with the same field IDs, so all save logic is unchanged ---- */
+const qa=(ic,t,d,btn,fn)=>`<div class="qa"><span class="ic ${IC[ic].g}">${IC[ic].s}</span><div class="qat"><b>${t}</b><span class="k">${d}</span></div><button class="b" onclick="${fn}">${btn}</button></div>`;
+const prodForm=()=>S.emp.length?`
+ <label>Workers (tick, or tap a group)</label>
+ <div style="margin-bottom:6px">${S.groups.map(g=>`<button class="s" onclick="pickG('${g.id}')">${esc(g.name)}</button> `).join('')}<button class="s" onclick="clrG()">Individuals</button> <span id="pgl" class="k">${pgTxt()}</span></div>
+ <div>${S.emp.map(n=>chk('pc',n)).join('')}</div>
+ <div class="f"><div><label>Date</label><input type="date" id="pd" value="${today()}"></div>
+ <div><label>Brick size / work</label><select id="ps" onchange="prT()">${T().map(t=>`<option value="${t.id}">${esc(t.name)}${t.kind=='work'?' (work)':''}</option>`).join('')}</select></div>
+ <div><label>Quantity (bricks or work units)</label><input type="number" id="pq" min="0"></div>
+ <div><label>Cement bags used (bricks only)</label><input type="number" id="pcm" step="any" oninput="pv()"></div>
+ <div><label>Granite metal – buckets used</label><input type="number" id="pmm" step="any" oninput="this.dataset.d=this.value===''?'':1;pv()"></div>
+ <div><label>Granite sand – buckets used</label><input type="number" id="pss" step="any" oninput="this.dataset.d=this.value===''?'':1;pv()"></div>
+ <div><label>Pay per unit (override)</label><input type="number" id="pr" step="any" placeholder="${T()[0]?T()[0].wage:''}"></div></div>
+ <p class="k" id="pv">Defaults: 1 cement bag = ${S.set.rm} bucket(s) of metal (${bk(S.set.rm).toFixed(2)} cu ft) + ${S.set.rs} bucket(s) of sand (${bk(S.set.rs).toFixed(2)} cu ft); 1 bucket = ${S.set.bk} L = ${(S.set.bk/28.3168).toFixed(2)} cu ft. The bucket boxes fill in automatically from the cement bags — change them if that day was different. Wage is split equally among the selected workers.</p>
+ <p><button class="s" onclick="quickT()">+ New brick size or work type</button> <span class="k">Pay and prices for every type are in Settings.</span></p>
+ <div class="f"><div><label>Note (optional)</label><input id="pnote" placeholder="e.g. stacking, cleaning"></div></div>`:`<p class="mu">Add workers first in the Employees app, then record production.</p>`;
+const dlgProd=()=>{dlg('factory','Daily production entry',prodForm(),'Materials deduct from stock automatically; wage is split between the ticked workers.','<button class="b" onclick="addProd()">Save entry</button>');if(S.emp.length)prT()};
+const dlgGroup=()=>dlg('users','New worker group',`
+ <div class="f"><div><label>Group name</label><input id="gname" placeholder="e.g. Team A"></div></div>
+ <label style="margin:10px 0 5px">Members</label>
+ <div>${S.emp.map(n=>chk('gc',n)).join('')}</div>`,'Production entered for a group is paid to the whole group, split equally.','<button class="b" onclick="saveGroup()">Save group</button>');
+const purForm=()=>`
+ <div class="f"><div><label>Date</label><input type="date" id="ud" value="${today()}"></div>
+ <div><label>Material</label><select id="um" onchange="uChg()">${MAT.map(([k,n])=>`<option value="${k}">${n}</option>`).join('')}</select></div>
+ <div><label>Vendor</label><select id="uv">${vOpts('c')}</select></div>
+ <div><label>Quantity</label><input type="number" id="uq" step="any" oninput="uPv()"></div>
+ <div><label>Measured in</label><select id="uu" onchange="uPv()">${uOpts('c').map(([a,b])=>`<option value="${a}">${b}</option>`).join('')}</select></div>
+ <div id="ulw" style="display:none"><label>Cubic feet in 1 load</label><input type="number" id="ulc" step="any" value="${S.set.lc.m}" oninput="uPv()"></div>
+ <div><label>Total cost</label><input type="number" id="uc" step="any"></div></div>
+ <p class="k" id="upv"></p>
+ <p class="k">For sand and metal choose Loads and enter how many cubic feet that truck load had (each load can differ). You can also enter cubic feet or buckets directly.</p>`;
+const dlgPur=()=>dlg('truck','Record purchase',purForm(),'Stock and average cost update instantly.','<button class="b" onclick="addPur()">Save purchase</button>');
+const saleForm=()=>`
+ <div class="f"><div><label>Date</label><input type="date" id="sd" value="${today()}"></div>
+ <div><label>Customer</label><input id="sc" list="cdl" autocomplete="off" oninput="scChg()"><datalist id="cdl">${ACC().list.map(x=>`<option value="${esc(x.name)}">`).join('')}</datalist><div id="sch" class="k"></div></div><div><label>Phone</label><input id="sp"></div></div>
+ <div class="f" style="margin-top:10px">${TB().map(b=>`<div><label>${esc(b.name)} – qty</label><input type="number" id="q_${b.id}" oninput="sl()"></div><div><label>${esc(b.name)} – rate</label><input type="number" id="r_${b.id}" step="any" value="${b.price}" oninput="sl()"></div>`).join('')}</div>
+ <div class="f" style="margin-top:10px"><div><label>Total</label><input id="st" disabled></div><div><label>Paid now (0 = credit)</label><input type="number" id="sa" step="any" value="0"></div>
+ <div><label>Follow-up date (if balance)</label><input type="date" id="sf"></div>
+ <div><label>Loaded on truck (bricks)</label><input type="number" id="sload"></div></div>
+ <div style="margin-top:10px"><label>Loaded by – tick the team(s) and/or the people who loaded (loading pay is split equally between the ticked items)</label>${S.groups.length?`<div>${S.groups.map(g=>chk2('lg','G:'+g.name,'Team '+g.name)).join('')}</div>`:''}<div>${S.emp.map(n=>chk2('li',n,n)).join('')}</div></div>`;
+const dlgSale=()=>{dlg('receipt','New sale / invoice',saleForm(),'Bricks sold deduct from stock; the invoice opens after saving.','<button class="b" onclick="addSale()">Save sale</button>');sl()};
+const expForm=()=>`
+ <div class="f"><div><label>Date</label><input type="date" id="xd" value="${today()}"></div>
+ <div><label>Category</label><input id="xc" list="cats" placeholder="Electricity"><datalist id="cats">${['Electricity','Diesel / fuel','Machine maintenance','Rent','Water','Vehicle / transport','Licence / tax','Miscellaneous'].map(c=>`<option>${c}</option>`).join('')}</datalist></div>
+ <div><label>Amount</label><input type="number" id="xa" step="any"></div><div><label>Note</label><input id="xn"></div></div>`;
+const dlgExp=()=>dlg('banknote','Other expenses',expForm(),'Running costs outside materials, wages and loading.','<button class="b" onclick="addExp()">Add expense</button>');
+const adjForm=()=>`
+ <div class="f"><div><label>Date</label><input type="date" id="bd" value="${today()}"></div>
+ <div><label>Brick size</label><select id="bs">${TB().map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('')}</select></div>
+ <div><label>Actual bricks counted in the yard</label><input type="number" id="bc" min="0" step="any"></div>
+ <div><label>Note (optional)</label><input id="bn" placeholder="e.g. broken, opening stock"></div></div>`;
+const dlgAdj=()=>dlg('bricks','Correct stock after a physical count',adjForm(),'Saves only the difference as a correction — made and sold totals stay untouched. Also use it to enter opening stock.','<button class="b" onclick="addAdj()">Set stock</button>');
+const empForm=()=>{const e=ET.e?EMPS().find(x=>x.id==ET.e):null;
+ return `
+ <div class="f"><div><label>Full name</label><input id="e_n" value="${e?esc(e.name):''}"></div>
+ <div><label>Role / staff type</label><select id="e_r">${ROLES.map(r=>`<option${e&&e.role==r?' selected':''}>${r}</option>`).join('')}</select></div>
+ <div><label>Phone</label><input id="e_p" value="${e?esc(e.phone):''}"></div>
+ <div><label>Joined on</label><input type="date" id="e_j" value="${e?e.joined||'':''}"></div>
+ <div><label>Default pay / unit (optional)</label><input type="number" id="e_rate" step="any" value="${e&&e.rate?e.rate:''}"></div></div>
+ <label style="margin:12px 0 5px">Work this person does (their name is highlighted in Production when you pick it)</label>
+ <div>${T().map(t=>`<label class="wlb"><input type="checkbox" class="ew" value="${t.id}"${e&&(e.works||[]).includes(t.id)?' checked':''}>${esc(t.name)}</label>`).join('')}</div>
+ <div class="f" style="margin-top:8px"><div><label>Note (optional)</label><input id="e_o" value="${e?esc(e.note||''):''}"></div></div>`};
+const dlgEmp=()=>dlg('users',ET.e?'Edit employee':'Add employee',empForm(),'Full HR record — role, contact, joined date, pay rate and work kinds.',`<button class="b" onclick="saveEmp()">${ET.e?'Update employee':'Add employee'}</button>`);
+const custForm=()=>`
+ <div class="f"><div><label>Name</label><input id="cn_n"></div><div><label>Phone</label><input id="cn_p"></div><div><label>Address</label><input id="cn_a"></div><div><label>Credit limit (optional)</label><input type="number" id="cn_l" step="any"></div><div><label>Note</label><input id="cn_o"></div></div>`;
+const dlgCust=()=>dlg('wallet','Add customer',custForm(),'Customers you bill in New sale are added here automatically. Use this to save phone, address and a credit limit.','<button class="b" onclick="addCust()">Add customer</button>');
+const dlgAddW=()=>dlg('users','Add worker','<div class="f"><div><label>Name</label><input id="en" placeholder="Name"></div></div>','Full details can be filled in later from the Employees app.','<button class="b" onclick="addEmp()">Add worker</button>');
+const gnAll=()=>[...new Set([...S.groups.map(g=>g.name),...S.prod.map(p=>p.grp).filter(Boolean),...S.sales.flatMap(ldrs).filter(x=>x.startsWith('G:')).map(x=>x.slice(2))])];
+const dlgPayN=()=>dlg('banknote','Pay a group or worker',`
+ <div class="f"><div><label>Pay to</label><select id="wpy">${gnAll().length?`<optgroup label="Groups">${gnAll().map(n=>`<option value="G:${esc(n)}">Team ${esc(n)}</option>`).join('')}</optgroup>`:''}<optgroup label="Individuals">${S.emp.map(n=>`<option>${esc(n)}</option>`).join('')}</optgroup></select></div>
+ <div><label>Amount</label><input type="number" id="wpa" step="any"></div>
+ <div><label>Payment date</label><input type="date" id="wpd" value="${today()}"></div></div>`,`Recorded against the week of ${wk} to ${addD(wk,6)}. Use it for advances or part payments — the balances update.`,'<button class="b" onclick="payNow()">Record payment</button>');
+const dlgVen=()=>dlg('truck','Add vendor',`
+ <div class="f"><div><label>Vendor name</label><input id="vn"></div></div>
+ <label style="margin:10px 0 5px">What they supply</label>
+ <div>${MAT.map(([k,n])=>`<label class="wlb"><input type="checkbox" class="vc" value="${k}" style="width:auto">${n}</label>`).join('')}</div>`,'Vendors appear in the purchase form immediately.','<button class="b" onclick="addVendor()">Add vendor</button>');
+const dlgT2=()=>dlg('bricks','New brick size or work type',`
+ <div class="f"><div><label>New name</label><input id="tn" placeholder="e.g. 8 inch brick"></div>
+ <div><label>Type</label><select id="tk"><option value="brick">Brick (sold)</option><option value="work">Other work (paid only)</option></select></div>
+ <div><label>Pay per unit</label><input type="number" id="tw" step="any"></div>
+ <div><label>Selling price (bricks)</label><input type="number" id="tp" step="any"></div></div>`,'Bricks are deducted from stock when sold; other work is paid only.','<button class="b" onclick="addT()">Add</button>');
 const V={
 dash(){const st=stock(),t=today(),tp=S.prod.filter(p=>p.date==t),r=recv(),mo=pnl(t.slice(0,7)+'-01',t.slice(0,7)+'-31');
- let al='';MAT.forEach(([k,n])=>{const x=st[k];if(x.low)al+=`<div class="al">⚠ <b>${n}</b>: ${q(x.left)} ${UN[k]} left${x.dl!==null?` (~${q(Math.max(x.dl,0))} days at ${q(x.use)}/day)`:''}. Reorder now.</div>`});
- ACC().list.filter(x=>x.fstate=='due').forEach(x=>al+=`<div class="al w">💰 <b>${esc(x.name)}</b> owes ${m(x.bal)} — follow-up due ${x.next}${x.phone?' · '+esc(x.phone):''}</div>`);
- return `${al||'<div class="cd ok">✓ No stock or payment reminders today.</div>'}
+ let al='';MAT.forEach(([k,n])=>{const x=st[k];if(x.low)al+=`<div class="al"><b>${n}</b>: ${q(x.left)} ${UN[k]} left${x.dl!==null?` (~${q(Math.max(x.dl,0))} days at ${q(x.use)}/day)`:''}. Reorder now.</div>`});
+ ACC().list.filter(x=>x.fstate=='due').forEach(x=>al+=`<div class="al w"><b>${esc(x.name)}</b> owes ${m(x.bal)} — follow-up due ${x.next}${x.phone?' · '+esc(x.phone):''}</div>`);
+ return `${al||'<div class="cd ok">No stock or payment reminders today.</div>'}
  <div class="g"><div class="cd"><div class="k">Today’s bricks</div><div class="v">${q(sum(tp.filter(p=>p.k!='work'),p=>p.qty))}</div></div>
  <div class="cd"><div class="k">Total to collect</div><div class="v ${r.length?'wn':''}">${m(sum(r,x=>x.bal))}</div></div>
  <div class="cd"><div class="k">This month net profit</div><div class="v ${mo.net<0?'bad':'ok'}">${m(mo.net)}</div></div>
- <div class="cd"><div class="k">Month revenue</div><div class="v">${m(mo.rev)}</div></div><div class="cd"><div class="k">Owed to vendors</div><div class="v ${vOwed()>0.005?'wn':''}">${m(vOwed())}</div></div></div>
+ <div class="cd"><div class="k">Month revenue</div><div class="v">${m(mo.rev)}</div></div><div class="cd"><div class="k">Owed to vendors</div><div class="v ${vOwed()>0.005?'wn':''}">${m(vOwed())}</div></div><div class="cd"><div class="k">Staff on roll</div><div class="v">${S.emp.length}</div></div></div>
+ <div class="cols">
  <div class="cd"><h2>Money to collect</h2>${dashOwe()}</div>
+ <div class="cd"><h2>Raw material stock</h2>${tbl(['Material','In stock','Avg use/day','Days left'],MAT.map(([k,n])=>row([n,q(st[k].left)+' '+UN[k],q(st[k].use),st[k].dl===null?'—':q(Math.max(st[k].dl,0))],['','','',st[k].low?'bad':'ok'])).join(''))}</div></div>
  <div class="cd"><h2>Brick stock (ready to sell)</h2>${bstTbl(true)}</div>
- <div class="cd"><h2>Raw material stock</h2>${tbl(['Material','In stock','Avg use/day','Days left'],MAT.map(([k,n])=>row([n,q(st[k].left)+' '+UN[k],q(st[k].use),st[k].dl===null?'—':q(Math.max(st[k].dl,0))],['','','',st[k].low?'bad':'ok'])).join(''))}</div>`},
-prod(){const rows=[...S.prod].sort((a,b)=>b.date<a.date?-1:1).slice(0,40).map(p=>row([p.date,esc(p.emp),p.size+' inch',q(p.qty),m(p.rate),m(p.qty*p.rate),delB('prod',p.id)],['','','','r','r','r'])).join('');
- return `<div class="cd"><h2>Daily production entry</h2>${S.emp.length?`<div class="f"><div><label>Date</label><input type="date" id="pd" value="${today()}"></div>
- <div><label>Worker</label><select id="pe">${empOpts()}</select></div>
- <div><label>Brick size</label><select id="ps"><option value="4">4 inch</option><option value="6">6 inch</option></select></div>
- <div><label>Bricks made</label><input type="number" id="pq" min="0"></div>
- <div><label>Rate/brick (override)</label><input type="number" id="pr" step="any" placeholder="default"></div><button class="b" onclick="addProd()">Add</button></div>
- <p class="k">Raw materials are deducted automatically using your recipe in Settings. Rate is saved with each entry, so changing rates later won’t alter old wages.</p>`:`<p class="mu">Add workers first in the Weekly payroll tab.</p>`}</div>
- <div class="cd"><h2>Recent production</h2>${tbl(['Date','Worker','Size','Bricks','Rate','Wage',''],rows)}</div>`},
-stock(){const st=stock(),rows=[...S.pur].sort((a,b)=>b.date<a.date?-1:1).slice(0,30).map(p=>row([p.date,MAT.find(x=>x[0]==p.mat)[1],esc(p.vendor),q(p.qty),m(p.cost),m(p.qty?p.cost/p.qty:0),delB('pur',p.id)],['','','','r','r','r'])).join('');
- return `<div class="cd"><h2>Current stock</h2>${tbl(['Material','Bought','Used','In stock','Avg cost/unit','Avg use/day','Days left'],MAT.map(([k,n])=>{const x=st[k];return row([n+' ('+UN[k]+')',q(x.b),q(x.u),`<b>${q(x.left)}</b>`,m(x.avg),q(x.use),x.dl===null?'—':q(Math.max(x.dl,0))],['','r','r','r','r','r',x.low?'bad':''])}).join(''))}
- <p class="k">Reminder triggers when stock will last ${S.set.warn} days or less (based on the last 14 days’ usage). Cement is counted in bags; granite metal and granite sand are counted in loads (fractions like 0.5 load are fine).</p></div>
- <div class="cd"><h2>Record purchase</h2><div class="f"><div><label>Date</label><input type="date" id="ud" value="${today()}"></div>
- <div><label>Material</label><select id="um">${MAT.map(([k,n])=>`<option value="${k}">${n}</option>`).join('')}</select></div>
- <div><label>Vendor</label><input id="uv"></div><div><label>Quantity (cement: bags · metal/sand: loads)</label><input type="number" id="uq" step="any"></div>
- <div><label>Total cost</label><input type="number" id="uc" step="any"></div><button class="b" onclick="addPur()">Add</button></div>
- <p class="k">Tip: to correct stock after a physical count, add a negative quantity with cost 0.</p></div>
- <div class="cd"><h2>Purchase history</h2>${tbl(['Date','Material','Vendor','Qty','Cost','Per unit',''],rows)}</div>`},
-sales(){const r=recv(),t=today();
- const rr=r.map(x=>row([x.s.no,esc(x.s.cust),esc(x.s.phone||''),m(x.s.total),m(x.bal),x.s.due||'—',`<button class="s" onclick="rcv('${x.s.id}')">Receive</button>`],['','','','r','r',x.s.due&&x.s.due<=t?'bad':''])).join('');
- const sl=[...S.sales].sort((a,b)=>b.date<a.date?-1:1).slice(0,40).map(s=>{const b=s.total-paid(s.id);return row([s.no,s.date,esc(s.cust),esc((s.loader||'—').replace(/^G:/,'👥 ')),q(sum(s.items,i=>i.qty)),m(s.total),b>0.005?`<span class="wn">${m(b)}</span>`:'<span class="ok">Paid</span>',`<button class="s" onclick="inv('${s.id}')">Invoice</button> ${delB('sales',s.id)}`],['','','','','r','r','r'])}).join('');
- return `<div class="cd"><h2>New sale / invoice</h2><div class="f"><div><label>Date</label><input type="date" id="sd" value="${t}"></div>
- <div><label>Customer</label><input id="sc" list="cdl" autocomplete="off" oninput="scChg()"><datalist id="cdl">${ACC().list.map(x=>`<option value="${esc(x.name)}">`).join('')}</datalist><div id="sch" class="k"></div></div><div><label>Phone</label><input id="sp"></div></div>
- <div class="f" style="margin-top:10px"><div><label>4 inch – qty</label><input type="number" id="q4" oninput="sl()"></div><div><label>4 inch – rate</label><input type="number" id="r4" step="any" value="${S.set.p4}" oninput="sl()"></div>
- <div><label>6 inch – qty</label><input type="number" id="q6" oninput="sl()"></div><div><label>6 inch – rate</label><input type="number" id="r6" step="any" value="${S.set.p6}" oninput="sl()"></div></div>
- <div class="f" style="margin-top:10px"><div><label>Total</label><input id="st" disabled></div><div><label>Paid now (0 = credit)</label><input type="number" id="sa" step="any" value="0"></div>
- <div><label>Follow-up date (if balance)</label><input type="date" id="sf"></div>
- <div><label>Loaded on truck (bricks)</label><input type="number" id="sload"></div><div><label>Loaded by</label><select id="sby"><option value="">—</option>${S.groups.length?`<optgroup label="Teams">${S.groups.map(g=>`<option value="G:${esc(g.name)}">👥 ${esc(g.name)}</option>`).join('')}</optgroup>`:''}<optgroup label="Individuals">${empOpts()}</optgroup></select></div></div>
- <p><button class="b" onclick="addSale()">Save sale</button></p></div>
- <div class="cd"><h2>Payments to follow up</h2>${tbl(['Invoice','Customer','Phone','Total','Balance','Follow-up',''],rr)}</div>
- <div class="cd"><h2>Invoices</h2>${tbl(['No.','Date','Customer','Loaded by','Bricks','Total','Status',''],sl)}</div>`},
-pay(){const e=wk,f=addD(wk,6);let tot=0;
- const rows=S.emp.map(n=>{const P=S.prod.filter(p=>(p.emps||[p.emp]).includes(n)&&inR(p.date,e,f)),L=S.sales.filter(s=>s.loader==n&&inR(s.date,e,f));
-  const pw=sum(P,p=>sh(p)*p.rate),lw=sum(L,s=>s.loaded*s.lrate),pd=sum(S.wp.filter(w=>w.emp==n&&w.week==e),w=>w.amt),bal=pw+lw-pd;tot+=pw+lw;
-  return row([esc(n),q(sum(P,sh)),m(pw),q(sum(L,s=>s.loaded)),m(lw),`<b>${m(pw+lw)}</b>`,m(pd),bal>0.005?`<span class="wn">${m(bal)}</span>`:'<span class="ok">Settled</span>',bal>0.005?`<button class="s" onclick="payW('${esc(n)}',${bal})">Pay</button>`:''],['','r','r','r','r','r','r','r'])}).join('');
- return `<div class="cd"><h2>Weekly payroll</h2><div class="f"><div><label>Week starting (Monday)</label><input type="date" id="wk" value="${wk}" onchange="wk=mon(this.value);render()"></div>
- <div><label>Add worker</label><input id="en" placeholder="Name"></div><button class="b" onclick="addEmp()">Add worker</button></div><p class="k">Week: ${e} to ${f}. Wages = bricks produced × rate at the time + bricks loaded × loading rate.</p>
- ${tbl(['Worker','Bricks','Production wage','Loaded','Loading wage','Total','Paid','Balance',''],rows)}<p><b>Week total: ${m(tot)}</b></p>
- <p class="k">Workers: ${S.emp.map(n=>`${esc(n)} <a href="#" onclick="rmEmp('${esc(n)}');return false">✕</a>`).join(' · ')||'none'}</p></div>`},
-exp(){const rows=[...S.exp].sort((a,b)=>b.date<a.date?-1:1).slice(0,50).map(x=>row([x.date,esc(x.cat),esc(x.note),m(x.amt),delB('exp',x.id)],['','','','r'])).join('');
- return `<div class="cd"><h2>Other expenses</h2><div class="f"><div><label>Date</label><input type="date" id="xd" value="${today()}"></div>
- <div><label>Category</label><input id="xc" list="cats" placeholder="Electricity"><datalist id="cats">${['Electricity','Diesel / fuel','Machine maintenance','Rent','Water','Vehicle / transport','Licence / tax','Miscellaneous'].map(c=>`<option>${c}</option>`).join('')}</datalist></div>
- <div><label>Amount</label><input type="number" id="xa" step="any"></div><div><label>Note</label><input id="xn"></div><button class="b" onclick="addExp()">Add</button></div></div>
- <div class="cd">${tbl(['Date','Category','Note','Amount',''],rows)}</div>`},
-pnl(){const a=pm+'-01',b=pm+'-31',x=pnl(a,b),r=recv();
- const L=(n,v,c)=>row([n,m(v)],['',(c||'')+' r']);
- return `<div class="cd"><h2>Profit & loss</h2><div class="f"><div><label>Month</label><input type="month" id="pmn" value="${pm}" onchange="pm=this.value;render()"></div></div>
- <div class="sc"><table>${L('Sales invoiced ('+q(x.sold)+' bricks)',x.rev,'ok')}
- ${row(['<b>Direct costs</b>',''])}${L('Raw materials used ('+q(x.bricks)+' bricks made)',-x.mat)}${L('Production wages',-x.pw)}${L('Loading wages',-x.lw)}
- ${L('<b>Gross profit</b>',x.rev-x.mat-x.pw-x.lw)}${row(['<b>Other expenses</b>',''])}${Object.entries(x.cats).map(([c,v])=>L(esc(c),-v)).join('')||row(['<span class="mu">none</span>',''])}
- ${L('<b>NET PROFIT</b>',x.net,x.net<0?'bad':'ok')}</table></div>
- <p class="k">Cash view for the month: collected ${m(x.coll)} of ${m(x.rev)} invoiced. Total pending from customers (all time): <b class="wn">${m(sum(r,y=>y.bal))}</b>. Raw materials are costed at your average purchase price.</p></div>`},
+ <div class="cd"><h2>Bricks made – last 14 days</h2>${dchart()}<p class="k">Hover a bar to see the day's count.</p></div>`},
+exp(){const rows=[...S.exp].sort((a,b)=>b.date<a.date?-1:1).filter(x=>mD(x.date)&&mQ(x.cat,x.note)).slice(0,50).map(x=>row([x.date,esc(x.cat),esc(x.note),m(x.amt),delB('exp',x.id)],['','','','r'])).join('');
+ return `${qa('banknote','Other expenses','Electricity, fuel, rent, machine work and any other running cost.','Add expense','dlgExp()')}
+ <div class="cd"><h2>Expense history</h2>${fbar('category or note',drng())}${tbl(['Date','Category','Note','Amount',''],rows)}</div>`},
 set(){const s=S.set;return `<div class="cd"><h2>Business & rates</h2><div class="f"><div><label>Business name</label><input id="s_biz" value="${esc(s.biz)}"></div><div><label>Currency symbol</label><input id="s_cur" value="${esc(s.cur)}"></div>
  
  <div><label>Loading charge / brick</label><input type="number" id="s_load" step="any" value="${s.load}"></div>
  <div><label>Phone country code (for WhatsApp)</label><input id="s_cc" value="${s.cc||'91'}"></div>
+  <div><label>VAT % (UAE — shown on invoices)</label><input type="number" id="s_vat" step="any" value="${s.vat||0}"></div>
  <div><label>Reorder warning (days left)</label><input type="number" id="s_warn" value="${s.warn}"></div></div></div>
  <div class="cd"><h2>Granite metal and sand – measuring</h2><p class="k">Metal and sand are stored in cubic feet (cu ft). Trucks bring loads and each load can differ, so you enter the cu ft per load on every purchase (the values below are only the default). Production usage is entered in buckets.</p><div class="f"><div><label>Bucket size (litres)</label><input type="number" id="s_bk" step="any" value="${s.bk}" oninput="cvt()"></div><div><label>Metal buckets per 1 cement bag</label><input type="number" id="s_rm" step="any" value="${s.rm}" oninput="cvt()"></div><div><label>Sand buckets per 1 cement bag</label><input type="number" id="s_rs" step="any" value="${s.rs}" oninput="cvt()"></div><div><label>Default cu ft per load – metal</label><input type="number" id="s_lm" step="any" value="${s.lc.m}"></div><div><label>Default cu ft per load – sand</label><input type="number" id="s_ls" step="any" value="${s.lc.s}"></div><div><label>Reorder cover (days of stock to buy)</label><input type="number" id="s_oc" value="${s.oc}"></div></div><p class="k" id="cvt"><b>${cvTxt(s.bk,s.rm,s.rs)}</b></p><p class="k">1 cu ft = 28.3 litres. These are sample values – set yours and change them any time. New production entries use the new values; old entries keep the values they were saved with.</p>
  ${[].map(z=>`<div class="f" style="margin-bottom:8px"><div><label>${z} inch: bricks (N)</label><input type="number" id="n${z}" value="${s.rec[z].n}"></div><div><label>Cement bags</label><input type="number" id="c${z}" step="any" value="${s.rec[z].c}"></div><div><label>Granite metal bags</label><input type="number" id="m${z}" step="any" value="${s.rec[z].m}"></div><div><label>Granite sand bags</label><input type="number" id="s${z}" step="any" value="${s.rec[z].s}"></div></div>`).join('')}
  <button class="b" onclick="saveSet()">Save settings</button> <span class="k">Changes apply to new entries only.</span></div>
  <div class="cd"><h2>Brick sizes and work types</h2><p class="k">Add any new brick size or other work you pay workers for. <b>Brick</b> types can be sold and use cement, metal and sand. <b>Work</b> types are only paid to workers (no materials, no sales).</p>
- ${tbl(['Name','Type','Pay per unit','Selling price',''],T().map(t=>row([`<input value="${esc(t.name)}" onchange="updT('${t.id}','name',this.value)">`,t.kind=='brick'?'Brick':'Work',`<input type="number" step="any" value="${t.wage}" onchange="updT('${t.id}','wage',this.value)">`,t.kind=='brick'?`<input type="number" step="any" value="${t.price}" onchange="updT('${t.id}','price',this.value)">`:'\u2014',`<button class="s" onclick="delT('${t.id}')">\u2715</button>`])).join(''))}
- <div class="f"><div><label>New name</label><input id="tn" placeholder="e.g. 8 inch brick"></div><div><label>Type</label><select id="tk"><option value="brick">Brick (sold)</option><option value="work">Other work (paid only)</option></select></div><div><label>Pay per unit</label><input type="number" id="tw" step="any"></div><div><label>Selling price (bricks)</label><input type="number" id="tp" step="any"></div><button class="b" onclick="addT()">Add</button></div><p class="k">Changes to pay or price apply to new entries only; old entries keep what they were saved with. Edits here save automatically.</p></div>
- <div class="cd"><h2>Vendors</h2><div class="f"><div><label>Vendor name</label><input id="vn"></div><div><label>Supplies</label><div>${MAT.map(([k,n])=>`<label style="display:inline-flex;gap:4px;margin-right:10px;color:var(--tx);font-size:14px"><input type="checkbox" class="vc" value="${k}" style="width:auto">${n}</label>`).join('')}</div></div><button class="b" onclick="addVendor()">Add vendor</button></div>${tbl(['Vendor','Supplies',''],S.vendors.map(v=>row([esc(v.name),v.mats.map(k=>MAT.find(x=>x[0]==k)[1]).join(', '),delB('vendors',v.id)])).join(''))}<p class="k">Weekly payments and balances per vendor are in the Vendors tab.</p></div>
+ ${tbl(['Name','Type','Pay per unit','Selling price',''],T().map(t=>row([`<input value="${esc(t.name)}" onchange="updT('${t.id}','name',this.value)">`,t.kind=='brick'?'Brick':'Work',`<input type="number" step="any" value="${t.wage}" onchange="updT('${t.id}','wage',this.value)">`,t.kind=='brick'?`<input type="number" step="any" value="${t.price}" onchange="updT('${t.id}','price',this.value)">`:'\u2014',`<button class="s" onclick="delT('${t.id}')">${IC.x}</button>`])).join(''))}
+ <div class="toolbar"><button class="s" onclick="dlgT2()">New size / work type</button></div><p class="k">Changes to pay or price apply to new entries only; old entries keep what they were saved with. Edits here save automatically.</p></div>
+ <div class="cd"><h2>Vendors</h2><div class="toolbar"><button class="s" onclick="dlgVen()">New vendor</button></div>${tbl(['Vendor','Supplies',''],S.vendors.map(v=>row([esc(v.name),v.mats.map(k=>MAT.find(x=>x[0]==k)[1]).join(', '),delB('vendors',v.id)])).join(''))}<p class="k">Weekly payments and balances per vendor are in the Vendors tab.</p></div>
  <div class="cd"><h2>Backup</h2><p class="k">Your data is stored in the cloud database and shared by everyone who signs in. This text is a safety copy; restoring it replaces all current data.</p>
  <textarea id="bk" rows="4">${esc(JSON.stringify(S))}</textarea><p><button class="b" onclick="restore()">Restore from text</button></p></div>`}};
 
@@ -183,25 +467,17 @@ const UN={c:'bags',m:'cu ft',s:'cu ft'};
 const bk=n=>n*S.set.bk/28.3168;
 const chk=(c,n)=>`<label style="display:inline-flex;gap:5px;align-items:center;margin:0 12px 6px 0;font-size:14px;color:var(--tx)"><input type="checkbox" class="${c}" value="${esc(n)}" style="width:auto">${esc(n)}</label>`;
 V.prod=function(){
- const rows=[...S.prod].sort((a,b)=>b.date<a.date?-1:1).slice(0,40).map(p=>row([p.date,(p.grp?'👥 '+esc(p.grp)+': ':'')+esc((p.emps||[p.emp]).join(', ')),esc(p.sn||TN(p.size))+(p.note?' <span class="mu">('+esc(p.note)+')</span>':''),q(p.qty),q(p.u.c),q(p.u.m)+(p.bu?' ('+q(p.bu.m)+' bkt)':''),q(p.u.s)+(p.bu?' ('+q(p.bu.s)+' bkt)':''),m(p.qty*p.rate),delB('prod',p.id)],['','','','r','r','r','r','r'])).join('');
+ const rows=[...S.prod].sort((a,b)=>b.date<a.date?-1:1).filter(p=>mD(p.date)&&mQ((p.emps||[p.emp]).join(' '),p.grp,p.sn,p.note,p.size)).slice(0,40).map(p=>row([p.date,(p.grp?'Team '+esc(p.grp)+': ':'')+esc((p.emps||[p.emp]).join(', ')),esc(p.sn||TN(p.size))+(p.note?' <span class="mu">('+esc(p.note)+')</span>':''),q(p.qty),q(p.u.c),q(p.u.m)+(p.bu?' ('+q(p.bu.m)+' bkt)':''),q(p.u.s)+(p.bu?' ('+q(p.bu.s)+' bkt)':''),m(p.qty*p.rate),delB('prod',p.id)],['','','','r','r','r','r','r'])).join('');
  const gl=S.groups.map(g=>row([esc(g.name),esc(g.members.join(', ')),delB('groups',g.id)])).join('');
- return `<div class="cd"><h2>Daily production entry</h2>${S.emp.length?`<label>Workers (tick, or tap a group)</label><div style="margin-bottom:6px">${S.groups.map(g=>`<button class="s" onclick="pickG('${g.id}')">👥 ${esc(g.name)}</button> `).join('')}<button class="s" onclick="clrG()">Individuals</button> <span id="pgl" class="k">${pgTxt()}</span></div><div>${S.emp.map(n=>chk('pc',n)).join('')}</div>
- <div class="f"><div><label>Date</label><input type="date" id="pd" value="${today()}"></div>
- <div><label>Brick size / work</label><select id="ps" onchange="prT()">${T().map(t=>`<option value="${t.id}">${esc(t.name)}${t.kind=='work'?' (work)':''}</option>`).join('')}</select></div>
- <div><label>Quantity (bricks or work units)</label><input type="number" id="pq" min="0"></div>
- <div><label>Cement bags used (bricks only)</label><input type="number" id="pcm" step="any" oninput="pv()"></div>
- <div><label>Granite metal – buckets used</label><input type="number" id="pmm" step="any" oninput="this.dataset.d=this.value===''?'':1;pv()"></div>
- <div><label>Granite sand – buckets used</label><input type="number" id="pss" step="any" oninput="this.dataset.d=this.value===''?'':1;pv()"></div>
- <div><label>Pay per unit (override)</label><input type="number" id="pr" step="any" placeholder="${T()[0]?T()[0].wage:''}"></div><button class="b" onclick="addProd()">Add</button></div>
- <p class="k" id="pv">Defaults: 1 cement bag = ${S.set.rm} bucket(s) of metal (${bk(S.set.rm).toFixed(2)} cu ft) + ${S.set.rs} bucket(s) of sand (${bk(S.set.rs).toFixed(2)} cu ft); 1 bucket = ${S.set.bk} L = ${(S.set.bk/28.3168).toFixed(2)} cu ft. The bucket boxes fill in automatically from the cement bags — change them if that day was different. Defaults are set in Settings. Wage is split equally among the selected workers.</p><p><button class="s" onclick="quickT()">+ New brick size or work type</button> <span class="k">Pay and prices for every type are in Settings. Add a note below if useful.</span></p><div class="f"><div><label>Note (optional)</label><input id="pnote" placeholder="e.g. stacking, cleaning"></div></div>`:`<p class="mu">Add workers first in the Weekly payroll tab.</p>`}</div>
- <div class="cd"><h2>Worker groups</h2>${S.emp.length?`<div class="f"><div><label>Group name</label><input id="gname" placeholder="e.g. Team A"></div><button class="b" onclick="saveGroup()">Save group</button></div><div style="margin-top:8px">${S.emp.map(n=>chk('gc',n)).join('')}</div>`:''}${tbl(['Group','Members',''],gl)}</div>
- <div class="cd"><h2>Recent production</h2>${tbl(['Date','Workers','Size','Bricks','Cement (bags)','Metal (cu ft)','Sand (cu ft)','Wage',''],rows)}</div>`};
+ return `${qa('factory','Daily production entry','Record what was made today — materials deduct from stock automatically and pay is split between workers.','New entry','dlgProd()')}
+ <div class="cd"><h2>Worker groups</h2>${S.emp.length?`<div class="toolbar"><button class="s" onclick="dlgGroup()">New group</button></div>`:''}${tbl(['Group','Members',''],gl)}</div>
+ <div class="cd"><h2>Recent production</h2>${fbar('worker, size or note',drng())}${tbl(['Date','Workers','Size','Bricks','Cement (bags)','Metal (cu ft)','Sand (cu ft)','Wage',''],rows)}</div>`};
 function pv(){const c=num('pcm');[['pmm',S.set.rm],['pss',S.set.rs]].forEach(([id,k])=>{const e=$(id);if(!e.dataset.d)e.value=c?+(c*k).toFixed(2):''});
  const a=num('pmm'),b=num('pss');$('pv').textContent=c?'Using '+q(a)+' buckets metal ('+q(bk(a))+' cu ft) and '+q(b)+' buckets sand ('+q(bk(b))+' cu ft) for '+q(c)+' cement bags. 1 bucket = '+S.set.bk+' L = '+(S.set.bk/28.3168).toFixed(2)+' cu ft.':'Enter the cement bags used and the metal and sand buckets fill in from your defaults.'}
 let pg='';const pgTxt=()=>pg?'\u2192 Pay goes to the group: '+pg:'\u2192 Pay goes to the individual workers ticked';
 function clrG(){pg='';$('pgl').textContent=pgTxt()}
 function pickG(id){const g=S.groups.find(x=>x.id==id);document.querySelectorAll('.pc').forEach(c=>c.checked=g.members.includes(c.value));pg=g.name;$('pgl').textContent=pgTxt()}
-function saveGroup(){const n=val('gname').trim(),mb=[...document.querySelectorAll('.gc:checked')].map(c=>c.value);if(!n||!mb.length)return alert('Enter a group name and tick its workers');S.groups.push({id:uid(),name:n,members:mb});save();render()}
+function saveGroup(){const n=val('gname').trim(),mb=[...document.querySelectorAll('.gc:checked')].map(c=>c.value);if(!n||!mb.length)return alert('Enter a group name and tick its workers');S.groups.push({id:uid(),name:n,members:mb});save();mclose();render()}
 const SN={c:'cement',m:'metal',s:'sand'};
 let vw=mon(today());
 const vNames=()=>[...new Set([...S.vendors.map(v=>v.name),...S.pur.map(p=>p.vendor).filter(Boolean)])];
@@ -212,38 +488,32 @@ const toBase=(k,u,n,lc)=>k=='c'?n:u=='load'?n*lc:u=='bkt'?bk(n):n;
 function uChg(){const k=val('um');$('uu').innerHTML=uOpts(k).map(([a,b])=>`<option value="${a}">${b}</option>`).join('');$('uv').innerHTML=vOpts(k);if(k!='c')$('ulc').value=S.set.lc[k];uPv()}
 function uPv(){const k=val('um'),u=val('uu'),n=num('uq'),ld=k!='c'&&u=='load';$('ulw').style.display=ld?'':'none';const b=toBase(k,u,n,num('ulc'));$('upv').textContent=n?'= '+q(b)+' '+UN[k]+(k!='c'?' (about '+q(b*28.3168/S.set.bk)+' buckets)':''):''}
 function addPur(){const k=val('um'),u=val('uu'),n=num('uq'),lc=num('ulc');if(!n)return alert('Enter quantity');if(k!='c'&&u=='load'&&lc<=0)return alert('Enter the cubic feet in this load');
- S.pur.push(Object.assign({id:uid(),date:val('ud'),mat:k,vendor:val('uv'),qty:toBase(k,u,n,lc),cost:num('uc'),en:n,eu:u},k!='c'&&u=='load'?{lc}:{}));save();render()}
-function addVendor(){const n=val('vn').trim(),mt=[...document.querySelectorAll('.vc:checked')].map(c=>c.value);if(!n||!mt.length)return alert('Enter vendor name and tick what they supply');S.vendors.push({id:uid(),name:n,mats:mt});save();render()}
+ S.pur.push(Object.assign({id:uid(),date:val('ud'),mat:k,vendor:val('uv'),qty:toBase(k,u,n,lc),cost:num('uc'),en:n,eu:u},k!='c'&&u=='load'?{lc}:{}));save();mclose();render()}
+function addVendor(){const n=val('vn').trim(),mt=[...document.querySelectorAll('.vc:checked')].map(c=>c.value);if(!n||!mt.length)return alert('Enter vendor name and tick what they supply');S.vendors.push({id:uid(),name:n,mats:mt});save();mclose();render()}
 function payV(n,b){const a=parseFloat(prompt('Pay '+n+' (balance '+b+')',b));if(a>0){S.vp.push({id:uid(),vendor:n,date:today(),amt:a});save();render()}}
 V.stock=function(){const st=stock(),U=(P,k)=>sum(P,p=>p.u[k]||0),bu=x=>x*28.3168/S.set.bk,gx=(k,v)=>q(v)+' ('+q(bu(v))+' bkt)';
  const ent=p=>!p.en?'\u2014':p.eu=='load'?q(p.en)+' loads \u00d7 '+q(p.lc)+' cu ft':q(p.en)+' '+({bag:'bags',ft:'cu ft',bkt:'buckets',load:'loads'})[p.eu];
- const hist=[...S.pur].sort((a,b)=>b.date<a.date?-1:1).slice(0,30).map(p=>row([p.date,MAT.find(x=>x[0]==p.mat)[1],esc(p.vendor),ent(p),q(p.qty)+' '+UN[p.mat],m(p.cost),m(p.qty?p.cost/p.qty:0),delB('pur',p.id)],['','','','r','r','r','r'])).join('');
+ const hist=[...S.pur].sort((a,b)=>b.date<a.date?-1:1).filter(p=>mD(p.date)&&mQ(p.vendor,SN[p.mat])).slice(0,30).map(p=>row([p.date,MAT.find(x=>x[0]==p.mat)[1],esc(p.vendor),ent(p),q(p.qty)+' '+UN[p.mat],m(p.cost),m(p.qty?p.cost/p.qty:0),delB('pur',p.id)],['','','','r','r','r','r'])).join('');
  const dr=Array.from({length:14},(_,i)=>addD(today(),-i)).map(d=>{const P=S.prod.filter(p=>p.date==d);return row([d,q(sum(P.filter(p=>p.k!='work'),p=>p.qty)),q(U(P,'c')),gx('m',U(P,'m')),gx('s',U(P,'s'))],['','r','r','r','r'])}).join('');
  const mr=[...new Set(S.prod.map(p=>p.date.slice(0,7)))].sort().reverse().slice(0,12).map(x=>{const P=S.prod.filter(p=>p.date.slice(0,7)==x),dn=new Set(P.map(p=>p.date)).size||1,c=U(P,'c'),me=U(P,'m'),sa=U(P,'s'),br=sum(P.filter(p=>p.k!='work'),p=>p.qty);
   return row([x,dn,q(br),q(c),gx('m',me),gx('s',sa),q(c/dn)+' bags \u00b7 '+q(me/dn)+' \u00b7 '+q(sa/dn)+' cu ft',c?q(br/c):'\u2014'],['','r','r','r','r','r','r','r'])}).join('');
  return `<div class="cd"><h2>Current stock</h2>${tbl(['Material','Received','Used','In stock','Avg cost/unit','Avg use/day (14 d)','Days left','Suggested order'],MAT.map(([k,n])=>{const x=st[k];return row([n+' ('+UN[k]+')',q(x.b),q(x.u),`<b>${q(x.left)}</b>`+(k=='c'?'':' ('+q(bu(x.left))+' bkt)'),m(x.avg),q(x.use),x.dl===null?'\u2014':q(Math.max(x.dl,0)),(()=>{const nd=x.use*S.set.oc-x.left;return x.use>0&&nd>0?(k=='c'?q(Math.ceil(nd))+' bags':q(nd)+' cu ft (\u2248 '+q(nd/S.set.lc[k])+' loads)'):'\u2014'})()],['','r','r','r','r','r',x.low?'bad':'',''])}).join(''))}
  <p class="k">Cement is counted in bags. Granite metal and sand are counted in cubic feet (cu ft); bkt = ${S.set.bk} litre buckets. Reminder triggers when stock will last ${S.set.warn} days or less. Suggested order = average daily use × ${S.set.oc} days − stock in hand (loads use your default cu ft per load).</p></div>
- <div class="cd"><h2>Record purchase</h2><div class="f"><div><label>Date</label><input type="date" id="ud" value="${today()}"></div>
- <div><label>Material</label><select id="um" onchange="uChg()">${MAT.map(([k,n])=>`<option value="${k}">${n}</option>`).join('')}</select></div>
- <div><label>Vendor</label><select id="uv">${vOpts('c')}</select></div>
- <div><label>Quantity</label><input type="number" id="uq" step="any" oninput="uPv()"></div>
- <div><label>Measured in</label><select id="uu" onchange="uPv()">${uOpts('c').map(([a,b])=>`<option value="${a}">${b}</option>`).join('')}</select></div>
- <div id="ulw" style="display:none"><label>Cubic feet in 1 load</label><input type="number" id="ulc" step="any" value="${S.set.lc.m}" oninput="uPv()"></div>
- <div><label>Total cost</label><input type="number" id="uc" step="any"></div><button class="b" onclick="addPur()">Add</button></div>
- <p class="k" id="upv"></p><p class="k">For sand and metal choose Loads and enter how many cubic feet that truck load had (each load can differ). You can also enter cubic feet or buckets directly. To correct stock after a physical count, add a negative quantity with cost 0.</p></div>
+ ${qa('truck','Record purchase','Cement, granite metal and sand — stock and average cost update instantly.','New purchase','dlgPur()')}
  <div class="cd"><h2>Daily usage (last 14 days)</h2>${tbl(['Date','Bricks','Cement (bags)','Granite metal (cu ft)','Granite sand (cu ft)'],dr)}<p class="k">Usage comes from the cement bags you enter in Production, with metal and sand deducted by your per-bag bucket ratio.</p></div>
  <div class="cd"><h2>Monthly usage</h2>${tbl(['Month','Days worked','Bricks','Cement (bags)','Granite metal (cu ft)','Granite sand (cu ft)','Avg per working day','Bricks per cement bag'],mr)}</div>
- <div class="cd"><h2>Purchase history</h2>${tbl(['Date','Material','Vendor','Entered','Stock qty','Cost','Per unit',''],hist)}</div>`};
+ <div class="cd"><h2>Purchase history</h2>${fbar('vendor or material',drng())}${tbl(['Date','Material','Vendor','Entered','Stock qty','Cost','Per unit',''],hist)}</div>`};
 V.ven=function(){const a=vw,b=addD(vw,6),names=vNames();let wt=0;
- const rows=names.map(n=>{const P=S.pur.filter(p=>p.vendor==n&&inR(p.date,a,b)),ds=MAT.map(([k])=>{const x=sum(P.filter(p=>p.mat==k),p=>p.qty);return x>0?q(x)+' '+UN[k]+' '+SN[k]:''}).filter(Boolean).join(', ')||'—';
+ const rows=names.filter(n=>mQ(n)).map(n=>{const P=S.pur.filter(p=>p.vendor==n&&inR(p.date,a,b)),ds=MAT.map(([k])=>{const x=sum(P.filter(p=>p.mat==k),p=>p.qty);return x>0?q(x)+' '+UN[k]+' '+SN[k]:''}).filter(Boolean).join(', ')||'—';
   const wc=sum(P,p=>p.cost),wp=sum(S.vp.filter(p=>p.vendor==n&&inR(p.date,a,b)),p=>p.amt),ow=vBought(n)-vPaid(n);wt+=wc;
   return row([esc(n),ds,m(wc),m(wp),`<b class="${ow>0.005?'wn':'ok'}">${m(ow)}</b>`,ow>0.005?`<button class="s" data-n="${esc(n)}" onclick="payV(this.dataset.n,${ow})">Pay</button>`:''],['','','r','r','r'])}).join('');
- const dl=S.pur.filter(p=>inR(p.date,a,b)).sort((x,y)=>x.date<y.date?-1:1).map(p=>row([p.date,esc(p.vendor),MAT.find(x=>x[0]==p.mat)[1],q(p.qty)+' '+UN[p.mat],m(p.cost)],['','','','r','r'])).join('');
- const ph=[...S.vp].sort((x,y)=>y.date<x.date?-1:1).slice(0,30).map(p=>row([p.date,esc(p.vendor),m(p.amt),delB('vp',p.id)],['','','r'])).join('');
+ const dl=S.pur.filter(p=>inR(p.date,a,b)).filter(p=>mQ(p.vendor,SN[p.mat])).sort((x,y)=>x.date<y.date?-1:1).map(p=>row([p.date,esc(p.vendor),MAT.find(x=>x[0]==p.mat)[1],q(p.qty)+' '+UN[p.mat],m(p.cost)],['','','','r','r'])).join('');
+ const ph=[...S.vp].sort((x,y)=>y.date<x.date?-1:1).filter(p=>mD(p.date)&&mQ(p.vendor)).slice(0,30).map(p=>row([p.date,esc(p.vendor),m(p.amt),delB('vp',p.id)],['','','r'])).join('');
  return `<div class="cd"><h2>Vendor payments</h2><div class="f"><div><label>Week starting (Monday)</label><input type="date" value="${vw}" onchange="vw=mon(this.value);render()"></div></div><p class="k">Week: ${a} to ${b}. Balance = everything received from the vendor minus everything you have paid.</p>
+ ${fbar('vendor')}
  ${tbl(['Vendor','Received this week','Bill this week','Paid this week','Total balance to pay',''],rows)}<p><b>This week’s bills: ${m(wt)} · Total owed to all vendors: ${m(vOwed())}</b></p></div>
  <div class="cd"><h2>This week’s deliveries</h2>${tbl(['Date','Vendor','Material','Quantity','Cost'],dl)}</div>
- <div class="cd"><h2>Payments made</h2>${tbl(['Date','Vendor','Amount',''],ph)}</div>`};
+ <div class="cd"><h2>Payments made</h2>${fbar('vendor',drng())}${tbl(['Date','Vendor','Amount',''],ph)}</div>`};
 const cvTxt=(l,rm,rs)=>{const b=(+l||0)/28.3168;return '1 bucket = '+(+l||0)+' litres = '+b.toFixed(2)+' cu ft. 1 cement bag uses '+(+rm||0)+' bucket(s) of metal = '+((+rm||0)*b).toFixed(2)+' cu ft and '+(+rs||0)+' bucket(s) of sand = '+((+rs||0)*b).toFixed(2)+' cu ft.'};
 function cvt(){$('cvt').innerHTML='<b>'+cvTxt(num('s_bk'),num('s_rm'),num('s_rs'))+'</b>'}
 V.pay=function(){const e=wk,f=addD(wk,6);let tot=0,due=0;
@@ -253,18 +523,17 @@ V.pay=function(){const e=wk,f=addD(wk,6);let tot=0,due=0;
  const bal=(v,k)=>{const b=v-paidOf(k);tot+=v;if(b>0)due+=b;return b};
  const btn=(k,b,al)=>b>0.005||al?`<button class="s" data-n="${esc(k)}" onclick="payW(this.dataset.n,${b})">Pay</button>`:'';
  const st=(b,v,pd)=>b>0.005?`<span class="wn">${m(b)}</span>`:b<-0.005?`<span class="ok">Advance ${m(-b)}</span>`:(v||pd)?'<span class="ok">Settled</span>':'<span class="mu">No work this week</span>';
- const gr=gn.map(n=>{const k='G:'+n,g=S.groups.find(x=>x.name==n),mc=g?g.members.length:0,P=S.prod.filter(p=>p.grp==n&&inR(p.date,e,f)),L=S.sales.filter(x=>ldrs(x).includes(k)&&inR(x.date,e,f)),pw=sum(P,p=>p.qty*p.rate),lw=sum(L,x=>x.loaded*x.lrate/ldrs(x).length),b=bal(pw+lw,k);
-  return row(['\ud83d\udc65 '+esc(n),mc||'\u2014',q(sum(P,p=>p.qty)),m(pw),q(sum(L,x=>x.loaded/ldrs(x).length)),m(lw),`<b>${m(pw+lw)}</b>`,mc?m((pw+lw)/mc):'\u2014',m(paidOf(k)),st(b,pw+lw,paidOf(k)),btn(k,b,1)],['','r','r','r','r','r','r','r','r','r',''])}).join('');
- const wr=wn.map(n=>{const P=S.prod.filter(p=>!p.grp&&(p.emps||[p.emp]).includes(n)&&inR(p.date,e,f)),L=S.sales.filter(x=>ldrs(x).includes(n)&&inR(x.date,e,f)),pw=sum(P,p=>sh(p)*p.rate),lw=sum(L,x=>x.loaded*x.lrate/ldrs(x).length),b=bal(pw+lw,n);if(!(pw+lw)&&!paidOf(n))return '';
-  return row([esc(n),q(sum(P,sh)),m(pw),q(sum(L,x=>x.loaded/ldrs(x).length)),m(lw),`<b>${m(pw+lw)}</b>`,m(paidOf(n)),st(b,pw+lw,paidOf(n)),btn(n,b)],['','r','r','r','r','r','r','r',''])}).join('');
- const ph=[...S.wp].sort((a,b)=>b.date<a.date?-1:1).slice(0,40).map(w=>row([w.date,esc(w.emp.replace(/^G:/,'\ud83d\udc65 ')),w.week,m(w.amt),delB('wp',w.id)],['','','','r',''])).join('');
- return `<div class="cd"><h2>Weekly pay</h2><div class="f"><div><label>Week starting (Monday)</label><input type="date" id="wk" value="${wk}" onchange="wk=mon(this.value);render()"></div>
- <div><label>Add worker</label><input id="en" placeholder="Name"></div><button class="b" onclick="addEmp()">Add worker</button></div>
+ const gr=gn.filter(n=>mQ(n)).map(n=>{const k='G:'+n,g=S.groups.find(x=>x.name==n),mc=g?g.members.length:0,P=S.prod.filter(p=>p.grp==n&&inR(p.date,e,f)),L=S.sales.filter(x=>ldrs(x).includes(k)&&inR(x.date,e,f)),pw=sum(P,p=>p.qty*p.rate),lw=sum(L,x=>x.loaded*x.lrate/ldrs(x).length),b=bal(pw+lw,k);
+  return row(['Team '+esc(n),mc||'\u2014',q(sum(P,p=>p.qty)),m(pw),q(sum(L,x=>x.loaded/ldrs(x).length)),m(lw),`<b>${m(pw+lw)}</b>`,mc?m((pw+lw)/mc):'\u2014',m(paidOf(k)),st(b,pw+lw,paidOf(k)),btn(k,b,1)],['','r','r','r','r','r','r','r','r','r',''])}).join('');
+ const wr=wn.filter(n=>mQ(n)).map(n=>{const P=S.prod.filter(p=>!p.grp&&(p.emps||[p.emp]).includes(n)&&inR(p.date,e,f)),L=S.sales.filter(x=>ldrs(x).includes(n)&&inR(x.date,e,f)),pw=sum(P,p=>sh(p)*p.rate),lw=sum(L,x=>x.loaded*x.lrate/ldrs(x).length),b=bal(pw+lw,n);if(!(pw+lw)&&!paidOf(n))return '';
+  return row([empCell(n),q(sum(P,sh)),m(pw),q(sum(L,x=>x.loaded/ldrs(x).length)),m(lw),`<b>${m(pw+lw)}</b>`,m(paidOf(n)),st(b,pw+lw,paidOf(n)),btn(n,b)],['','r','r','r','r','r','r','r',''])}).join('');
+ const ph=[...S.wp].sort((a,b)=>b.date<a.date?-1:1).slice(0,40).map(w=>row([w.date,esc(w.emp.replace(/^G:/,'Team ')),w.week,m(w.amt),delB('wp',w.id)],['','','','r',''])).join('');
+ return `<div class="cd"><h2>Weekly pay</h2><div class="f"><div><label>Week starting (Monday)</label><input type="date" id="wk" value="${wk}" onchange="wk=mon(this.value);render()"></div><button class="s" onclick="dlgAddW()">Add worker</button></div>
  <p class="k">Week: ${e} to ${f}. Pay = bricks \u00d7 rate at the time + bricks loaded \u00d7 loading rate. Work entered for a <b>group</b> is paid to the group as a whole; work entered for ticked individuals is paid to those workers.</p></div>
- <div class="cd"><h2>Pay a group or worker</h2><div class="f"><div><label>Pay to</label><select id="wpy">${gn.length?`<optgroup label="Groups">${gn.map(n=>`<option value="G:${esc(n)}">\ud83d\udc65 ${esc(n)}</option>`).join('')}</optgroup>`:''}<optgroup label="Individuals">${S.emp.map(n=>`<option>${esc(n)}</option>`).join('')}</optgroup></select></div><div><label>Amount</label><input type="number" id="wpa" step="any"></div><div><label>Payment date</label><input type="date" id="wpd" value="${today()}"></div><button class="b" onclick="payNow()">Record payment</button></div><p class="k">Recorded against the week shown above (${e} to ${f}). Use it for advances or part payments; the balances below update. If a group shows "No work this week", no production or loading was saved for that group in this week \u2013 check the week date above.</p></div>
- <div class="cd"><h2>Group pay</h2>${tbl(['Group','Members','Bricks / units','Production pay','Loaded','Loading pay','Total','Per member (equal)','Paid','Balance',''],gr)}</div>
+ ${qa('banknote','Pay a group or worker','Advances or part payments, recorded against the week shown above. Balances update instantly.','Record payment','dlgPayN()')}
+ <div class="cd"><h2>Group pay</h2>${fbar('group or worker')}${tbl(['Group','Members','Bricks / units','Production pay','Loaded','Loading pay','Total','Per member (equal)','Paid','Balance',''],gr)}</div>
  <div class="cd"><h2>Individual workers</h2>${tbl(['Worker','Bricks / units (share)','Production wage','Loaded','Loading wage','Total','Paid','Balance',''],wr)}
- <p class="k">Workers: ${S.emp.map(n=>`${esc(n)} <a href="#" onclick="rmEmp('${esc(n)}');return false">\u2715</a>`).join(' \u00b7 ')||'none'}</p></div>
+ <p class="k">Workers: ${S.emp.map(n=>`${esc(n)} <a href="#" onclick="rmEmp('${esc(n)}');return false">${IC.x}</a>`).join(' \u00b7 ')||'none'}</p></div>
  <p><b>Week total: ${m(tot)} \u00b7 Still to pay: ${m(due)}</b></p>
  <div class="cd"><h2>Wage payments made</h2>${tbl(['Date paid','Paid to','For week of','Amount',''],ph)}</div>`};
 V.pnl=function(){const a=pm+'-01',b=pm+'-31',x=pnl(a,b),r=recv(),Lr=(n,v,c)=>row([n,m(v)],['',(c||'')+' r']);
@@ -276,7 +545,7 @@ V.pnl=function(){const a=pm+'-01',b=pm+'-31',x=pnl(a,b),r=recv(),Lr=(n,v,c)=>row
  ${Lr('<b>Gross profit</b>',x.rev-x.mat-x.pw-x.lw)}${row(['<b>Other expenses</b>',''])}${Object.entries(x.cats).map(([c,v])=>Lr(esc(c),-v)).join('')||row(['<span class="mu">none</span>',''])}
  ${Lr('<b>NET PROFIT</b>',x.net,x.net<0?'bad':'ok')}</table></div>
  <p class="k">Profit counts what was sold, produced and used in the month, whether or not it has been paid yet. Raw materials are costed at your average purchase price for the quantity used, so vendor payments are shown separately below, not deducted twice.</p></div>
- <div class="cd"><h2>Payments this month (cash)</h2><div class="sc"><table>${Lr('Received from customers',rc,'ok')}${Lr('Wages paid',-wpd)}${Object.entries(by).map(([k,v])=>row(['\u00a0\u00a0'+esc(k.replace(/^G:/,'\ud83d\udc65 ')),m(v)],['mu','mu r'])).join('')}${Lr('Paid to vendors (raw materials)',-vpm)}${Lr('Other expenses',-x.ex)}${Lr('<b>Net cash movement</b>',cash,cash<0?'bad':'ok')}</table></div></div>
+ <div class="cd"><h2>Payments this month (cash)</h2><div class="sc"><table>${Lr('Received from customers',rc,'ok')}${Lr('Wages paid',-wpd)}${Object.entries(by).map(([k,v])=>row(['\u00a0\u00a0'+esc(k.replace(/^G:/,'Team ')),m(v)],['mu','mu r'])).join('')}${Lr('Paid to vendors (raw materials)',-vpm)}${Lr('Other expenses',-x.ex)}${Lr('<b>Net cash movement</b>',cash,cash<0?'bad':'ok')}</table></div></div>
  <div class="cd"><h2>Still pending (all time)</h2><div class="sc"><table>${Lr('Customers still owe you',sum(r,y=>y.bal),'wn')}${Lr('Wages earned but not yet paid',unp,'wn')}${Lr('You still owe vendors',vOwed(),'wn')}</table></div></div>`};
 const ldrs=x=>x.loaders||(x.loader?[x.loader]:[]);
 const ldsel=()=>[...document.querySelectorAll('.lg:checked,.li:checked')].map(c=>c.value);
@@ -285,16 +554,17 @@ const T=()=>S.set.types||[{id:'4',name:'4 inch brick',kind:'brick',wage:S.set.w4
 const TN=id=>{const t=T().find(x=>x.id==id);return t?t.name:(/^\d+$/.test(String(id))?id+' inch brick':String(id))};
 const TB=()=>T().filter(t=>t.kind=='brick');
 function updT(id,k,v){S.set.types=T().map(t=>t.id==id?Object.assign({},t,{[k]:k=='name'?v:(+v||0)}):t);save()}
-function addT(){const n=val('tn').trim();if(!n)return alert('Enter a name');S.set.types=[...T(),{id:'t'+uid(),name:n,kind:val('tk'),wage:num('tw'),price:num('tp')}];save();render()}
+function addT(){const n=val('tn').trim();if(!n)return alert('Enter a name');S.set.types=[...T(),{id:'t'+uid(),name:n,kind:val('tk'),wage:num('tw'),price:num('tp')}];save();mclose();render()}
 function delT(id){if(confirm('Remove this type from the lists? Old entries keep their name.')){S.set.types=T().filter(t=>t.id!=id);save();render()}}
 function quickT(){const n=(prompt('Name of the new brick size or work (e.g. 8 inch brick, Stacking, Cleaning)')||'').trim();if(!n)return;
  const br=confirm('Is this a BRICK you make and sell?\nOK = brick, Cancel = other work (paid only)'),w=parseFloat(prompt('Pay per unit for the workers','1'))||0,pr=br?(parseFloat(prompt('Default selling price per brick','0'))||0):0,id='t'+uid();
- S.set.types=[...T(),{id,name:n,kind:br?'brick':'work',wage:w,price:pr}];save();softRender();$('ps').value=id;prT()}
-function prT(){const t=T().find(x=>x.id==val('ps'));if(t)$('pr').placeholder=t.wage}
+ S.set.types=[...T(),{id,name:n,kind:br?'brick':'work',wage:w,price:pr}];save();softRender();const sl=$('ps');if(sl){sl.insertAdjacentHTML('beforeend',`<option value="${id}">${esc(n)}${br?'':' (work)'}</option>`);sl.value=id}prT()}
+function prT(){const t=T().find(x=>x.id==val('ps'));if(t)$('pr').placeholder=t.wage;hlWork()}
+function hlWork(){const tid=val('ps');document.querySelectorAll('.pc').forEach(c=>{const e=EMPS().find(x=>x.name==c.value),as=e&&(e.works||[]).includes(tid),l=c.parentElement;l.style.fontWeight=as?'650':'400';l.style.color=as?'var(--ac)':''})}
 function addProd(){const em=[...document.querySelectorAll('.pc:checked')].map(c=>c.value),z=val('ps'),t=T().find(x=>x.id==z)||{name:TN(z),kind:'brick',wage:0},wkn=t.kind=='work',qt=num('pq'),cm=num('pcm');
  if(!em.length)return alert('Select at least one worker');if(qt<=0)return alert('Enter the quantity');if(!wkn&&cm<=0)return alert('Enter cement bags used');
  const bm=wkn?0:val('pmm')!==''?num('pmm'):cm*S.set.rm,bs=wkn?0:val('pss')!==''?num('pss'):cm*S.set.rs;
- S.prod.push(Object.assign({id:uid(),date:val('pd'),emps:em,emp:em.join(', '),size:z,sn:t.name,qty:qt,rate:val('pr')!==''?num('pr'):t.wage,u:wkn?{c:0,m:0,s:0}:{c:cm,m:bk(bm),s:bk(bs)},grp:pg||((S.groups.find(g=>g.members.length==em.length&&g.members.every(x=>em.includes(x)))||{}).name||''),note:val('pnote')||''},wkn?{k:'work'}:{bu:{m:bm,s:bs,l:S.set.bk}}));pg='';save();render()}
+ S.prod.push(Object.assign({id:uid(),date:val('pd'),emps:em,emp:em.join(', '),size:z,sn:t.name,qty:qt,rate:val('pr')!==''?num('pr'):t.wage,u:wkn?{c:0,m:0,s:0}:{c:cm,m:bk(bm),s:bk(bs)},grp:pg||((S.groups.find(g=>g.members.length==em.length&&g.members.every(x=>em.includes(x)))||{}).name||''),note:val('pnote')||''},wkn?{k:'work'}:{bu:{m:bm,s:bs,l:S.set.bk}}));pg='';save();mclose();render()}
 function sl(){const t=sum(TB(),b=>num('q_'+b.id)*num('r_'+b.id));$('st').value=t;$('sload').placeholder=sum(TB(),b=>num('q_'+b.id))}
 function addSale(){const it=TB().map(b=>({size:b.id,name:b.name,qty:num('q_'+b.id),rate:num('r_'+b.id)})).filter(i=>i.qty>0);
  if(!it.length||!val('sc').trim())return alert('Enter customer and quantity');const bl=bstock(),over=it.filter(i=>{const x=bl.find(y=>y.id==String(i.size));return (x?x.left:0)<i.qty});
@@ -305,17 +575,69 @@ function addSale(){const it=TB().map(b=>({size:b.id,name:b.name,qty:num('q_'+b.i
  S.sales.push({id,no,date:val('sd'),cust:val('sc').trim(),phone:val('sp'),items:it,total:tot,loaded:val('sload')!==''?num('sload'):qt,loaders:ldsel(),loader:ldsel()[0]||'',lrate:S.set.load,due:val('sf')});
  if(num('sa')>0)S.pay.push({id:uid(),sid:id,date:val('sd'),amt:Math.min(num('sa'),tot)});save();render();inv(id)}
 V.sales=function(){const r=recv(),t=today();
- const rr=r.map(x=>row([x.s.no,esc(x.s.cust),esc(x.s.phone||''),m(x.s.total),m(x.bal),x.s.due||'\u2014',`<button class="s" onclick="rcv('${x.s.id}')">Receive</button>`],['','','','r','r',x.s.due&&x.s.due<=t?'bad':''])).join('');
- const li=[...S.sales].sort((a,b)=>b.date<a.date?-1:1).slice(0,40).map(s=>{const b=s.total-paid(s.id);return row([s.no,s.date,esc(s.cust),esc(ldrs(s).map(z=>z.replace(/^G:/,'\ud83d\udc65 ')).join(', ')||'\u2014'),q(sum(s.items,i=>i.qty)),m(s.total),b>0.005?`<span class="wn">${m(b)}</span>`:'<span class="ok">Paid</span>',`<button class="s" onclick="inv('${s.id}')">Invoice</button> ${delB('sales',s.id)}`],['','','','','r','r','r'])}).join('');
- return `<div class="cd"><h2>New sale / invoice</h2><div class="f"><div><label>Date</label><input type="date" id="sd" value="${t}"></div>
- <div><label>Customer</label><input id="sc" list="cdl" autocomplete="off" oninput="scChg()"><datalist id="cdl">${ACC().list.map(x=>`<option value="${esc(x.name)}">`).join('')}</datalist><div id="sch" class="k"></div></div><div><label>Phone</label><input id="sp"></div></div>
- <div class="f" style="margin-top:10px">${TB().map(b=>`<div><label>${esc(b.name)} \u2013 qty</label><input type="number" id="q_${b.id}" oninput="sl()"></div><div><label>${esc(b.name)} \u2013 rate</label><input type="number" id="r_${b.id}" step="any" value="${b.price}" oninput="sl()"></div>`).join('')}</div>
- <div class="f" style="margin-top:10px"><div><label>Total</label><input id="st" disabled></div><div><label>Paid now (0 = credit)</label><input type="number" id="sa" step="any" value="0"></div>
- <div><label>Follow-up date (if balance)</label><input type="date" id="sf"></div>
- <div><label>Loaded on truck (bricks)</label><input type="number" id="sload"></div></div><div style="margin-top:10px"><label>Loaded by \u2013 tick the team(s) and/or the people who loaded (loading pay is split equally between the ticked items)</label>${S.groups.length?`<div>${S.groups.map(g=>chk2('lg','G:'+g.name,'\ud83d\udc65 '+g.name)).join('')}</div>`:''}<div>${S.emp.map(n=>chk2('li',n,n)).join('')}</div></div>
- <p><button class="b" onclick="addSale()">Save sale</button></p></div>
- <div class="cd"><h2>Payments to follow up</h2>${tbl(['Invoice','Customer','Phone','Total','Balance','Follow-up',''],rr)}</div>
- <div class="cd"><h2>Invoices</h2>${tbl(['No.','Date','Customer','Loaded by','Bricks','Total','Status',''],li)}</div>`};
+ const rr=r.filter(x=>mQ(x.s.cust,x.s.no)).map(x=>row([x.s.no,esc(x.s.cust),esc(x.s.phone||''),m(x.s.total),m(x.bal),x.s.due||'\u2014',`<button class="s" onclick="rcv('${x.s.id}')">Receive</button>`],['','','','r','r',x.s.due&&x.s.due<=t?'bad':''])).join('');
+ const li=[...S.sales].sort((a,b)=>b.date<a.date?-1:1).filter(s=>mD(s.date)&&mQ(s.cust,s.no)&&(!Q.st||(Q.st=='bal'&&s.total-paid(s.id)>0.005)||(Q.st=='paid'&&s.total-paid(s.id)<=0.005))).slice(0,40).map(s=>{const b=s.total-paid(s.id);return row([s.no,s.date,esc(s.cust),esc(ldrs(s).map(z=>z.replace(/^G:/,'Team ')).join(', ')||'\u2014'),q(sum(s.items,i=>i.qty)),m(s.total),b>0.005?`<span class="wn">${m(b)}</span>`:'<span class="ok">Paid</span>',`<button class="s" onclick="inv('${s.id}')">Invoice</button> ${delB('sales',s.id)}`],['','','','','r','r','r'])}).join('');
+ const ssel=`<select onchange="Q.st=this.value;render()"><option value="">All statuses</option><option value="bal"${Q.st=='bal'?' selected':''}>Balance due</option><option value="paid"${Q.st=='paid'?' selected':''}>Fully paid</option></select>`;
+ return `${qa('receipt','New sale / invoice','Raise an invoice, take payment and set a follow-up date. The invoice opens after saving.','New sale','dlgSale()')}
+ <div class="cd"><h2>Payments to follow up</h2>${fbar('customer or invoice no.')}${tbl(['Invoice','Customer','Phone','Total','Balance','Follow-up',''],rr)}</div>
+ <div class="cd"><h2>Invoices</h2>${fbar('customer or invoice no.',drng()+ssel)}${tbl(['No.','Date','Customer','Loaded by','Bricks','Total','Status',''],li)}</div>`};
+
+/* ---- employees (HR master) ---- */
+let ET={v:'dir',q:'',e:''};
+const ROLES=['Owner','Supervisor','Worker','Moulder','Loader','Driver','Helper','Other staff'];
+const EMPS=()=>{if(!S.set.emps||!S.set.emps.length){S.set.emps=(S.emp||[]).map(n=>({id:uid(),name:n,role:'Worker',phone:'',joined:'',rate:0,works:[],active:true,note:''}))}return S.set.emps};
+const syncEmps=()=>{S.emp=EMPS().filter(e=>e.active!==false).map(e=>e.name)};
+const roleOf=n=>{const e=EMPS().find(x=>x.name==n);return e&&e.active!==false?e.role:''};
+const empCell=n=>{const r=roleOf(n);return esc(n)+(r?` <span class="bdg">${r}</span>`:'')};
+const ETABS=[['dir','Directory'],['work','Work assignments'],['led','Pay ledger']];
+const mE=(...f)=>{const s=ckey(ET.q||'');return!s||f.some(x=>ckey(String(x??'')).includes(s))};
+const etNav=()=>`<div class="toolbar"><div class="seg">${ETABS.map(([k,n])=>`<button class="${ET.v==k?'on':''}" onclick="ET.v='${k}';ET.q='';ET.e='';render()">${n}</button>`).join('')}</div><input id="eq" placeholder="Search staff" value="${esc(ET.q)}" oninput="ET.q=this.value;softRender()" style="max-width:220px"></div>`;
+V.emp=function(){
+ if(ET.v=='work')return etNav()+empWork();
+ if(ET.v=='led')return etNav()+empLed();
+ const e=ET.e?EMPS().find(x=>x.id==ET.e):null;
+ const rows=EMPS().filter(x=>!ET.q||ckey(x.name+' '+x.phone+' '+x.role).includes(ckey(ET.q))).map(x=>row([
+  `<b>${esc(x.name)}</b>${x.active===false?' <span class="bdg off">Off</span>':''}`,
+  `<span class="bdg">${x.role}</span>`,esc(x.phone||'\u2014'),x.joined||'\u2014',
+  (x.works||[]).map(id=>`<span class="wchip">${esc(TN(id))}</span>`).join(' ')||'<span class="mu">\u2014</span>',
+  x.rate?m(x.rate):'\u2014',
+  `${x.active===false?`<button class="s" onclick="actEmp('${x.id}',1)">Reactivate</button>`:`<button class="s" onclick="actEmp('${x.id}',0)">Deactivate</button>`} <button class="s" onclick="ET.e='${x.id}';dlgEmp()">Edit</button>`],
+  ['','','','r','','r',''])).join('');
+ return etNav()+qa('users','Employee records','Add a staff record, or press Edit in the directory below to open one. Full HR record: role, phone, joined date, pay rate, work kinds.','Add employee',"ET.e='';dlgEmp()")+`
+ <div class="cd"><h2>Staff directory (${EMPS().length})</h2>${tbl(['Name','Role','Phone','Joined','Work kinds','Pay/unit',''],rows)}</div>`};
+function empWork(){const types=T(),L=EMPS().filter(x=>mE(x.name,x.role));
+ return `<div class="cd"><h2>Who does what</h2><p class="k">Tap a cell to tick or untick a work kind for that person. In Production, the assigned people are highlighted as soon as you pick that work.</p>
+ ${tbl(['Employee',...types.map(t=>esc(t.name))],L.map(x=>row([`${empCell(x.name)}${x.active===false?' <span class="bdg off">Off</span>':''}`,...types.map(t=>`<button class="s" style="min-width:36px" onclick="tglWork('${x.id}','${t.id}')">${(x.works||[]).includes(t.id)?'\u2713':'\u2014'}</button>`)])).join(''))} <p class="k">Tip: add or rename work kinds (moulding, loading, stacking\u2026) in Settings \u2192 Brick sizes and work types.</p></div>`}
+function empLed(){
+ const gn=[...new Set([...S.groups.map(g=>g.name),...S.prod.map(p=>p.grp).filter(Boolean),...S.sales.flatMap(ldrs).filter(x=>x.startsWith('G:')).map(x=>x.slice(2))])];
+ const wn=[...new Set([...S.emp,...S.prod.filter(p=>!p.grp).flatMap(p=>p.emps||[p.emp]),...S.sales.flatMap(ldrs).filter(x=>!x.startsWith('G:'))])];
+ const li=n=>{const P=S.prod.filter(p=>(p.emps||[p.emp]).includes(n)),L=S.sales.filter(s=>ldrs(s).includes(n));
+  const pw=sum(P,p=>sh(p)*p.rate),lw=sum(L,s=>s.loaded*s.lrate/ldrs(s).length),pd=sum(S.wp.filter(w=>w.emp==n),w=>w.amt);
+  return{pw,lw,pd,bal:pw+lw-pd}};
+ const stc=b=>b>0.005?`<span class="wn">${m(b)}</span>`:b<-0.005?`<span class="ok">Advance ${m(-b)}</span>`:'<span class="ok">Settled</span>';
+ const wr=wn.filter(n=>mE(n)).map(n=>{const x=li(n);return row([empCell(n),m(x.pw),m(x.lw),`<b>${m(x.pw+x.lw)}</b>`,m(x.pd),stc(x.bal),x.bal>0.005?`<button class="s" data-n="${esc(n)}" onclick="payW(this.dataset.n,${x.bal})">Pay</button>`:''],['','r','r','r','r','r',''])}).join('');
+ const gr=gn.filter(n=>mE(n)).map(n=>{const k='G:'+n,P=S.prod.filter(p=>p.grp==n),L=S.sales.filter(s=>ldrs(s).includes(k));
+  const pw=sum(P,p=>p.qty*p.rate),lw=sum(L,s=>s.loaded*s.lrate/ldrs(s).length),pd=sum(S.wp.filter(w=>w.emp==k),w=>w.amt),b=pw+lw-pd;
+  return row([`${esc(n)} <span class="bdg tm">Team</span>`,m(pw),m(lw),`<b>${m(pw+lw)}</b>`,m(pd),stc(b),b>0.005?`<button class="s" data-n="G:${esc(n)}" onclick="payW(this.dataset.n,${b})">Pay</button>`:''],['','r','r','r','r','r',''])}).join('');
+ return `<div class="cd"><h2>Individuals \u2013 all time</h2>${tbl(['Employee','Production pay','Loading pay','Earned','Paid','Balance',''],wr)}</div>
+ <div class="cd"><h2>Teams \u2013 all time</h2>${tbl(['Team','Production pay','Loading pay','Earned','Paid','Balance',''],gr)}<p class="k">Balance is what you still owe. Pay records a payment against the week shown in Weekly pay.</p></div>`}
+function saveEmp(){const n=val('e_n').trim();if(!n)return alert('Enter the name');
+ if(EMPS().some(x=>x.name==n&&x.id!=ET.e))return alert('Someone with that name already exists');
+ const old=ET.e?EMPS().find(x=>x.id==ET.e):null;
+ const rec={id:old?old.id:uid(),name:n,role:val('e_r'),phone:val('e_p').trim(),joined:val('e_j'),rate:num('e_rate'),works:[...document.querySelectorAll('.ew:checked')].map(c=>c.value),active:old?old.active:true,note:val('e_o').trim()};
+ if(old){if(old.name!=n)renameEmp(old.id,n);Object.assign(old,rec)}else EMPS().push(rec);
+ syncEmps();save();ET.e='';mclose();render()}
+function renameEmp(id,nm){const e=EMPS().find(x=>x.id==id);if(!e)return;const o=e.name;
+ S.prod.forEach(p=>{p.emps=(p.emps||[p.emp]).map(x=>x==o?nm:x);p.emp=p.emps.join(', ')});
+ S.wp.forEach(w=>{if(w.emp==o)w.emp=nm});
+ S.sales.forEach(s=>{s.loaders=(s.loaders||[]).map(x=>x==o?nm:x);if(s.loader==o)s.loader=nm});
+ S.groups.forEach(g=>g.members=(g.members||[]).map(x=>x==o?nm:x));
+ e.name=nm}
+function actEmp(id,on){const e=EMPS().find(x=>x.id==id);if(!e)return;
+ if(!on&&!confirm('Deactivate '+e.name+'? They stop appearing in new entries; past records stay.'))return;
+ e.active=!!on;syncEmps();save();render()}
+function tglWork(eid,tid){const e=EMPS().find(x=>x.id==eid);if(!e)return;
+ e.works=(e.works||[]).includes(tid)?(e.works||[]).filter(x=>x!=tid):[...(e.works||[]),tid];save();render()}
 
 /* ---- brick stock ---- */
 const bAdj=()=>S.set.badj||[];
@@ -333,23 +655,17 @@ function bstTbl(short){const L=bstock(),T0=k=>sum(L,x=>x[k]);
  const tot=short?row(['<b>Total</b>',`<b>${q(T0('today'))}</b>`,`<b>${q(T0('prod'))}</b>`,`<b>${q(T0('sold'))}</b>`,`<b>${q(T0('left'))}</b>`],['','r','r','r','r']):row(['<b>Total</b>',`<b>${q(T0('today'))}</b>`,`<b>${q(T0('month'))}</b>`,`<b>${q(T0('prod'))}</b>`,`<b>${q(T0('sold'))}</b>`,`<b>${(T0('adj')>0?'+':'')+q(T0('adj'))}</b>`,`<b>${q(T0('left'))}</b>`],['','r','r','r','r','r','r']);
  return tbl(short?['Size','Made today','Made (total)','Sold','In stock']:['Size','Made today','Made this month','Made (total)','Sold','Count correction','In stock'],rows+tot)}
 V.bst=function(){const L=bstock(),neg=L.filter(x=>x.left<0);
- const hist=[...bAdj()].sort((a,b)=>b.date<a.date?-1:1).map(a=>row([a.date,esc(TN(a.size)),(a.qty>0?'+':'')+q(a.qty),esc(a.note||''),`<button class="s" onclick="delAdj('${a.id}')">\u2715</button>`],['','','r','',''])).join('');
- return `${neg.map(x=>`<div class="al">\u26a0 <b>${esc(x.name)}</b> stock is ${q(x.left)} \u2013 more was sold than recorded as made. Check Production entries or do a physical count below.</div>`).join('')}
+ const hist=[...bAdj()].sort((a,b)=>b.date<a.date?-1:1).filter(a=>mD(a.date)&&mQ(TN(a.size),a.note)).map(a=>row([a.date,esc(TN(a.size)),(a.qty>0?'+':'')+q(a.qty),esc(a.note||''),`<button class="s" onclick="delAdj('${a.id}')">${IC.x}</button>`],['','','r','',''])).join('');
+ return `${neg.map(x=>`<div class="al"><b>${esc(x.name)}</b> stock is ${q(x.left)} \u2013 more was sold than recorded as made. Check Production entries or do a physical count below.</div>`).join('')}
  <div class="cd"><h2>Brick stock by size</h2>${bstTbl(false)}
  <p class="k">In stock = bricks made (Production tab) \u2212 bricks sold (Sales tab) \u00b1 count corrections. "Other work" types such as stacking or cleaning are not counted.</p></div>
- <div class="cd"><h2>Correct stock after a physical count</h2>
- <div class="f"><div><label>Date</label><input type="date" id="bd" value="${today()}"></div>
- <div><label>Brick size</label><select id="bs">${TB().map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join('')}</select></div>
- <div><label>Actual bricks counted in the yard</label><input type="number" id="bc" min="0" step="any"></div>
- <div><label>Note (optional)</label><input id="bn" placeholder="e.g. broken, opening stock"></div>
- <button class="b" onclick="addAdj()">Set stock</button></div>
- <p class="k">The app works out the difference between your count and the system stock and saves it as a correction, so totals made and sold stay untouched. Use this also to enter your opening stock before you started using the app.</p></div>
- <div class="cd"><h2>Count corrections</h2>${tbl(['Date','Size','Change','Note',''],hist)}</div>`};
+ ${qa('bricks','Correct stock after a physical count','Counted the yard? Set the real number - the difference is saved as a correction.','Set stock','dlgAdj()')}
+ <div class="cd"><h2>Count corrections</h2>${fbar('size or note',drng())}${tbl(['Date','Size','Change','Note',''],hist)}</div>`};
 function addAdj(){const id=val('bs');if(!id)return alert('Choose a brick size');if(val('bc')==='')return alert('Enter the bricks counted');
  const cur=(bstock().find(x=>x.id==String(id))||{left:0}).left,c=num('bc'),d=c-cur;
  if(!d)return alert('Count matches the system stock \u2013 nothing to correct.');
  if(!confirm(TN(id)+': system stock is '+q(cur)+', you counted '+q(c)+'.\nSave a correction of '+(d>0?'+':'')+q(d)+'?'))return;
- S.set.badj=[...bAdj(),{id:uid(),date:val('bd'),size:String(id),qty:d,note:val('bn')||''}];save();render()}
+ S.set.badj=[...bAdj(),{id:uid(),date:val('bd'),size:String(id),qty:d,note:val('bn')||''}];save();mclose();render()}
 function delAdj(id){if(confirm('Delete this correction?')){S.set.badj=bAdj().filter(a=>a.id!=id);save();render()}}
 
 /* ---- accounts ---- */
@@ -383,6 +699,7 @@ const FT=['Called \u2013 promised to pay','Called \u2013 no answer','Message sen
 let AST={v:'sum',c:'',f:'all',q:'',from:'',to:''};
 const AT=[['sum','Summary'],['cus','Customers'],['inv','Invoices'],['fol','Follow-ups'],['pay','Payments']];
 const asel=(k,v)=>{AST[k]=v;AST.q='';render()};
+const dlg=(iconKey,title,body,sub,foot='')=>{const M=$('modal');M.innerHTML=`<div><div class="dlghead"><span class="ic ${IC[iconKey]?.g||'g1'}">${IC[iconKey]?.s||''}</span><div><b>${title}</b>${sub?`<div class="k">${sub}</div>`:''}</div><button class="s dlgclose" onclick="mclose()" aria-label="Close">${IC.x}</button></div>${body}${foot?`<div class="dlgfoot">${foot}</div>`:''}</div>`;M.style.display='flex'};
 const mdl=h=>{const M=$('modal');M.innerHTML='<div>'+h+'<p class="nob"><button class="s" onclick="mclose()">Close</button></p></div>';M.style.display='flex'};
 const mclose=()=>{$('modal').style.display='none'};
 function openC(k){AST.c=decodeURIComponent(k);AST.v='cus';tab='acct';render();scrollTo(0,0)}
@@ -391,12 +708,12 @@ const payC=k=>payM({cust:decodeURIComponent(k)});
 V.acct=function(){const A=ACC();
  if(AST.c&&A.by[AST.c])return custView(A.by[AST.c]);
  AST.c='';const dueN=A.list.filter(x=>x.fstate=='due').length;
- const nav=`<div style="margin-bottom:12px;display:flex;gap:6px;flex-wrap:wrap">${AT.map(([k,n])=>`<button class="${AST.v==k?'b':'s'}" style="padding:7px 12px" onclick="asel('v','${k}')">${n}${k=='fol'&&dueN?' ('+dueN+')':''}</button>`).join('')}</div>`;
+ const nav=`<div class="toolbar"><div class="seg">${AT.map(([k,n])=>`<button class="${AST.v==k?'on':''}" onclick="asel('v','${k}')">${n}${k=='fol'&&dueN?' ('+dueN+')':''}</button>`).join('')}</div></div>`;
  return nav+({sum:aSum,cus:aCus,inv:aInv,fol:aFol,pay:aPay}[AST.v]||aSum)(A)};
 function aSum(A){const t=today(),ms=t.slice(0,7)+'-01',owing=A.list.filter(x=>x.bal>0.005),tot=sum(owing,x=>x.bal),ov=sum(owing,x=>x.over),
  ag=[0,1,2,3].map(i=>sum(owing,x=>x.ag[i])),coll=sum(S.pay.filter(p=>p.date>=ms&&p.date<=t),p=>+p.amt||0),bill=sum(S.sales.filter(s=>s.date>=ms&&s.date<=t),s=>s.total),
  due=A.list.filter(x=>x.fstate=='due').length,nod=A.list.filter(x=>x.fstate=='noset').length;
- const rows=owing.map(x=>row([cLink(x),esc(x.phone||'\u2014'),m(x.billed),m(x.paid),`<b class="wn">${m(x.bal)}</b>`,x.oldest?ageD(x.oldest)+' d':'\u2014',fLabel(x),`<button class="s" onclick="payC('${kq(x.key)}')">Receive</button> `+contactBtns(x)],['','','r','r','r','r','',''])).join('');
+ const rows=owing.filter(x=>mQ(x.name,x.phone)).map(x=>row([cLink(x),esc(x.phone||'\u2014'),m(x.billed),m(x.paid),`<b class="wn">${m(x.bal)}</b>`,x.oldest?ageD(x.oldest)+' d':'\u2014',fLabel(x),`<button class="s" onclick="payC('${kq(x.key)}')">Receive</button> `+contactBtns(x)],['','','r','r','r','r','',''])).join('');
  return `<div class="g" style="margin-bottom:14px"><div class="cd"><div class="k">Total to collect</div><div class="v ${tot>0?'wn':''}">${m(tot)}</div></div>
  <div class="cd"><div class="k">Past follow-up/due date</div><div class="v ${ov>0?'bad':''}">${m(ov)}</div></div>
  <div class="cd"><div class="k">Customers owing</div><div class="v">${owing.length}</div></div>
@@ -404,17 +721,16 @@ function aSum(A){const t=today(),ms=t.slice(0,7)+'-01',owing=A.list.filter(x=>x.
  <div class="cd"><div class="k">Collected this month</div><div class="v ok">${m(coll)}</div></div>
  <div class="cd"><div class="k">Billed this month</div><div class="v">${m(bill)}</div></div></div>
  <div class="cd"><h2>How old is the money owed?</h2>${tbl(['0\u201330 days','31\u201360 days','61\u201390 days','Over 90 days','Total'],row([m(ag[0]),m(ag[1]),m(ag[2]),`<span class="${ag[3]>0?'bad':''}">${m(ag[3])}</span>`,`<b>${m(tot)}</b>`],['r','r','r','r','r']))}<p class="k">Age is counted from the invoice date.</p></div>
- <div class="cd"><h2>Who owes you money</h2>${tbl(['Customer','Phone','Billed','Paid','Balance','Oldest unpaid','Next follow-up','Actions'],rows)}<p><button class="s" onclick="expCsv()">Download this list (CSV)</button></p></div>`}
+ <div class="cd"><h2>Who owes you money</h2>${fbar('customer or phone')}${tbl(['Customer','Phone','Billed','Paid','Balance','Oldest unpaid','Next follow-up','Actions'],rows)}<p><button class="s" onclick="expCsv()">Download this list (CSV)</button></p></div>`}
 function expCsv(){const A=ACC(),rows=[['Customer','Phone','Billed','Paid','Balance','Oldest unpaid (days)','Next follow-up']].concat(A.list.filter(x=>x.bal>0.005).map(x=>[x.name,x.phone,x.billed,x.paid,x.bal,x.oldest?ageD(x.oldest):'',x.next]));
  const csv=rows.map(r=>r.map(c=>'"'+String(c==null?'':c).replace(/"/g,'""')+'"').join(',')).join('\n'),a=document.createElement('a');
  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='outstanding-'+today()+'.csv';a.click()}
 function aCus(A){const s=ckey(AST.q),L=A.list.filter(x=>!s||ckey(x.name+' '+x.phone).includes(s));
  const rows=L.map(x=>row([cLink(x),esc(x.phone||'\u2014'),x.inv.length,m(x.billed),m(x.paid),x.bal>0.005?`<b class="wn">${m(x.bal)}</b>`:'<span class="ok">Clear</span>',x.lastPay||'\u2014',fLabel(x)],['','','r','r','r','r','',''])).join('');
- return `<div class="cd"><h2>Add customer</h2><div class="f"><div><label>Name</label><input id="cn_n"></div><div><label>Phone</label><input id="cn_p"></div><div><label>Address</label><input id="cn_a"></div><div><label>Credit limit (optional)</label><input type="number" id="cn_l" step="any"></div><div><label>Note</label><input id="cn_o"></div><button class="b" onclick="addCust()">Add</button></div>
- <p class="k">Customers you bill in New sale are added here automatically. Use this to save phone, address and a credit limit.</p></div>
+ return `${qa('wallet','Add customer','Save phone, address and a credit limit. Customers you bill in New sale are added automatically.','Add customer','dlgCust()')}
  <div class="cd"><h2>Customers (${L.length})</h2><div style="margin-bottom:8px"><input id="aq" placeholder="Search name or phone" value="${esc(AST.q)}" oninput="AST.q=this.value;softRender()"></div>${tbl(['Customer','Phone','Invoices','Billed','Paid','Balance','Last payment','Follow-up'],rows)}</div>`}
 function addCust(){const n=val('cn_n').trim();if(!n)return alert('Enter the customer name');const k=ckey(n);
- S.set.cust=[...CUS().filter(c=>ckey(c.name)!=k),{id:uid(),name:n,phone:val('cn_p').trim(),addr:val('cn_a').trim(),limit:num('cn_l'),note:val('cn_o').trim()}];save();render()}
+ S.set.cust=[...CUS().filter(c=>ckey(c.name)!=k),{id:uid(),name:n,phone:val('cn_p').trim(),addr:val('cn_a').trim(),limit:num('cn_l'),note:val('cn_o').trim()}];save();mclose();render()}
 function aInv(A){const s=ckey(AST.q),f=AST.f;
  const L=A.invs.filter(r=>(!s||ckey(r.s.cust+' '+r.s.no).includes(s))&&(!AST.from||r.s.date>=AST.from)&&(!AST.to||r.s.date<=AST.to)&&(f=='all'||(f=='open'&&r.open)||(f=='unpaid'&&r.status=='Unpaid')||(f=='part'&&r.status=='Part paid')||(f=='paid'&&r.status=='Paid')||(f=='over'&&r.over)));
  const rows=L.slice(0,200).map(r=>row([r.s.no,r.s.date,cLink(r.x),m(r.s.total),m(r.paid),r.open?`<span class="wn">${m(r.bal)}</span>`:'\u2014',r.open?r.age+' d':'\u2014',r.s.due||'\u2014',`<span class="${r.status=='Paid'?'ok':r.over?'bad':'wn'}">${r.status}${r.over?' \u00b7 overdue':''}</span>`,(r.open?`<button class="s" onclick="rcv('${r.s.id}')">Receive</button> `:'')+`<button class="s" onclick="inv('${r.s.id}')">Invoice</button> ${delB('sales',r.s.id)}`],['','','','r','r','r','r','','',''])).join('');
@@ -424,12 +740,12 @@ function aInv(A){const s=ckey(AST.q),f=AST.f;
  <div><label>Customer / invoice no.</label><input id="aq" value="${esc(AST.q)}" oninput="AST.q=this.value;softRender()"></div><div><label>From</label><input type="date" id="afr" value="${AST.from}" onchange="AST.from=this.value;render()"></div><div><label>To</label><input type="date" id="ato" value="${AST.to}" onchange="AST.to=this.value;render()"></div><button class="s" onclick="go('sales')">+ New invoice</button></div></div>
  <div class="cd">${tbl(['No.','Date','Customer','Total','Paid','Balance','Age','Due','Status',''],rows?rows+tt:'')}${L.length>200?'<p class="k">Showing the latest 200. Use the filters to narrow down.</p>':''}</div>`}
 function aFol(A){const owing=A.list.filter(x=>x.bal>0.005),
- need=[...owing.filter(x=>x.fstate=='due').sort((a,b)=>a.next<b.next?-1:1),...owing.filter(x=>x.fstate=='noset').sort((a,b)=>b.bal-a.bal)],sc=owing.filter(x=>x.fstate=='sched').sort((a,b)=>a.next<b.next?-1:1);
+ need=[...owing.filter(x=>x.fstate=='due').sort((a,b)=>a.next<b.next?-1:1),...owing.filter(x=>x.fstate=='noset').sort((a,b)=>b.bal-a.bal)].filter(x=>mQ(x.name,x.phone)),sc=owing.filter(x=>x.fstate=='sched').filter(x=>mQ(x.name,x.phone)).sort((a,b)=>a.next<b.next?-1:1);
  const pst=x=>x.paid>0.005?'Part paid \u00b7 last '+(x.lastPay||'\u2014'):'<span class="bad">Nothing received</span>';
  const fr=x=>{const f=x.fups[0];return row([cLink(x),esc(x.phone||'\u2014'),`<b>${m(x.bal)}</b>`,pst(x),x.oldest?ageD(x.oldest)+' d':'\u2014',f?f.date+' \u00b7 '+esc(f.type):'\u2014',fLabel(x),contactBtns(x)+` <button class="s" onclick="fupM('${kq(x.key)}')">Log</button> <button class="s" onclick="payC('${kq(x.key)}')">Receive</button>`],['','','r','','r','','',''])};
  const H=['Customer','Phone','Balance','Payment status','Oldest unpaid','Last contact','Next follow-up','Actions'];
- const lg=[...FUP()].sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:a.id<b.id?1:-1).slice(0,40).map(f=>row([f.date,esc(f.name||f.cust),esc(f.type),esc(f.note||''),f.next||'\u2014',`<button class="s" onclick="delFup('${f.id}')">\u2715</button>`])).join('');
- return `<div class="cd"><h2>Follow up now (${need.length})</h2>${tbl(H,need.map(fr).join(''))}<p class="k">Customers whose follow-up date is today or past, or who owe money but have no date set. After each call press <b>Log</b>, pick what happened and the next date \u2013 they leave this list until then. When money comes in, press <b>Receive</b>; it is logged automatically and you can set the next date for the balance.</p></div>
+ const lg=[...FUP()].sort((a,b)=>a.date<b.date?1:a.date>b.date?-1:a.id<b.id?1:-1).slice(0,40).map(f=>row([f.date,esc(f.name||f.cust),esc(f.type),esc(f.note||''),f.next||'\u2014',`<button class="s" onclick="delFup('${f.id}')">${IC.x}</button>`])).join('');
+ return `<div class="cd"><h2>Follow up now (${need.length})</h2>${fbar('customer or phone')}${tbl(H,need.map(fr).join(''))}<p class="k">Customers whose follow-up date is today or past, or who owe money but have no date set. After each call press <b>Log</b>, pick what happened and the next date \u2013 they leave this list until then. When money comes in, press <b>Receive</b>; it is logged automatically and you can set the next date for the balance.</p></div>
  <div class="cd"><h2>Scheduled (${sc.length})</h2>${tbl(H,sc.map(fr).join(''))}</div>
  <div class="cd"><h2>Recent follow-up log</h2>${tbl(['Date','Customer','Outcome','Note','Next',''],lg)}</div>`}
 function aPay(A){const s=ckey(AST.q),all=[];A.list.forEach(x=>x.pays.forEach(z=>all.push({x,z})));
@@ -438,7 +754,7 @@ function aPay(A){const s=ckey(AST.q),all=[];A.list.forEach(x=>x.pays.forEach(z=>
 function custView(x){const t=today(),k=kq(x.key);
  const inv=x.inv.map(r=>row([r.s.no,r.s.date,m(r.s.total),m(r.paid),r.open?`<span class="wn">${m(r.bal)}</span>`:'<span class="ok">Paid</span>',r.open?r.age+' d':'\u2014',r.s.due||'\u2014',r.status,(r.open?`<button class="s" onclick="rcv('${r.s.id}')">Receive</button> `:'')+`<button class="s" onclick="inv('${r.s.id}')">Invoice</button>`],['','','r','r','r','r','','',''])).join('');
  const pays=x.pays.map(z=>row([z.p.date,z.s.no,m(z.p.amt),esc(z.p.mode||''),esc(z.p.ref||''),delB('pay',z.p.id)],['','','r','','',''])).join('');
- const fl=x.fups.map(f=>row([f.date,esc(f.type),esc(f.note||''),f.next||'\u2014',`<button class="s" onclick="delFup('${f.id}')">\u2715</button>`])).join('');
+ const fl=x.fups.map(f=>row([f.date,esc(f.type),esc(f.note||''),f.next||'\u2014',`<button class="s" onclick="delFup('${f.id}')">${IC.x}</button>`])).join('');
  return `<p><button class="s" onclick="backC()">\u2190 All customers</button></p>
  <div class="cd"><h2 style="margin-bottom:2px">${esc(x.name)}</h2><div class="k">${esc(x.phone||'No phone')}${x.addr?' \u00b7 '+esc(x.addr):''}</div>
  <div class="g" style="margin-top:10px"><div><div class="k">Billed</div><div class="v">${m(x.billed)}</div></div><div><div class="k">Received</div><div class="v ok">${m(x.paid)}</div></div><div><div class="k">Balance due</div><div class="v ${x.bal>0.005?'wn':'ok'}">${m(x.bal)}</div></div><div><div class="k">Last payment</div><div class="v">${x.lastPay||'\u2014'}</div></div><div><div class="k">Next follow-up</div><div class="v">${x.bal>0.005?(x.next||'not set'):'\u2014'}</div></div>${x.limit?`<div><div class="k">Credit limit</div><div class="v ${x.bal>x.limit?'bad':''}">${m(x.limit)}</div></div>`:''}</div>
@@ -487,22 +803,181 @@ function scChg(){const n=val('sc'),x=ACC().by[ckey(n)],h=$('sch');if(!h)return;
 function dashOwe(){const A=ACC(),o=A.list.filter(x=>x.bal>0.005),due=A.list.filter(x=>x.fstate=='due').length,nod=A.list.filter(x=>x.fstate=='noset').length;
  return (o.length?tbl(['Customer','Balance','Next follow-up'],o.slice(0,5).map(x=>row([cLink(x),`<b class="wn">${m(x.bal)}</b>`,fLabel(x)],['','r',''])).join('')):'<p class="ok">Nobody owes you money.</p>')+`<p><button class="s" onclick="AST.v='sum';AST.c='';go('acct')">Open Accounts</button> <span class="k">${due} follow-up(s) due \u00b7 ${nod} without a date \u00b7 total ${m(sum(o,x=>x.bal))}</span></p>`}
 /* ---- actions ---- */
-function addEmp(){const n=val('en').trim();if(n&&!S.emp.includes(n)){S.emp.push(n);save();render()}}
-function rmEmp(n){if(confirm('Remove '+n+' from list? Past records stay.')){S.emp=S.emp.filter(x=>x!=n);save();render()}}
+function addEmp(){const n=val('en').trim();if(!n)return alert('Enter a name');if(EMPS().some(e=>e.name==n))return alert('That name already exists');
+ EMPS().push({id:uid(),name:n,role:'Worker',phone:'',joined:'',rate:0,works:[],active:true,note:''});syncEmps();save();mclose();render()}
+function rmEmp(n){if(!confirm('Deactivate '+n+'? Past records stay; reactivate any time from the Employees app.'))return;
+ const e=EMPS().find(x=>x.name==n);if(e)e.active=false;syncEmps();save();render()}
 function rcv(id){payM({sid:id})}
-function payNow(){const k=val('wpy'),a=num('wpa');if(!k||a<=0)return alert('Choose who to pay and enter the amount');S.wp.push({id:uid(),emp:k,week:wk,date:val('wpd'),amt:a});save();render()}
+function payNow(){const k=val('wpy'),a=num('wpa');if(!k||a<=0)return alert('Choose who to pay and enter the amount');S.wp.push({id:uid(),emp:k,week:wk,date:val('wpd'),amt:a});save();mclose();render()}
 function payW(n,b){const a=parseFloat(prompt('Pay '+n.replace(/^G:/,'group ')+' (balance '+Math.max(b,0)+')',b>0?b:''));if(a>0){S.wp.push({id:uid(),emp:n,week:wk,date:today(),amt:a});save();render()}}
-function addExp(){if(!num('xa')||!val('xc').trim())return alert('Enter category and amount');S.exp.push({id:uid(),date:val('xd'),cat:val('xc').trim(),amt:num('xa'),note:val('xn')});save();render()}
-function saveSet(){const s=S.set;s.biz=val('s_biz');s.cur=val('s_cur');['load','warn'].forEach(k=>s[k]=num('s_'+k));s.cc=(val('s_cc')||'91').replace(/\D/g,'')||'91';
+function addExp(){if(!num('xa')||!val('xc').trim())return alert('Enter category and amount');S.exp.push({id:uid(),date:val('xd'),cat:val('xc').trim(),amt:num('xa'),note:val('xn')});save();mclose();render()}
+function saveSet(){const s=S.set;s.biz=val('s_biz');s.cur=val('s_cur');['load','warn'].forEach(k=>s[k]=num('s_'+k));s.cc=(val('s_cc')||'91').replace(/\D/g,'')||'91';s.vat=num('s_vat')||0;
  s.oc=num('s_oc')||7;s.bk=num('s_bk')||15;s.rm=num('s_rm');s.rs=num('s_rs');s.lc={m:num('s_lm')||1,s:num('s_ls')||1};save();render();alert('Saved')}
 function restore(){try{const x=JSON.parse(val('bk'));if(!x.set)throw 0;if(confirm('Replace ALL data in the cloud database with this backup?')){S=Object.assign(structuredClone(D),x);S.set=Object.assign({},D.set,S.set);save();render()}}catch(e){alert('That backup text is not valid')}}
 function inv(id){const s=S.sales.find(x=>x.id==id),p=paid(id),M=$('modal');
  M.innerHTML=`<div><h2 style="margin:0">${esc(S.set.biz)}</h2><div style="color:#666">Invoice ${s.no} · ${s.date}</div><p><b>${esc(s.cust)}</b><br>${esc(s.phone||'')}</p>
  <table style="width:100%;border-collapse:collapse"><tr><th align="left">Item</th><th align="right">Qty</th><th align="right">Rate</th><th align="right">Amount</th></tr>
  ${s.items.map(i=>`<tr><td>${esc(i.name||TN(i.size))}</td><td align="right">${i.qty}</td><td align="right">${m(i.rate)}</td><td align="right">${m(i.qty*i.rate)}</td></tr>`).join('')}
- <tr><td colspan="3" align="right"><b>Total</b></td><td align="right"><b>${m(s.total)}</b></td></tr><tr><td colspan="3" align="right">Paid</td><td align="right">${m(p)}</td></tr>
+ <tr><td colspan="3" align="right"><b>Total</b></td><td align="right"><b>${m(s.total)}</b></td></tr>${(S.set.vat||0)>0?`<tr><td colspan="3" align="right" style="color:#666">Includes VAT @ ${S.set.vat}%</td><td align="right" style="color:#666">${m(s.total*S.set.vat/(100+S.set.vat))}</td></tr>`:''}<tr><td colspan="3" align="right">Paid</td><td align="right">${m(p)}</td></tr>
  <tr><td colspan="3" align="right"><b>Balance</b></td><td align="right"><b>${m(s.total-p)}</b></td></tr></table>
  <p class="nob"><button class="b" onclick="print()">Print</button> <button class="s" onclick="$('modal').style.display='none'">Close</button></p></div>`;M.style.display='flex'}
+/* ---- accounting: journal + trial balance, derived live from every entry ---- */
+let AC={v:'tb'};
+function J(){const j=[];
+ S.sales.forEach(s=>j.push({d:s.date,r:s.no,w:'Invoice '+esc(s.cust),dr:'Accounts receivable',cr:'Sales revenue',a:s.total}));
+ S.pay.forEach(p=>{const s=S.sales.find(x=>x.id==p.sid);j.push({d:p.date,r:s?s.no:'\u2014',w:'Received from '+esc(s?s.cust:'customer'),dr:'Cash',cr:'Accounts receivable',a:p.amt})});
+ S.pur.forEach(p=>j.push({d:p.date,r:'\u2014',w:MAT.find(x=>x[0]==p.mat)[1]+' from '+esc(p.vendor),dr:'Raw material inventory',cr:'Accounts payable',a:p.cost}));
+ S.vp.forEach(p=>j.push({d:p.date,r:'\u2014',w:'Paid vendor '+esc(p.vendor),dr:'Accounts payable',cr:'Cash',a:p.amt}));
+ S.exp.forEach(e=>j.push({d:e.date,r:'\u2014',w:esc(e.cat)+(e.note?' \u00b7 '+esc(e.note):''),dr:'Other expenses',cr:'Cash',a:e.amt}));
+ S.wp.forEach(w=>j.push({d:w.date,r:'\u2014',w:'Wages \u2013 '+esc(w.emp.replace(/^G:/,'Team '))+(w.week?' \u00b7 week of '+w.week:''),dr:'Wages',cr:'Cash',a:w.amt}));
+ return j.sort((a,b)=>a.d<b.d?1:a.d>b.d?-1:0)}
+function TBal(){const sold=sum(S.sales,s=>s.total),pin=sum(S.pay,p=>p.amt),purch=sum(S.pur,p=>p.cost),vpd=sum(S.vp,v=>v.amt),ex=sum(S.exp,e=>e.amt),wp=sum(S.wp,w=>w.amt);
+ const st=stock(),inv=MAT.reduce((a,[k])=>a+st[k].left*st[k].avg,0);
+ const earn=sum(S.prod,p=>p.qty*p.rate)+sum(S.sales,s=>s.loaded*s.lrate),mat=pnl('0000-01-01','9999-12-31').mat;
+ return[['Cash & bank','Asset',pin-vpd-ex-wp],['Accounts receivable','Asset',sold-pin],['Raw material inventory','Asset',inv],['Materials used (COGS)','Expense',mat],['Wages earned','Expense',earn],['Other expenses','Expense',ex],['Accounts payable','Liability',-(purch-vpd)],['Wages payable','Liability',-(earn-wp)],['Sales revenue','Income',-sold]]}
+V.acc=function(){
+ const nav=`<div class="toolbar"><div class="seg"><button class="${AC.v=='tb'?'on':''}" onclick="AC.v='tb';render()">Trial balance</button><button class="${AC.v=='j'?'on':''}" onclick="AC.v='j';render()">Journal</button></div><span class="k">Worked out live from every sale, purchase, payment and expense.</span></div>`;
+ if(AC.v=='j'){const rows=J().filter(e=>mD(e.d)&&mQ(e.w,e.dr,e.cr,e.r)).slice(0,150).map(e=>row([e.d,e.r,e.w,e.dr,e.cr,m(e.a)],['','','','','','r'])).join('');
+  return nav+`<div class="cd"><h2>Journal \u2013 every entry, both sides</h2>${fbar('account, party or note',drng())}${tbl(['Date','Ref','Details','Debit account','Credit account','Amount'],rows)}</div>`}
+ const A=TBal(),dr=sum(A.filter(a=>a[2]>0.005),a=>a[2]),cr=-sum(A.filter(a=>a[2]<-0.005),a=>a[2]),df=dr-cr;
+ const rows=A.map(a=>row([a[0],a[1],a[2]>0.005?m(a[2]):'',a[2]<-0.005?m(-a[2]):''],['','','r','r'])).join('');
+ return nav+`<div class="g">
+ <div class="cd"><div class="k">Total debits</div><div class="v">${m(dr)}</div></div>
+ <div class="cd"><div class="k">Total credits</div><div class="v">${m(cr)}</div></div>
+ <div class="cd"><div class="k">Difference</div><div class="v ${Math.abs(df)<0.01?'ok':'bad'}">${Math.abs(df)<0.01?'In balance':m(df)}</div></div>
+ <div class="cd"><div class="k">Journal entries</div><div class="v">${J().length}</div></div></div>
+ <div class="cd"><h2>Trial balance</h2>${tbl(['Account','Type','Debit','Credit'],rows+row(['<b>Total</b>','','<b>'+m(dr)+'</b>','<b>'+m(cr)+'</b>'],['','','r','r']))}
+ <p class="k">Each transaction is posted twice \u2013 once debit, once credit \u2013 so the two sides always match. Materials used are valued at your average purchase cost, matching the Profit &amp; loss module. Wages payable is earned wages minus what you have already paid out.</p></div>`};
+/* ---- inventory: consolidated stock, valuation, movements ---- */
+const invVal=()=>{const st=stock();return MAT.reduce((a,[k])=>a+st[k].left*st[k].avg,0)+sum(bstock(),x=>x.left*((T().find(y=>y.id==x.id)||{}).price||0))};
+V.inv=function(){const st=stock(),bs=bstock(),TT=T(),bv=sum(bs,x=>x.left*((TT.find(y=>y.id==x.id)||{}).price||0)),mv=MAT.reduce((a,[k])=>a+st[k].left*st[k].avg,0);
+ const lowM=MAT.filter(([k])=>st[k].low).map(([k,n])=>n+' runs out in '+(st[k].dl===null?'?':q(Math.max(st[k].dl,0)))+' days at current use');
+ const negB=bs.filter(x=>x.left<0).map(x=>x.name+' is negative \u2013 more sold than recorded. Check Production or do a count.');
+ const mo=[];S.pur.forEach(p=>mo.push({d:p.date,o:0,i:MAT.find(x=>x[0]==p.mat)[1],v:q(p.qty)+' '+UN[p.mat],w:'From '+esc(p.vendor)+' \u00b7 '+m(p.cost)}));
+ S.sales.forEach(s=>mo.push({d:s.date,o:1,i:'Bricks sold',v:q(sum(s.items,x=>x.qty))+' bricks',w:esc(s.cust)+' \u00b7 '+m(s.total)}));
+ bAdj().forEach(a=>mo.push({d:a.date,o:a.qty<0?1:0,i:'Count correction',v:(a.qty>0?'+':'')+q(a.qty)+' bricks',w:esc(TN(a.size))+(a.note?' \u00b7 '+esc(a.note):'')}));
+ const rows=mo.sort((x,y)=>x.d<y.d?1:-1).filter(x=>mD(x.d)&&mQ(x.i,x.w)).slice(0,120).map(x=>row([x.d,x.o?'<span class="wn">OUT</span>':'<span class="ok">IN</span>',x.i,x.v,x.w],['','','','r',''])).join('');
+ return `<div class="g">
+ <div class="cd"><div class="k">Bricks in stock</div><div class="v">${q(sum(bs,x=>x.left))}</div></div>
+ <div class="cd"><div class="k">Brick stock value</div><div class="v">${m(bv)}</div></div>
+ <div class="cd"><div class="k">Raw materials at cost</div><div class="v">${m(mv)}</div></div>
+ <div class="cd"><div class="k">Alerts</div><div class="v ${lowM.length+negB.length?'bad':'ok'}">${lowM.length+negB.length||'None'}</div></div></div>
+ ${(lowM.length||negB.length)?`<div class="al"><b>Needs attention</b>${[...lowM,...negB].map(x=>'<br>\u2022 '+x).join('')}</div>`:''}
+ <div class="cd"><h2>Brick stock by size</h2>${tbl(['Size','In stock','Selling price','Stock value'],bs.map(x=>{const t=TT.find(y=>y.id==x.id);return row([esc(x.name),`<b>${q(x.left)}</b>`,t&&t.price?m(t.price):'\u2014',m(x.left*((t&&t.price)||0))],['','r','r','r'])}).join(''))}<p class="k">In stock = made \u2212 sold \u00b1 count corrections. Value is at each size\u2019s selling price from Settings.</p></div>
+ <div class="cd"><h2>Raw materials</h2>${tbl(['Material','In stock','Avg cost/unit','Value at cost'],MAT.map(([k,n])=>{const x=st[k];return row([n+' ('+UN[k]+')',q(x.left),m(x.avg),m(x.left*x.avg)],['','r','r','r'])}).join(''))}</div>
+ <div class="cd"><h2>Stock movements</h2>${fbar('item or party',drng())}${tbl(['Date','In/Out','Item','Quantity','Details'],rows)}<p class="k">Every purchase in, every sale out and every count correction, newest first.</p></div>`};
+/* ---- tax: VAT return by quarter ---- */
+let TX={q:''};
+const qk=d=>d.slice(0,4)+'-Q'+Math.ceil((+d.slice(5,7))/3);
+const qList=()=>[...new Set([...S.sales.map(s=>s.date),...S.pur.map(p=>p.date),today()].map(qk))].sort().reverse();
+function vatQ(q){const r=+S.set.vat||0,f=r/(100+r),L=S.sales.filter(s=>qk(s.date)==q),P=S.pur.filter(p=>qk(p.date)==q);
+ const out=sum(L,s=>s.total)*f,inn=sum(P,p=>p.cost)*f;
+ return{r,sold:sum(L,s=>s.total),purch:sum(P,p=>p.cost),out,inn,net:out-inn,ns:L.length,np:P.length}}
+V.tax=function(){const q=TX.q||qList()[0],x=vatQ(q),r=+S.set.vat||0;
+ const srows=S.sales.filter(s=>qk(s.date)==q).map(s=>row([s.no,s.date,esc(s.cust),m(s.total),m(s.total*r/(100+r))],['','','','r','r'])).join('');
+ const prows=S.pur.filter(p=>qk(p.date)==q).map(p=>row([p.date,esc(p.vendor),MAT.find(y=>y[0]==p.mat)[1],m(p.cost),m(p.cost*r/(100+r))],['','','','r','r'])).join('');
+ return `${r?'':'<div class="al">Set your VAT percentage in Settings \u2192 Business &amp; rates first \u2013 the report below uses it.</div>'}
+ <div class="toolbar"><div class="seg">${qList().slice(0,8).map(k=>`<button class="${k==q?'on':''}" onclick="TX.q='${k}';render()">${k}</button>`).join('')}</div></div>
+ <div class="g">
+ <div class="cd"><div class="k">Supplies in ${q} (incl. VAT)</div><div class="v">${m(x.sold)}</div></div>
+ <div class="cd"><div class="k">Output tax on supplies</div><div class="v">${m(x.out)}</div></div>
+ <div class="cd"><div class="k">Input tax on purchases</div><div class="v">${m(x.inn)}</div></div>
+ <div class="cd"><div class="k">NET VAT ${x.net>=0?'payable':'refundable'}</div><div class="v ${x.net>0.005?'wn':'ok'}">${m(Math.abs(x.net))}</div></div></div>
+ <div class="cd"><h2>Return summary</h2>${tbl(['Box','What goes in','Amount'],[
+  row(['1','Standard rated supplies (before VAT)',m(x.sold-x.out)],['','','r']),
+  row(['2','VAT calculated on supplies',m(x.out)],['','','r']),
+  row(['6','Input tax on expenses and purchases',m(x.inn)],['','','r']),
+  row(['12','<b>Net VAT payable for the quarter</b>','<b>'+m(x.net)+'</b>'],['','','r'])].join(''))}
+ <p class="k">Your prices include VAT, so the tax is back-calculated from each invoice total at ${r}%. Input tax assumes vendor bills also include VAT at the same rate \u2013 check your purchase invoices and tell your accountant if they differ.</p></div>
+ <div class="cd"><h2>Sales in ${q} (${x.ns})</h2>${tbl(['Invoice','Date','Customer','Total (incl. VAT)','Output VAT'],srows)}</div>
+ <div class="cd"><h2>Purchases in ${q} (${x.np})</h2>${tbl(['Date','Vendor','Material','Cost (incl. VAT)','Input VAT'],prows)}</div>`};
+/* ---- integrations: WhatsApp reminders, data, connections ---- */
+const waDef='Dear {name}, this is a friendly reminder from {biz}. An amount of {amount} is pending against invoice(s) {invoices}. Kindly arrange the payment. Thank you.';
+const waTpl=x=>{let t=waDef;try{t=localStorage.getItem('bkm_watpl')||waDef}catch(e){}
+ return t.replace(/{name}/g,x.name).replace(/{biz}/g,S.set.biz).replace(/{amount}/g,m(x.bal)).replace(/{invoices}/g,x.inv.filter(r=>r.open).map(r=>r.s.no).join(', ')||'\u2014')};
+function saveWa(){try{localStorage.setItem('bkm_watpl',val('watpl'))}catch(e){}render();alert('Template saved on this device')}
+function expJson(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));a.download='brick-erp-backup-'+today()+'.json';a.click()}
+V.int=function(){const A=ACC(),ow=A.list.filter(x=>x.bal>0.005);
+ let tpl=waDef;try{tpl=localStorage.getItem('bkm_watpl')||waDef}catch(e){}
+ const rows=ow.map(x=>row([cLink(x),esc(x.phone||'\u2014'),`<b class="wn">${m(x.bal)}</b>`,fLabel(x),x.phone?`<a class="s" href="https://wa.me/${telN(x.phone)}?text=${encodeURIComponent(waTpl(x))}" target="_blank" rel="noopener">Send reminder</a> <a class="s" href="tel:${esc(x.phone)}">Call</a>`:'<span class="mu">no phone saved</span>'],['','','r','',''])).join('');
+ return `<div class="cd"><h2>WhatsApp payment reminders</h2>
+ <label style="display:block;margin:2px 0 4px">Message template</label><textarea id="watpl" rows="3" style="width:100%">${esc(tpl)}</textarea>
+ <p><button class="b" onclick="saveWa()">Save template</button> <span class="k">Use {name} {biz} {amount} {invoices} \u2013 they fill in per customer. Opens WhatsApp with the message typed; you press send there.</span></p>
+ ${tbl(['Customer','Phone','Balance','Next follow-up',''],rows)}
+ <p class="k">${ow.filter(x=>x.phone).length} of ${ow.length} owing customers have a phone number saved \u2013 add phones in Accounts receivable.</p></div>
+ <div class="cd"><h2>Data</h2><p><button class="b" onclick="expJson()">Download full backup (JSON)</button> <button class="s" onclick="go('set')">Restore from text</button></p>
+ <p class="k">The JSON file holds every entry and setting. Restoring is in Settings \u2192 Backup \u2013 it replaces all current data after a confirmation.</p></div>
+ <div class="cd"><h2>Connections</h2>${tbl(['Service','Status','Notes'],[
+  row(['WhatsApp reminders','<span class="ok">Ready</span>','Works through wa.me links \u2013 no setup needed']),
+  row(['Calls &amp; invoices','<span class="ok">Ready</span>','Tap-to-call links and printable invoices']),
+  row(['Payment gateway (Telr, Network International)','<span class="mu">Not connected</span>','Needs an online merchant account \u2013 planned next']),
+  row(['Bank feeds &amp; accounting sync','<span class="mu">Not connected</span>','Planned next'])].join(''))}</div>`};
+/* ---- roles & audit ---- */
+function audit(){const ev=[];
+ S.prod.forEach(p=>ev.push({d:p.date,t:'Production',w:(p.grp?'Team '+esc(p.grp)+': ':'')+esc((p.emps||[p.emp]).join(', '))+' \u2013 '+q(p.qty)+' '+esc(p.sn||TN(p.size)),a:p.qty*p.rate}));
+ S.sales.forEach(s=>ev.push({d:s.date,t:'Sale',w:'Invoice '+s.no+' \u2013 '+esc(s.cust),a:s.total}));
+ S.pay.forEach(p=>{const s=S.sales.find(x=>x.id==p.sid);ev.push({d:p.date,t:'Receipt',w:'From '+esc(s?s.cust:'\u2014')+(s?' \u00b7 '+s.no:''),a:p.amt})});
+ S.pur.forEach(p=>ev.push({d:p.date,t:'Purchase',w:esc(p.vendor)+' \u2013 '+MAT.find(x=>x[0]==p.mat)[1],a:p.cost}));
+ S.vp.forEach(p=>ev.push({d:p.date,t:'Vendor pay',w:'To '+esc(p.vendor),a:p.amt}));
+ S.exp.forEach(e=>ev.push({d:e.date,t:'Expense',w:esc(e.cat)+(e.note?' \u00b7 '+esc(e.note):''),a:e.amt}));
+ S.wp.forEach(w=>ev.push({d:w.date,t:'Wages',w:'To '+esc(w.emp.replace(/^G:/,'Team ')),a:w.amt}));
+ bAdj().forEach(a=>ev.push({d:a.date,t:'Correction',w:esc(TN(a.size))+' '+(a.qty>0?'+':'')+q(a.qty),a:0}));
+ return ev.sort((x,y)=>x.d<y.d?1:-1)}
+V.rol=function(){const ev=audit(),t=today(),ms=t.slice(0,7)+'-01',mo=ev.filter(e=>e.d>=ms);
+ const who=(($('who').textContent.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+/)||[])[0])||'this device';
+ const byt={};mo.forEach(e=>byt[e.t]=(byt[e.t]||0)+1);
+ const rows=ev.filter(e=>mD(e.d)&&mQ(e.t,e.w)).slice(0,120).map(e=>row([e.d,`<span class="bdg">${e.t}</span>`,e.w,e.a?m(e.a):'\u2014'],['','','','r'])).join('');
+ return `<div class="cd"><h2>Access</h2><div class="g" style="margin-top:6px">
+ <div><div class="k">Signed in as</div><div class="v" style="font-size:16px">${esc(who)}</div></div>
+ <div><div class="k">Role</div><div class="v"><span class="bdg tm">Administrator</span></div></div>
+ <div><div class="k">Entries this month</div><div class="v">${mo.length}</div></div>
+ <div><div class="k">Total tracked entries</div><div class="v">${ev.length}</div></div></div>
+ <p class="k">Every entry below is reconstructed from the database \u2013 nothing is stored twice, so the trail always matches your books. Finer roles (supervisor, read-only viewer) arrive with multi-user sign-in.</p></div>
+ <div class="cd"><h2>Activity this month by type</h2>${tbl(['Type','Entries'],Object.entries(byt).map(([k,v])=>row([`<span class="bdg">${k}</span>`,v],['','r'])).join(''))}</div>
+ <div class="cd"><h2>Audit trail</h2>${fbar('type, party or note',drng())}${tbl(['Date','Type','What happened','Amount'],rows)}<p class="k">Newest first. Delete an entry anywhere in the app and it leaves this trail too \u2013 the trail is a live view, not a copy.</p></div>`};
+/* ---- app launcher home page ---- */
+const weekDue=()=>{const e=wk,f=addD(wk,6);let due=0;
+ const gn=[...new Set([...S.groups.map(g=>g.name),...S.prod.map(p=>p.grp).filter(Boolean),...S.sales.flatMap(ldrs).filter(x=>x.startsWith('G:')).map(x=>x.slice(2))])];
+ const wn=[...new Set([...S.emp,...S.prod.filter(p=>!p.grp).flatMap(p=>p.emps||[p.emp]),...S.sales.flatMap(ldrs).filter(x=>!x.startsWith('G:'))])];
+ const earned=k=>{const isG=k.startsWith('G:');
+  const P=isG?S.prod.filter(p=>p.grp==k.slice(2)&&inR(p.date,e,f)):S.prod.filter(p=>!p.grp&&(p.emps||[p.emp]).includes(k)&&inR(p.date,e,f));
+  const L=S.sales.filter(s=>ldrs(s).includes(k)&&inR(s.date,e,f));
+  return sum(P,p=>isG?p.qty*p.rate:sh(p)*p.rate)+sum(L,s=>s.loaded*s.lrate/ldrs(s).length)};
+ [...gn.map(x=>'G:'+x),...wn].forEach(k=>{const b=earned(k)-sum(S.wp.filter(w=>w.emp==k&&w.week==e),w=>w.amt);if(b>0.005)due+=b});
+ return due};
+const appCounts=()=>{const t=today(),ms=t.slice(0,7)+'-01';
+ const st=stock(),bs=bstock(),low=MAT.filter(([k])=>st[k].low).length;
+ return{
+  dash:[q(sum(S.prod.filter(p=>p.date==t&&p.k!='work'),p=>+p.qty||0)),'bricks today'],
+  prod:[q(sum(S.prod.filter(p=>p.date>=ms&&p.date<=t),p=>+p.qty||0)),'units this month'],
+  bst:[q(sum(bs,x=>x.left)),'bricks in stock'],
+  stock:[low?low:'OK',low?'material'+(low>1?'s':'')+' low':'all in stock'],
+  sales:[S.sales.filter(s=>s.date>=ms&&s.date<=t).length,'invoices this month'],
+  acct:[m(sum(recv(),x=>x.bal)),'to collect'],
+  ven:[m(vOwed()),'owed to vendors'],
+  emp:[EMPS().length,'on roll'],
+  pay:[m(weekDue()),'to pay this week'],
+  exp:[m(sum(S.exp.filter(e=>e.date>=ms&&e.date<=t),e=>e.amt)),'spent this month'],
+  pnl:[m(pnl(ms,t).net),'net this month'],
+  set:['','adjust rates'],
+  acc:[J().length,'journal entries'],
+  inv:[m(invVal()),'stock value'],
+  tax:[+S.set.vat?m(vatQ(qList()[0]).net):'\u2014',+S.set.vat?'VAT this quarter':'set VAT rate'],
+  rol:[audit().filter(e=>e.d>=ms).length,'entries this month'],
+  int:[ACC().list.filter(x=>x.bal>0.005&&x.phone).length,'reminders to send']}};
+let HF=''; /* launcher category filter */
+V.home=function(){const t=today(),tp=S.prod.filter(p=>p.date==t),r=recv(),mo=pnl(t.slice(0,7)+'-01',t.slice(0,7)+'-31'),ac=appCounts();
+ const dt=new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ return `<div class="hero"><div class="hk">ERP · Business suite</div><div class="hb">${esc(S.set.biz)}</div><div class="hd">${dt}</div>
+ <div class="hchips"><span class="hchip">Today’s bricks<b>${q(sum(tp.filter(p=>p.k!='work'),p=>p.qty))}</b></span>
+ <span class="hchip">To collect<b>${m(sum(r,x=>x.bal))}</b></span>
+ <span class="hchip">Month net<b>${m(mo.net)}</b></span><span class="hchip">Staff<b>${S.emp.length}</b></span></div>
+ <div style="margin-top:18px"><button class="hbtn" onclick="go('dash')">Open dashboard</button></div></div>
+ <div class="lchips"><button class="${HF?'':'on'}" onclick="HF='';render()">All apps</button>${MODULES.map(([cid,cn,mods])=>`<button class="${HF==cid?'on':''}" onclick="HF='${cid}';render()">${cn}<b>${mods.length}</b></button>`).join('')}</div>
+ <div class="lwrap">
+ ${MODULES.filter(([cid])=>!HF||HF==cid).map(([cid,cname,mods])=>`<section class="appsec"><div class="appcat">${cname}<b>${mods.length} app${mods.length>1?'s':''}</b></div><div class="apps">${mods.map(([id,nm,ic])=>{const c=ac[id]||['',''];return `<button class="app" onclick="go('${id}')"><span class="ai ${IC[ic].g}">${IC[ic].s}</span><span class="an">${nm}</span><span class="ad">${SUB[id]||''}</span><span class="astat"><b>${c[0]}</b>${c[1]}</span></button>`}).join('')}</div></section>`).join('')}
+ ${PLANNED.length?`<section class="appsec"><div class="appcat">Coming next</div><div class="apps">${PLANNED.map(([id,nm,ic,ds])=>`<div class="app off" title="Planned module"><span class="ai">${IC[ic].s}</span><span class="an">${nm}</span><span class="ad">${ds}</span><span class="soon">Planned</span></div>`).join('')}</div></section>`:''}
+ </div>`};
 render();
 </script>
 <script type="module">
