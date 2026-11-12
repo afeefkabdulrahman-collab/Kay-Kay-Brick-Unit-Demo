@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Brick Unit ERP</title>
+<title>KAY KAY Brick Unit ERP</title>
 <style>
 /* ===== Brick Unit ERP · design system ===== */
-:root{--bg:#f2f4f9;--cd:#ffffff;--tx:#17203a;--mu:#67718c;--bd:#e4e8f2;--ac:#4f46e5;--ac2:#7c3aed;--ok:#15803d;--wn:#b45309;--bad:#dc2626;--tint:rgba(79,70,229,.09);--sh:0 1px 2px rgba(23,32,58,.05),0 4px 16px rgba(23,32,58,.07);--r:14px;color-scheme:light}
-:root[data-theme="dark"]{--bg:#0d1220;--cd:#161d30;--tx:#e7ebf5;--mu:#8b94ad;--bd:#26304b;--ac:#818cf8;--ac2:#a78bfa;--ok:#4ade80;--wn:#fbbf24;--bad:#f87171;--tint:rgba(129,140,248,.14);--sh:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.35);color-scheme:dark}
+:root{--bg:#f5f4f0;--cd:#ffffff;--tx:#202b36;--mu:#69747d;--bd:#e5e2dc;--ac:#a85f3b;--ac2:#c17a50;--ok:#27845b;--wn:#b87922;--bad:#c84c43;--tint:rgba(168,95,59,.10);--sh:0 1px 2px rgba(32,43,54,.04),0 5px 18px rgba(32,43,54,.055);--r:13px;color-scheme:light}
+:root[data-theme="dark"]{--bg:#111820;--cd:#19232d;--tx:#edf1f2;--mu:#9aa8b2;--bd:#2b3944;--ac:#d18a61;--ac2:#e0a17b;--ok:#55bd8a;--wn:#e4b45f;--bad:#ed8278;--tint:rgba(209,138,97,.14);--sh:0 1px 2px rgba(0,0,0,.28),0 8px 24px rgba(0,0,0,.22);color-scheme:dark}
 *{box-sizing:border-box}html,body{margin:0}
 body{background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
 h1{font-size:19px;margin:0}h2{font-size:15px;font-weight:650;margin:0 0 12px}b,strong{font-weight:650}
@@ -58,8 +58,8 @@ h1{font-size:19px;margin:0}h2{font-size:15px;font-weight:650;margin:0 0 12px}b,s
 .lchips button:hover{border-color:var(--ac)}
 .lchips button.on{background:var(--ac);border-color:var(--ac);color:#fff}
 .lchips button.on b{background:rgba(255,255,255,.25);color:#fff}
-.lwrap{columns:2 560px;column-gap:18px}
-.appsec{break-inside:avoid;display:inline-block;width:100%;vertical-align:top;border:1px solid var(--bd);border-radius:20px;background:var(--cd);padding:8px 12px 14px;margin:0 0 18px;box-shadow:var(--sh)}
+.lwrap{display:grid;grid-template-columns:1fr;gap:16px}
+.appsec{border:1px solid var(--bd);border-radius:20px;background:var(--cd);padding:8px 12px 14px;box-shadow:var(--sh)}
 .appsec .appcat{margin:8px 2px 12px}
 .appcat b{font-weight:600;font-size:10px;letter-spacing:0;text-transform:none;color:var(--mu);background:var(--bg);border-radius:999px;padding:2px 8px}
 .app{display:flex;flex-direction:column;align-items:flex-start;gap:11px;background:var(--cd);border:1px solid var(--bd);border-radius:18px;padding:16px;cursor:pointer;font:inherit;color:var(--tx);text-align:left;transition:transform .16s,box-shadow .16s,border-color .16s}
@@ -71,10 +71,37 @@ h1{font-size:19px;margin:0}h2{font-size:15px;font-weight:650;margin:0 0 12px}b,s
 .ad{font-size:12px;color:var(--mu);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .astat{margin-top:auto;padding-top:9px;border-top:1px dashed var(--bd);font-size:11px;color:var(--mu);width:100%}
 .astat b{color:var(--ac);font-size:13px;margin-right:3px}
+/* ---- side panel vs apps-only view (toggle in top bar) ---- */
+@media(min-width:921px){
+ body.in.noside #app{grid-template-columns:minmax(0,1fr)}
+ body.in.noside #sidebar{display:none}
+}
+#menuBtn.on{border-color:var(--ac);color:var(--ac)}
+/* ---- global search results ---- */
+.global-search{position:relative}
+#gsr{position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--cd);border:1px solid var(--bd);border-radius:12px;box-shadow:0 16px 44px rgba(23,32,58,.22);max-height:min(440px,62vh);overflow-y:auto;display:none;z-index:70;padding:6px}
+#gsr.open{display:block}
+#gsr .gh{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);padding:9px 10px 3px}
+#gsr button{display:flex;width:100%;gap:10px;align-items:center;border:0;background:none;color:var(--tx);font:inherit;font-size:13.5px;padding:8px 10px;border-radius:9px;cursor:pointer;text-align:left}
+#gsr button:hover,#gsr button.sel{background:var(--tint)}
+#gsr button .gi{flex:none;width:27px;height:27px;border-radius:8px;display:grid;place-items:center;color:#fff}
+#gsr button .gi svg{width:15px;height:15px}
+#gsr button .gm{min-width:0;flex:1}
+#gsr button .gm b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#gsr button .gm span{display:block;font-size:11.5px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#gsr button .gt{flex:none;font-size:9.5px;font-weight:700;color:var(--mu);background:var(--bg);border-radius:999px;padding:2px 8px;text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+#gsr .gempty{padding:14px 12px;font-size:13px;color:var(--mu)}
+/* ---- stacked settings sections ---- */
+.setwrap{display:grid;grid-template-columns:230px minmax(0,1fr);gap:16px;align-items:start}
+.setnav{position:sticky;top:76px;display:flex;flex-direction:column;gap:4px;padding:10px;border:1px solid var(--bd);border-radius:14px;background:var(--cd);box-shadow:var(--sh)}
+.setnav button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;border:1px solid transparent;background:none;color:var(--mu);border-radius:9px;padding:9px 11px;font:inherit;font-size:13.5px;cursor:pointer}
+.setnav button:hover{background:var(--tint)}
+.setnav button.on{background:var(--tint);border-color:color-mix(in srgb,var(--ac) 25%,var(--bd));color:var(--ac);font-weight:600}
+@media(max-width:820px){.setwrap{grid-template-columns:1fr}.setnav{position:static;flex-direction:row;flex-wrap:wrap}}
 #menuBtn svg{width:16px;height:16px}
 #themeBtn svg{width:13px;height:13px;vertical-align:-2px;margin-right:5px}
 button.s svg{width:12px;height:12px;vertical-align:-1.5px}
-@media(max-width:640px){.apps{grid-template-columns:repeat(2,1fr)}.hero{padding:20px}}
+
 /* ---- employee badges & chips ---- */
 .bdg{display:inline-block;font-size:9.5px;font-weight:700;padding:2.5px 8px;border-radius:6px;background:var(--tint);color:var(--ac);text-transform:uppercase;letter-spacing:.05em;margin-left:6px;vertical-align:1px;white-space:nowrap}
 .bdg.off{background:color-mix(in srgb,var(--mu) 15%,transparent);color:var(--mu)}
@@ -104,7 +131,7 @@ body.in #app{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:1
 .sideFoot .k{font-size:11px}
 #content{display:flex;flex-direction:column;min-width:0}
 #topbar{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:12px;padding:11px 18px;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--bd)}
-#menuBtn{display:none}
+#menuBtn{display:grid;place-items:center;font-size:15px;flex:none}
 #who{margin-left:auto;font-size:13px;color:var(--mu);display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
 main{padding:20px;max-width:1080px;width:100%;margin:0 auto}
 #overlay{display:none;position:fixed;inset:0;background:rgba(9,13,26,.45);z-index:38}
@@ -198,6 +225,112 @@ tbody tr:hover td{background:color-mix(in srgb,var(--ac) 6%,transparent)}
 @media print{body.in #app{display:none}#modal{position:static;background:none;padding:0;backdrop-filter:none}#modal>div{box-shadow:none;border:0;max-width:100%}.nob{display:none}
  :root{--cd:#fff;--tx:#1a1a1a;--mu:#555;--bd:#ddd;background:#fff}
  #modal input,#modal select,#modal textarea{background:#fff;color:#1a1a1a}}
+
+/* ===== KAY KAY ERP · refined workspace design ===== */
+:root{scroll-behavior:smooth}
+body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:-.006em}
+#sidebar{background:var(--cd);border-right:1px solid var(--bd);padding:18px 13px}
+.logo{background:linear-gradient(145deg,#9b5637,#c17a50);box-shadow:none}
+.brand b{letter-spacing:.015em}
+#homeBtn{background:transparent;color:var(--mu);border:1px solid transparent;margin:8px 0 10px}
+#homeBtn:hover,#homeBtn.on{background:var(--tint);color:var(--ac);border-color:color-mix(in srgb,var(--ac) 18%,var(--bd))}
+#nav .cat{padding:17px 10px 7px;color:var(--mu);font-size:10px;letter-spacing:.12em}
+#nav button{padding:9px 11px;border-radius:9px;font-size:13px;color:var(--mu)}
+#nav button:hover{background:var(--bg);color:var(--tx)}
+#nav button.on{background:var(--tint);color:var(--ac)}
+#nav button.on::before{background:var(--ac);top:7px;bottom:7px}
+#topbar{min-height:62px;padding:10px 24px;background:color-mix(in srgb,var(--cd) 88%,transparent);border-bottom:1px solid var(--bd)}
+#topbar h1{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+.global-search{display:flex;align-items:center;gap:8px;margin-left:auto;width:min(300px,32vw);padding:0 11px;border:1px solid var(--bd);border-radius:9px;background:var(--bg);color:var(--mu)}
+.global-search>span{font-size:19px;line-height:1}
+.global-search input{border:0!important;box-shadow:none!important;background:transparent!important;padding:8px 0!important;min-width:0;font-size:12.5px}
+.global-search input:focus{outline:none}
+#who{margin-left:0;font-size:12px}
+main{max-width:1440px;padding:26px 30px 32px}
+.page-head{align-items:center;margin-bottom:22px}
+.pt{font-size:24px;letter-spacing:-.04em}
+.pt .ic{border-radius:11px;box-shadow:none}
+.ps{margin:5px 0 0 54px;color:var(--mu);font-size:12.5px}
+.cd{border-radius:12px;box-shadow:0 1px 3px rgba(32,43,54,.035);padding:18px}
+.g>.cd{border-top:2px solid var(--ac)}
+.cd h2{font-size:10.5px;letter-spacing:.11em}
+.v{letter-spacing:-.035em}
+button.b{background:var(--ac);border-radius:9px;box-shadow:none}
+button.b:hover{background:var(--ac2);filter:none}
+button.s,a.s{border-radius:8px}
+input,select,textarea{border-radius:8px}
+input:focus,select:focus,textarea:focus{box-shadow:0 0 0 3px var(--tint)}
+th{font-size:10px;letter-spacing:.08em}
+th,td{padding:10px 12px}
+tbody tr:nth-child(even) td{background:color-mix(in srgb,var(--bg) 62%,var(--cd))}
+tbody tr:hover td{background:var(--tint)}
+.hero{background:linear-gradient(115deg,#263b43,#39565a 58%,#8d573e);border-radius:14px;padding:27px 30px;box-shadow:none;margin-bottom:22px}
+.hero::before{width:260px;height:260px;right:-70px;top:-145px;background:rgba(255,255,255,.07)}
+.hero::after{width:170px;height:170px;right:145px;bottom:-115px;background:rgba(255,255,255,.055)}
+.hero .hk{letter-spacing:.16em}
+.hero .hb{font-size:28px}
+.hchip{background:rgba(255,255,255,.10);border-color:rgba(255,255,255,.17);border-radius:9px}
+.hbtn{color:#fff;background:#a85f3b;border:1px solid rgba(255,255,255,.22);box-shadow:none}
+.hbtn:hover{background:#bd7650}
+.appsec{border-radius:13px;box-shadow:0 1px 3px rgba(32,43,54,.035);padding:8px 13px 14px}
+.app{border-radius:12px;padding:14px;gap:9px;box-shadow:none}
+.app:hover{transform:translateY(-2px);box-shadow:0 7px 18px rgba(32,43,54,.08)}
+.ai{width:39px;height:39px;border-radius:11px;box-shadow:none}
+.ai svg{width:20px;height:20px}
+.g1{background:#a85f3b}.g2{background:#527b7c}.g3{background:#43866b}
+.g4{background:#b8793f}.g5{background:#8d6b62}.g6{background:#647d8b}
+.appcat{font-size:10px;letter-spacing:.12em}
+.astat{font-size:10.5px}
+.astat b{color:var(--ac)}
+.lchips button{border-radius:8px}
+.lchips button.on{background:var(--ac);border-color:var(--ac)}
+.sideFoot{padding-top:16px}
+footer.k{font-size:11px;opacity:.75}
+#modal>div{border-radius:13px}
+@media(max-width:920px){
+ main{padding:18px 16px 26px}
+ #topbar{padding:10px 14px;gap:9px}
+ .global-search{width:min(250px,40vw)}
+}
+@media(max-width:640px){
+ #topbar h1{display:none}
+ .global-search{width:auto;flex:1}
+ #who{font-size:11px}
+ main{padding:15px 12px 24px}
+ .hero{padding:21px}
+ .hero .hb{font-size:23px}
+ .hchips{gap:7px}
+ .hchip{padding:7px 9px}
+ .apps{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .app{padding:12px}
+ .appsec{padding:7px 9px 12px}
+ .cols{grid-template-columns:minmax(0,1fr)}
+}
+
+
+/* ===== Single-navigation ERP workspace ===== */
+#sidebar{width:250px}
+#nav{padding-bottom:10px}
+#nav .cat{margin-top:8px}
+#nav button{min-height:38px}
+#nav button.on{font-weight:700}
+#topbar{gap:14px}
+#topbar h1{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
+.global-search{margin-left:auto}
+.page-head{align-items:center}
+.pt{font-size:25px}
+#main .cd{box-shadow:0 1px 3px rgba(32,43,54,.04)}
+@media(max-width:920px){
+ body.in #app{grid-template-columns:minmax(0,1fr)}
+ #sidebar{width:270px}
+}
+@media(max-width:640px){
+ .global-search{width:auto;flex:1}
+ #who{max-width:48%;font-size:10.5px}
+ .pt{font-size:22px}
+ .ps{margin-left:0}
+}
+
 </style></head><body>
 <script>
 /* ===== STEP 1: paste your Firebase web app config here (Firebase console > Project settings > Your apps) ===== */
@@ -209,7 +342,7 @@ window.FIREBASE_CONFIG={apiKey:"AIzaSyDwPCcD09xEHZg1uOEZiWpk7JqyXvyBAFM",authDom
 <label>Email</label><input id="le" type="email" autocomplete="username"><label>Password</label><input id="lp" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
 <p id="lerr" class="bad" style="min-height:20px;margin:2px 0 12px"></p>
 <button class="b" style="width:100%" onclick="doLogin()">Sign in</button>
-<p style="text-align:center;margin:12px 0 0"><button class="s" onclick="doReset()">Forgot password?</button></p></div></div>
+<p style="text-align:center;margin:12px 0 0"><button class="s" onclick="doReset()">Forgot password?</button></p><p class="k" style="text-align:center;margin:10px 0 0">New staff member? Your administrator creates accounts in Settings &rarr; Users &amp; access.</p></div></div>
 <div id="app">
 <aside id="sidebar">
  <div class="brand"><div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="2" y="4" width="8" height="4" rx="1.2"/><rect x="14" y="4" width="8" height="4" rx="1.2"/><rect x="8" y="10" width="8" height="4" rx="1.2"/><rect x="2" y="16" width="8" height="4" rx="1.2"/><rect x="14" y="16" width="8" height="4" rx="1.2"/></svg></div><b id="brandName">Brick Unit</b><span class="tag">ERP</span></div>
@@ -217,17 +350,23 @@ window.FIREBASE_CONFIG={apiKey:"AIzaSyDwPCcD09xEHZg1uOEZiWpk7JqyXvyBAFM",authDom
  <nav id="nav"></nav>
  <div class="sideFoot">
   <button class="s" id="themeBtn" style="text-align:center" onclick="tglTheme()"><span>Dark mode</span></button>
-  <span class="k">Brick Unit ERP · v8 · Nov 2026</span>
+  <span class="k">KAY KAY BRICK UNIT · ERP</span>
  </div>
 </aside>
 <div id="content">
  <header id="topbar">
-  <button id="menuBtn" class="s" onclick="document.body.classList.toggle('navOpen')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+  <button id="menuBtn" class="s" onclick="tglNav()" title="Toggle side panel" aria-label="Toggle side panel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/></svg></button>
   <h1 id="ttl">Brick Unit Manager</h1>
+  <div class="global-search">
+   <span aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;flex:none"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
+    <input id="gs" type="search" placeholder="Search apps, customers, invoices, staff, vendors" aria-label="Global search" autocomplete="off"
+     oninput="gSearch(this.value)" onfocus="gSearch(this.value)" onkeydown="gKey(event)">
+    <div id="gsr"></div>
+  </div>
   <div id="who" class="k"></div>
  </header>
  <main id="main"></main>
- <footer class="k" style="text-align:center;padding:0 0 28px">Brick Unit ERP · restructured from the legacy single-page app · Nov 2026</footer>
+ <footer class="k" style="text-align:center;padding:0 0 28px">KAY KAY BRICK UNIT · Operations & Finance ERP</footer>
 </div>
 </div>
 <div id="overlay" onclick="document.body.classList.remove('navOpen')"></div>
@@ -281,24 +420,71 @@ const IC={
  sun:SVG('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>')};
 
 /* ERP module registry: [categoryId, category label, [[moduleId, label, iconKey], ...]] */
+/* ERP module registry: [categoryId, category label, [[moduleId, label, iconKey], ...]]
+   Eight consolidated apps with tabbed sub-views instead of many single pages. */
 const MODULES=[
  ['ov','Overview',[['dash','Dashboard','grid']]],
- ['mfg','Manufacturing & stock',[['prod','Production','factory'],['bst','Brick stock','bricks'],['stock','Raw materials','package'],['inv','Inventory','warehouse']]],
- ['crm','Sales & CRM',[['sales','New sale / invoice','receipt'],['acct','Accounts receivable','wallet']]],
- ['proc','Procurement',[['ven','Vendors & purchases','truck']]],
- ['ppl','People & payroll',[['emp','Employees','idcard'],['pay','Workers & weekly pay','users']]],
- ['fin','Finance',[['acc','Accounting','book'],['exp','Expenses','banknote'],['pnl','Profit & loss','chart'],['tax','Tax & VAT','percent']]],
- ['adm','Administration',[['rol','Roles & audit','shield'],['set','Settings & backup','sliders'],['int','Integrations','plug']]]];
-/* registerModule(catId,[id,name,icon]) moves a module from PLANNED into its
-   category with a live view — kept for modules added after this build. */
+ ['mfg','Manufacturing & stock',[['prod','Production','factory'],['inv','Inventory','warehouse']]],
+ ['crm','Sales & CRM',[['acct','Sales & customers','wallet']]],
+ ['proc','Procurement',[['ven','Purchases & vendors','truck']]],
+ ['ppl','People & payroll',[['emp','People & payroll','idcard']]],
+ ['fin','Finance',[['acc','Accounting','book']]],
+ ['adm','Administration',[['rol','Administration','shield']]]];
 const PLANNED=[];
 window.registerModule=(catId,[id,nm,ic])=>{const c=MODULES.find(x=>x[0]==catId);if(!c)return;
  const pi=PLANNED.findIndex(x=>x[0]==id);if(pi>=0)PLANNED.splice(pi,1);
  if(!c[2].some(m=>m[0]==id))c[2].push([id,nm,ic])};
 const MFLAT=()=>MODULES.flatMap(c=>c[2]);
-const SUB={home:'Every module of your ERP — tap an app to open it.',emp:'Master list of your staff — owners, workers and helpers, their roles, contact details and the work they do.',dash:'One page for the whole unit — production, stock, cash, and what needs attention today.',prod:'Record each day’s production. Raw materials are deducted automatically from your recipe.',bst:'Bricks made minus bricks sold, with count corrections for the yard.',stock:'Cement, granite metal and granite sand — levels, usage, and purchase entry.',ven:'What you received this week, what you paid, and what you still owe.',sales:'Raise an invoice, take payment, and keep follow-up dates.',acct:'Who owes you money, with follow-ups, statements and payment history.',pay:'Weekly wages for groups and individual workers, with balances and advances.',exp:'Running costs — electricity, fuel, rent and anything else.',pnl:'Profit for the month and where the cash went.',acc:'Double-entry journal and trial balance, worked out live from every sale, purchase, payment and expense.',inv:'Everything you hold — bricks and raw materials, valued, with movements and alerts.',tax:'VAT worked out from your invoices and purchases, quarter by quarter.',int:'WhatsApp payment reminders, data download and connections.',rol:'A living audit trail from every entry, plus who is signed in.',set:'Business details, rates, brick sizes, vendors and backup.'};
+const SUB={home:'Every app of your ERP in one place. Open a module to start work.',dash:'One page for the whole unit. Production, stock, cash, and what needs attention today.',prod:"Record each day's production. Raw materials are deducted automatically from your recipe and worker wages are split.",inv:'Everything you hold. Bricks and raw materials, valued, with movements, count corrections and low-stock alerts.',acct:'Raise invoices, take payments, follow up balances and keep every customer record.',ven:'What you received this week, what you paid, and what you still owe each vendor.',emp:'Your staff directory, work assignments, pay ledger and weekly wages in one place.',acc:'The books. Journal, trial balance, profit and loss, expenses and VAT, worked out live from every entry.',rol:'Settings, user accounts and roles, the audit trail and connections.'};
+
 let Q={}; /* per-module search & filter state (cleared on navigation) */
-const go=t=>{tab=t;Q={};document.body.classList.remove('navOpen');render();scrollTo(0,0)};
+/* sub-view state for the consolidated apps (tabs inside a mega-app) */
+let INV={v:'ov'},AD={v:'set'},ST={v:'biz'};
+/* legacy view ids redirect into the consolidated app they now live in */
+const GOTAB={bst:'inv',stock:'inv',pay:'emp',exp:'acc',pnl:'acc',tax:'acc',int:'rol',set:'rol',usr:'rol'};
+const setSub=(app,sub)=>{
+ if(app=='inv')INV.v=sub=='bst'?'bst':sub=='stock'?'stock':'ov';
+ else if(app=='emp')ET.v=sub=='pay'?'pay':sub=='work'?'work':sub=='led'?'led':'dir';
+ else if(app=='acc')AC.v=['tb','j','pnl','exp','tax'].includes(sub)?sub:'tb';
+ else if(app=='rol'){if(sub=='set'){AD.v='set';ST.v='data'}else AD.v=sub}};
+const go=t=>{const prev=tab;Q={};document.body.classList.remove('navOpen');
+ if(GOTAB[t]){const app=GOTAB[t];setSub(app,t);tab=app}
+ else if(t=='sales'){tab='acct';AST.v='sum';AST.c='';setTimeout(()=>dlgSale(),80)}
+ else if(t=='acct'){tab='acct';AST.c=''}
+ else tab=t;
+ if(!allowed(tab)){tab=prev;alert('Your role ('+myRole()+') does not have access to that area.')}
+ render();scrollTo(0,0)};
+/* ---- side panel vs apps-only view (toggle in the top bar) ---- */
+let NOSIDE=true;try{NOSIDE=localStorage.getItem('bkm_noside')!=='0'}catch(e){}
+const applyNavMode=()=>{document.body.classList.toggle('noside',NOSIDE);const b=$('menuBtn');if(b){b.classList.toggle('on',!NOSIDE);b.title=NOSIDE?'Show side panel':'Hide side panel'}};
+window.tglNav=()=>{if(matchMedia('(max-width:920px)').matches){document.body.classList.toggle('navOpen');return}
+ NOSIDE=!NOSIDE;try{localStorage.setItem('bkm_noside',NOSIDE?'1':'0')}catch(e){}applyNavMode()};
+applyNavMode();
+/* ---- global search: apps, customers, invoices, staff, vendors, entries ---- */
+let GSQ='',GSI=0,GSRES=[];
+const gsClose=()=>{const r=$('gsr');if(r)r.classList.remove('open')};
+window.gsGo=i=>{const r=GSRES[i];if(!r)return;gsClose();const b=$('gs');if(b)b.blur();r.fn()};
+const gsItems=()=>{const ck=ckey(GSQ),out=[];
+ if(!ck)return out;
+ MFLAT().forEach(([id,nm,ic])=>{if(ckey(nm+' '+(SUB[id]||'')).includes(ck))out.push({ic,g:IC[ic].g,t:nm,s:SUB[id]||'App',cat:'App',fn:()=>go(id)})});
+ try{ACC().list.forEach(x=>{if(ckey(x.name+' '+x.phone).includes(ck))out.push({ic:'wallet',g:IC.wallet.g,t:x.name,s:x.bal>0.005?m(x.bal)+' to collect':'Customer - no balance',cat:'Customer',fn:()=>openC(kq(x.key))})})}catch(e){}
+ try{S.sales.slice(-300).reverse().forEach(s=>{if(ckey(s.no+' '+s.cust).includes(ck))out.push({ic:'receipt',g:IC.receipt.g,t:s.no+' - '+s.cust,s:m(s.total)+' on '+s.date,cat:'Invoice',fn:()=>inv(s.id)})})}catch(e){}
+ try{EMPS().forEach(x=>{if(ckey(x.name+' '+x.role+' '+x.phone).includes(ck))out.push({ic:'idcard',g:IC.idcard.g,t:x.name,s:(x.role||'Staff')+(x.active===false?' - off roll':''),cat:'Staff',fn:()=>{ET.e=x.id;ET.v='dir';tab='emp';render();dlgEmp()}})})}catch(e){}
+ try{S.vendors.forEach(v=>{if(ckey(v.name).includes(ck))out.push({ic:'truck',g:IC.truck.g,t:v.name,s:'Vendor - '+((v.mats||[]).map(k=>(MAT.find(x=>x[0]==k)||[])[1]).join(', ')||'purchases'),cat:'Vendor',fn:()=>go('ven')})})}catch(e){}
+ try{audit().slice(0,300).forEach(e=>{if(ckey(e.t+' '+e.w).includes(ck))out.push({ic:'shield',g:IC.shield.g,t:e.t,s:e.w+' - '+e.d,cat:'Entry',fn:()=>{AD.v='rol';tab='rol';Q={q:GSQ};render()}})})}catch(e){}
+ return out.slice(0,40)};
+const gsPaint=()=>{const r=$('gsr');if(!r)return;
+ if(!GSQ){r.classList.remove('open');r.innerHTML='';return}
+ let h='',last='';
+ GSRES.forEach((x,i)=>{if(x.cat!=last){h+='<div class="gh">'+x.cat+'</div>';last=x.cat}
+  h+='<button class="'+(i==GSI?'sel':'')+'" onclick="gsGo('+i+')"><span class="gi '+x.g+'">'+IC[x.ic].s+'</span><span class="gm"><b>'+esc(x.t)+'</b><span>'+esc(x.s)+'</span></span><span class="gt">'+x.cat+'</span></button>'});
+ r.innerHTML=GSRES.length?h:'<div class="gempty">No matches. Try a customer, invoice number, staff name, vendor or app.</div>';
+ r.classList.add('open')};
+window.gSearch=v=>{GSQ=String(v||'');GSI=0;GSRES=gsItems();gsPaint()};
+window.gKey=e=>{if(e.key=='Escape'){gsClose();return}
+ if(e.key=='Enter'){e.preventDefault();if(GSRES.length)gsGo(GSI);return}
+ if(e.key=='ArrowDown'||e.key=='ArrowUp'){e.preventDefault();if(!GSRES.length)return;GSI=(GSI+(e.key=='ArrowDown'?1:GSRES.length-1))%GSRES.length;gsPaint();const s=document.querySelector('#gsr button.sel');if(s)s.scrollIntoView({block:'nearest'})}};
+document.addEventListener('click',e=>{if(!e.target.closest('.global-search'))gsClose()});
 const mQ=(...f)=>{const s=ckey(Q.q||'');return!s||f.some(x=>ckey(String(x??'')).includes(s))};
 const mD=d=>(!Q.from||d>=Q.from)&&(!Q.to||d<=Q.to);
 const drng=()=>`<input type="date" value="${Q.from||''}" onchange="Q.from=this.value;render()"><span class="k">to</span><input type="date" value="${Q.to||''}" onchange="Q.to=this.value;render()">`;
@@ -317,12 +503,18 @@ const themeInit=()=>{try{return localStorage.getItem('bkm_theme')}catch(e){retur
 const applyTheme=t=>{document.documentElement.dataset.theme=t;try{localStorage.setItem('bkm_theme',t)}catch(e){}const b=$('themeBtn');if(b)b.innerHTML=(t=='dark'?IC.sun:IC.moon)+' '+(t=='dark'?'Light mode':'Dark mode')};
 window.tglTheme=()=>applyTheme(document.documentElement.dataset.theme=='dark'?'light':'dark');
 applyTheme(themeInit()||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'));
-function render(){const md=tab=='home'?['home','Apps','apps']:MFLAT().find(x=>x[0]==tab)||MFLAT()[0];
+function render(){if(tab!='home'&&!allowed(tab))tab='home';const md=tab=='home'?['home','Apps','grid']:MFLAT().find(x=>x[0]==tab)||MFLAT()[0];
  $('ttl').textContent=md[1];$('brandName').textContent=S.set.biz;document.title=S.set.biz+' · Brick Unit ERP';
- $('homeBtn').classList.toggle('on',tab=='home');
- $('nav').innerHTML=MODULES.map(([cid,cname,mods])=>`<div class="cat">${cname}</div>`+mods.map(([id,nm,ic])=>`<button class="${id==tab?'on':''}" onclick="go('${id}')"><span class="ic">${IC[ic].s}</span><span>${nm}</span></button>`).join('')).join('');
- const head=tab=='home'?'':`<div class="page-head"><h1 class="pt"><span class="ic ${IC[md[2]].g}">${IC[md[2]].s}</span>${md[1]}</h1><p class="ps">${SUB[tab]||''}</p></div>`;
- $('main').innerHTML=head+V[tab]();if(tab=='prod'&&$('ps'))hlWork();}
+ const hb=$('homeBtn');if(hb)hb.classList.toggle('on',tab=='home');
+ const em=whoEmail();
+ if(em){const du=USERS().find(x=>x.email==em);
+  if(du&&du.active===false){window._kkGate=1;$('nav').innerHTML='';$('main').innerHTML='<div class="cd"><h2>Your access has been removed</h2><p>The administrator removed '+esc(em)+' from this ERP. Ask them to restore your access if this is a mistake.</p></div>';if(window.erpSignOut)window.erpSignOut();return}}
+ $('nav').innerHTML=MODULES.map(([cid,cname,mods])=>{const vis=mods.filter(([id])=>allowed(id));if(!vis.length)return'';
+  return '<div class="cat">'+cname+'</div>'+vis.map(([id,nm,ic])=>'<button class="'+(id==tab?'on':'')+'" onclick="go(\''+id+'\')"><span class="ic">'+IC[ic].s+'</span><span>'+nm+'</span></button>').join('')}).join('');
+ const head=tab=='home'?'':'<div class="page-head"><h1 class="pt"><span class="ic '+IC[md[2]].g+'">'+IC[md[2]].s+'</span>'+md[1]+'</h1><p class="ps">'+(SUB[tab]||'')+'</p></div>';
+ $('main').innerHTML=head+(V[tab]||V.dash)();if(tab=='prod'&&$('ps'))hlWork();}
+window.render=render;
+
 const del=(k,id)=>{if(confirm('Delete this entry?')){S[k]=S[k].filter(x=>x.id!=id);save();render()}};
 const delB=(k,id)=>`<button class="s" onclick="del('${k}','${id}')" aria-label="Delete">${IC.x}</button>`;
 
@@ -589,10 +781,11 @@ const EMPS=()=>{if(!S.set.emps||!S.set.emps.length){S.set.emps=(S.emp||[]).map(n
 const syncEmps=()=>{S.emp=EMPS().filter(e=>e.active!==false).map(e=>e.name)};
 const roleOf=n=>{const e=EMPS().find(x=>x.name==n);return e&&e.active!==false?e.role:''};
 const empCell=n=>{const r=roleOf(n);return esc(n)+(r?` <span class="bdg">${r}</span>`:'')};
-const ETABS=[['dir','Directory'],['work','Work assignments'],['led','Pay ledger']];
+const ETABS=[['dir','Directory'],['work','Work assignments'],['led','Pay ledger'],['pay','Weekly pay']];
 const mE=(...f)=>{const s=ckey(ET.q||'');return!s||f.some(x=>ckey(String(x??'')).includes(s))};
 const etNav=()=>`<div class="toolbar"><div class="seg">${ETABS.map(([k,n])=>`<button class="${ET.v==k?'on':''}" onclick="ET.v='${k}';ET.q='';ET.e='';render()">${n}</button>`).join('')}</div><input id="eq" placeholder="Search staff" value="${esc(ET.q)}" oninput="ET.q=this.value;softRender()" style="max-width:220px"></div>`;
 V.emp=function(){
+ if(ET.v=='pay')return etNav()+V.pay();
  if(ET.v=='work')return etNav()+empWork();
  if(ET.v=='led')return etNav()+empLed();
  const e=ET.e?EMPS().find(x=>x.id==ET.e):null;
@@ -607,7 +800,7 @@ V.emp=function(){
  <div class="cd"><h2>Staff directory (${EMPS().length})</h2>${tbl(['Name','Role','Phone','Joined','Work kinds','Pay/unit',''],rows)}</div>`};
 function empWork(){const types=T(),L=EMPS().filter(x=>mE(x.name,x.role));
  return `<div class="cd"><h2>Who does what</h2><p class="k">Tap a cell to tick or untick a work kind for that person. In Production, the assigned people are highlighted as soon as you pick that work.</p>
- ${tbl(['Employee',...types.map(t=>esc(t.name))],L.map(x=>row([`${empCell(x.name)}${x.active===false?' <span class="bdg off">Off</span>':''}`,...types.map(t=>`<button class="s" style="min-width:36px" onclick="tglWork('${x.id}','${t.id}')">${(x.works||[]).includes(t.id)?'\u2713':'\u2014'}</button>`)])).join(''))} <p class="k">Tip: add or rename work kinds (moulding, loading, stacking\u2026) in Settings \u2192 Brick sizes and work types.</p></div>`}
+ ${tbl(['Employee',...types.map(t=>esc(t.name))],L.map(x=>row([`${empCell(x.name)}${x.active===false?' <span class="bdg off">Off</span>':''}`,...types.map(t=>`<button class="s" style="min-width:36px" onclick="tglWork('${x.id}','${t.id}')">${(x.works||[]).includes(t.id)?'\u2713':'\u2014'}</button>`)])).join(''))} <p class="k">Tip: add or rename work kinds (moulding, loading, stacking\u2026) in Administration \u2192 Settings \u2192 Brick sizes &amp; work.</p></div>`}
 function empLed(){
  const gn=[...new Set([...S.groups.map(g=>g.name),...S.prod.map(p=>p.grp).filter(Boolean),...S.sales.flatMap(ldrs).filter(x=>x.startsWith('G:')).map(x=>x.slice(2))])];
  const wn=[...new Set([...S.emp,...S.prod.filter(p=>!p.grp).flatMap(p=>p.emps||[p.emp]),...S.sales.flatMap(ldrs).filter(x=>!x.startsWith('G:'))])];
@@ -658,7 +851,7 @@ V.bst=function(){const L=bstock(),neg=L.filter(x=>x.left<0);
  const hist=[...bAdj()].sort((a,b)=>b.date<a.date?-1:1).filter(a=>mD(a.date)&&mQ(TN(a.size),a.note)).map(a=>row([a.date,esc(TN(a.size)),(a.qty>0?'+':'')+q(a.qty),esc(a.note||''),`<button class="s" onclick="delAdj('${a.id}')">${IC.x}</button>`],['','','r','',''])).join('');
  return `${neg.map(x=>`<div class="al"><b>${esc(x.name)}</b> stock is ${q(x.left)} \u2013 more was sold than recorded as made. Check Production entries or do a physical count below.</div>`).join('')}
  <div class="cd"><h2>Brick stock by size</h2>${bstTbl(false)}
- <p class="k">In stock = bricks made (Production tab) \u2212 bricks sold (Sales tab) \u00b1 count corrections. "Other work" types such as stacking or cleaning are not counted.</p></div>
+ <p class="k">In stock = bricks made (Production app) \u2212 bricks sold (Sales app) \u00b1 count corrections. "Other work" types such as stacking or cleaning are not counted.</p></div>
  ${qa('bricks','Correct stock after a physical count','Counted the yard? Set the real number - the difference is saved as a correction.','Set stock','dlgAdj()')}
  <div class="cd"><h2>Count corrections</h2>${fbar('size or note',drng())}${tbl(['Date','Size','Change','Note',''],hist)}</div>`};
 function addAdj(){const id=val('bs');if(!id)return alert('Choose a brick size');if(val('bc')==='')return alert('Enter the bricks counted');
@@ -835,22 +1028,19 @@ function TBal(){const sold=sum(S.sales,s=>s.total),pin=sum(S.pay,p=>p.amt),purch
  const st=stock(),inv=MAT.reduce((a,[k])=>a+st[k].left*st[k].avg,0);
  const earn=sum(S.prod,p=>p.qty*p.rate)+sum(S.sales,s=>s.loaded*s.lrate),mat=pnl('0000-01-01','9999-12-31').mat;
  return[['Cash & bank','Asset',pin-vpd-ex-wp],['Accounts receivable','Asset',sold-pin],['Raw material inventory','Asset',inv],['Materials used (COGS)','Expense',mat],['Wages earned','Expense',earn],['Other expenses','Expense',ex],['Accounts payable','Liability',-(purch-vpd)],['Wages payable','Liability',-(earn-wp)],['Sales revenue','Income',-sold]]}
-V.acc=function(){
- const nav=`<div class="toolbar"><div class="seg"><button class="${AC.v=='tb'?'on':''}" onclick="AC.v='tb';render()">Trial balance</button><button class="${AC.v=='j'?'on':''}" onclick="AC.v='j';render()">Journal</button></div><span class="k">Worked out live from every sale, purchase, payment and expense.</span></div>`;
- if(AC.v=='j'){const rows=J().filter(e=>mD(e.d)&&mQ(e.w,e.dr,e.cr,e.r)).slice(0,150).map(e=>row([e.d,e.r,e.w,e.dr,e.cr,m(e.a)],['','','','','','r'])).join('');
-  return nav+`<div class="cd"><h2>Journal \u2013 every entry, both sides</h2>${fbar('account, party or note',drng())}${tbl(['Date','Ref','Details','Debit account','Credit account','Amount'],rows)}</div>`}
- const A=TBal(),dr=sum(A.filter(a=>a[2]>0.005),a=>a[2]),cr=-sum(A.filter(a=>a[2]<-0.005),a=>a[2]),df=dr-cr;
+/* ---- accounting app: trial balance, journal, P&L, expenses, VAT ---- */
+const ACTABS=[['tb','Trial balance'],['j','Journal'],['pnl','Profit & loss'],['exp','Expenses'],['tax','Tax & VAT']];
+const acNav=()=>'<div class="toolbar"><div class="seg">'+ACTABS.map(([k,n])=>'<button class="'+(AC.v==k?'on':'')+'" onclick="AC.v=\''+k+'\';Q={};render()">'+n+'</button>').join('')+'</div><span class="k">Worked out live from every sale, purchase, payment and expense.</span></div>';
+V.acc=function(){return acNav()+(AC.v=='j'?accJ():AC.v=='pnl'?V.pnl():AC.v=='exp'?V.exp():AC.v=='tax'?V.tax():accTb())};
+function accJ(){const rows=J().filter(e=>mD(e.d)&&mQ(e.w,e.dr,e.cr,e.r)).slice(0,150).map(e=>row([e.d,e.r,e.w,e.dr,e.cr,m(e.a)],['','','','','','r'])).join('');
+ return '<div class="cd"><h2>Journal \u2013 every entry, both sides</h2>'+fbar('account, party or note',drng())+tbl(['Date','Ref','Details','Debit account','Credit account','Amount'],rows)+'</div>'}
+function accTb(){const A=TBal(),dr=sum(A.filter(a=>a[2]>0.005),a=>a[2]),cr=-sum(A.filter(a=>a[2]<-0.005),a=>a[2]),df=dr-cr;
  const rows=A.map(a=>row([a[0],a[1],a[2]>0.005?m(a[2]):'',a[2]<-0.005?m(-a[2]):''],['','','r','r'])).join('');
- return nav+`<div class="g">
- <div class="cd"><div class="k">Total debits</div><div class="v">${m(dr)}</div></div>
- <div class="cd"><div class="k">Total credits</div><div class="v">${m(cr)}</div></div>
- <div class="cd"><div class="k">Difference</div><div class="v ${Math.abs(df)<0.01?'ok':'bad'}">${Math.abs(df)<0.01?'In balance':m(df)}</div></div>
- <div class="cd"><div class="k">Journal entries</div><div class="v">${J().length}</div></div></div>
- <div class="cd"><h2>Trial balance</h2>${tbl(['Account','Type','Debit','Credit'],rows+row(['<b>Total</b>','','<b>'+m(dr)+'</b>','<b>'+m(cr)+'</b>'],['','','r','r']))}
- <p class="k">Each transaction is posted twice \u2013 once debit, once credit \u2013 so the two sides always match. Materials used are valued at your average purchase cost, matching the Profit &amp; loss module. Wages payable is earned wages minus what you have already paid out.</p></div>`};
+ return '<div class="g"><div class="cd"><div class="k">Total debits</div><div class="v">'+m(dr)+'</div></div><div class="cd"><div class="k">Total credits</div><div class="v">'+m(cr)+'</div></div><div class="cd"><div class="k">Difference</div><div class="v '+(Math.abs(df)<0.01?'ok':'bad')+'">'+(Math.abs(df)<0.01?'In balance':m(df))+'</div></div><div class="cd"><div class="k">Journal entries</div><div class="v">'+J().length+'</div></div></div><div class="cd"><h2>Trial balance</h2>'+tbl(['Account','Type','Debit','Credit'],rows+row(['<b>Total</b>','','<b>'+m(dr)+'</b>','<b>'+m(cr)+'</b>'],['','','r','r']))+'<p class="k">Each transaction is posted twice \u2013 once debit, once credit \u2013 so the two sides always match. Materials used are valued at your average purchase cost, matching the Profit &amp; loss tab. Wages payable is earned wages minus what you have already paid out.</p></div>'}
+
 /* ---- inventory: consolidated stock, valuation, movements ---- */
 const invVal=()=>{const st=stock();return MAT.reduce((a,[k])=>a+st[k].left*st[k].avg,0)+sum(bstock(),x=>x.left*((T().find(y=>y.id==x.id)||{}).price||0))};
-V.inv=function(){const st=stock(),bs=bstock(),TT=T(),bv=sum(bs,x=>x.left*((TT.find(y=>y.id==x.id)||{}).price||0)),mv=MAT.reduce((a,[k])=>a+st[k].left*st[k].avg,0);
+function invCore(){const st=stock(),bs=bstock(),TT=T(),bv=sum(bs,x=>x.left*((TT.find(y=>y.id==x.id)||{}).price||0)),mv=MAT.reduce((a,[k])=>a+st[k].left*st[k].avg,0);
  const lowM=MAT.filter(([k])=>st[k].low).map(([k,n])=>n+' runs out in '+(st[k].dl===null?'?':q(Math.max(st[k].dl,0)))+' days at current use');
  const negB=bs.filter(x=>x.left<0).map(x=>x.name+' is negative \u2013 more sold than recorded. Check Production or do a count.');
  const mo=[];S.pur.forEach(p=>mo.push({d:p.date,o:0,i:MAT.find(x=>x[0]==p.mat)[1],v:q(p.qty)+' '+UN[p.mat],w:'From '+esc(p.vendor)+' \u00b7 '+m(p.cost)}));
@@ -866,6 +1056,11 @@ V.inv=function(){const st=stock(),bs=bstock(),TT=T(),bv=sum(bs,x=>x.left*((TT.fi
  <div class="cd"><h2>Brick stock by size</h2>${tbl(['Size','In stock','Selling price','Stock value'],bs.map(x=>{const t=TT.find(y=>y.id==x.id);return row([esc(x.name),`<b>${q(x.left)}</b>`,t&&t.price?m(t.price):'\u2014',m(x.left*((t&&t.price)||0))],['','r','r','r'])}).join(''))}<p class="k">In stock = made \u2212 sold \u00b1 count corrections. Value is at each size\u2019s selling price from Settings.</p></div>
  <div class="cd"><h2>Raw materials</h2>${tbl(['Material','In stock','Avg cost/unit','Value at cost'],MAT.map(([k,n])=>{const x=st[k];return row([n+' ('+UN[k]+')',q(x.left),m(x.avg),m(x.left*x.avg)],['','r','r','r'])}).join(''))}</div>
  <div class="cd"><h2>Stock movements</h2>${fbar('item or party',drng())}${tbl(['Date','In/Out','Item','Quantity','Details'],rows)}<p class="k">Every purchase in, every sale out and every count correction, newest first.</p></div>`};
+/* ---- inventory app: overview, brick stock, raw materials ---- */
+const ITABS=[['ov','Overview'],['bst','Brick stock'],['stock','Raw materials']];
+const invNav=()=>'<div class="toolbar"><div class="seg">'+ITABS.map(([k,n])=>'<button class="'+(INV.v==k?'on':'')+'" onclick="INV.v=\''+k+'\';Q={};render()">'+n+'</button>').join('')+'</div></div>';
+V.inv=function(){return invNav()+(INV.v=='bst'?V.bst():INV.v=='stock'?V.stock():invCore())};
+
 /* ---- tax: VAT return by quarter ---- */
 let TX={q:''};
 const qk=d=>d.slice(0,4)+'-Q'+Math.ceil((+d.slice(5,7))/3);
@@ -876,7 +1071,7 @@ function vatQ(q){const r=+S.set.vat||0,f=r/(100+r),L=S.sales.filter(s=>qk(s.date
 V.tax=function(){const q=TX.q||qList()[0],x=vatQ(q),r=+S.set.vat||0;
  const srows=S.sales.filter(s=>qk(s.date)==q).map(s=>row([s.no,s.date,esc(s.cust),m(s.total),m(s.total*r/(100+r))],['','','','r','r'])).join('');
  const prows=S.pur.filter(p=>qk(p.date)==q).map(p=>row([p.date,esc(p.vendor),MAT.find(y=>y[0]==p.mat)[1],m(p.cost),m(p.cost*r/(100+r))],['','','','r','r'])).join('');
- return `${r?'':'<div class="al">Set your VAT percentage in Settings \u2192 Business &amp; rates first \u2013 the report below uses it.</div>'}
+ return `${r?'':'<div class="al">Set your VAT percentage in Administration \u2192 Settings \u2192 Business &amp; tax first \u2013 the report below uses it.</div>'}
  <div class="toolbar"><div class="seg">${qList().slice(0,8).map(k=>`<button class="${k==q?'on':''}" onclick="TX.q='${k}';render()">${k}</button>`).join('')}</div></div>
  <div class="g">
  <div class="cd"><div class="k">Supplies in ${q} (incl. VAT)</div><div class="v">${m(x.sold)}</div></div>
@@ -904,9 +1099,9 @@ V.int=function(){const A=ACC(),ow=A.list.filter(x=>x.bal>0.005);
  <label style="display:block;margin:2px 0 4px">Message template</label><textarea id="watpl" rows="3" style="width:100%">${esc(tpl)}</textarea>
  <p><button class="b" onclick="saveWa()">Save template</button> <span class="k">Use {name} {biz} {amount} {invoices} \u2013 they fill in per customer. Opens WhatsApp with the message typed; you press send there.</span></p>
  ${tbl(['Customer','Phone','Balance','Next follow-up',''],rows)}
- <p class="k">${ow.filter(x=>x.phone).length} of ${ow.length} owing customers have a phone number saved \u2013 add phones in Accounts receivable.</p></div>
+ <p class="k">${ow.filter(x=>x.phone).length} of ${ow.length} owing customers have a phone number saved \u2013 add phones in Sales &amp; customers.</p></div>
  <div class="cd"><h2>Data</h2><p><button class="b" onclick="expJson()">Download full backup (JSON)</button> <button class="s" onclick="go('set')">Restore from text</button></p>
- <p class="k">The JSON file holds every entry and setting. Restoring is in Settings \u2192 Backup \u2013 it replaces all current data after a confirmation.</p></div>
+ <p class="k">The JSON file holds every entry and setting. Restoring is in Administration \u2192 Settings \u2192 Data &amp; backup \u2013 it replaces all current data after a confirmation.</p></div>
  <div class="cd"><h2>Connections</h2>${tbl(['Service','Status','Notes'],[
   row(['WhatsApp reminders','<span class="ok">Ready</span>','Works through wa.me links \u2013 no setup needed']),
   row(['Calls &amp; invoices','<span class="ok">Ready</span>','Tap-to-call links and printable invoices']),
@@ -923,18 +1118,84 @@ function audit(){const ev=[];
  S.wp.forEach(w=>ev.push({d:w.date,t:'Wages',w:'To '+esc(w.emp.replace(/^G:/,'Team ')),a:w.amt}));
  bAdj().forEach(a=>ev.push({d:a.date,t:'Correction',w:esc(TN(a.size))+' '+(a.qty>0?'+':'')+q(a.qty),a:0}));
  return ev.sort((x,y)=>x.d<y.d?1:-1)}
-V.rol=function(){const ev=audit(),t=today(),ms=t.slice(0,7)+'-01',mo=ev.filter(e=>e.d>=ms);
+function rolCore(){const ev=audit(),t=today(),ms=t.slice(0,7)+'-01',mo=ev.filter(e=>e.d>=ms);
  const who=(($('who').textContent.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+/)||[])[0])||'this device';
  const byt={};mo.forEach(e=>byt[e.t]=(byt[e.t]||0)+1);
  const rows=ev.filter(e=>mD(e.d)&&mQ(e.t,e.w)).slice(0,120).map(e=>row([e.d,`<span class="bdg">${e.t}</span>`,e.w,e.a?m(e.a):'\u2014'],['','','','r'])).join('');
  return `<div class="cd"><h2>Access</h2><div class="g" style="margin-top:6px">
  <div><div class="k">Signed in as</div><div class="v" style="font-size:16px">${esc(who)}</div></div>
- <div><div class="k">Role</div><div class="v"><span class="bdg tm">Administrator</span></div></div>
+ <div><div class="k">Role</div><div class="v"><span class="bdg tm">${esc(myRole())}</span></div></div>
  <div><div class="k">Entries this month</div><div class="v">${mo.length}</div></div>
  <div><div class="k">Total tracked entries</div><div class="v">${ev.length}</div></div></div>
- <p class="k">Every entry below is reconstructed from the database \u2013 nothing is stored twice, so the trail always matches your books. Finer roles (supervisor, read-only viewer) arrive with multi-user sign-in.</p></div>
+ <p class="k">Every entry below is reconstructed from the database \u2013 nothing is stored twice, so the trail always matches your books. Roles are assigned in Users &amp; access and control which apps each person can open.</p></div>
  <div class="cd"><h2>Activity this month by type</h2>${tbl(['Type','Entries'],Object.entries(byt).map(([k,v])=>row([`<span class="bdg">${k}</span>`,v],['','r'])).join(''))}</div>
  <div class="cd"><h2>Audit trail</h2>${fbar('type, party or note',drng())}${tbl(['Date','Type','What happened','Amount'],rows)}<p class="k">Newest first. Delete an entry anywhere in the app and it leaves this trail too \u2013 the trail is a live view, not a copy.</p></div>`};
+/* ---- administration app: settings, users & access, audit trail, integrations ---- */
+const ADTABS=[['set','Settings'],['usr','Users & access'],['rol','Audit trail'],['int','Integrations']];
+const adNav=()=>'<div class="toolbar"><div class="seg">'+ADTABS.map(([k,n])=>'<button class="'+(AD.v==k?'on':'')+'" onclick="AD.v=\''+k+'\';Q={};render()">'+n+'</button>').join('')+'</div></div>';
+V.rol=function(){return adNav()+(AD.v=='usr'?usrCore():(AD.v=='rol'?rolCore():(AD.v=='int'?V.int():setCore())))};
+/* ---- users, roles and access ---- */
+const UROLES=['Administrator','Manager','Accounts','Sales','Store'];
+const whoEmail=()=>((($('who').textContent.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+/)||[])[0])||'').trim();
+const USERS=()=>S.set.users||[];
+const myRole=()=>{const u=USERS().find(x=>x.email==whoEmail()&&x.active!==false);return u?u.role:'Administrator'};
+const ROLE_TABS={Manager:['dash','prod','inv','acct','ven','emp','acc'],Accounts:['dash','acct','ven','acc'],Sales:['dash','acct'],Store:['dash','prod','inv']};
+const allowed=id=>{const a=ROLE_TABS[myRole()];return !a||a.includes(id)||id=='home'};
+function usrCore(){const me=whoEmail(),U=USERS();
+ const rows=U.map(u=>row([
+  '<b>'+esc(u.email)+'</b>'+(u.email==me?' <span class="bdg tm">You</span>':''),
+  esc(u.name||'\u2014'),
+  '<span class="bdg">'+esc(u.role||'Administrator')+'</span>',
+  u.active===false?'<span class="bad">Access removed</span>':'<span class="ok">Active</span>',
+  u.active===false?'<button class="s" onclick="usrAccess(\''+kq(u.email)+'\',1)">Restore access</button>':'<button class="s" onclick="dlgUsr(\''+kq(u.email)+'\')">Edit</button> <button class="s" onclick="usrReset(\''+kq(u.email)+'\')">Reset password</button> <button class="s" onclick="usrAccess(\''+kq(u.email)+'\',0)">Remove access</button>'],
+  ['','','','',''])).join('');
+ return qa('idcard','Create a user','Give a staff member their own email and password to sign in to this ERP, with a role that controls which apps they can open.','Add user',"dlgUsr('')")+
+ '<div class="cd"><h2>User directory ('+U.length+')</h2>'+tbl(['Email','Name','Role','Status',''],rows)+
+ '<p class="k">Users sign in from the sign-in screen with their own email and password. Removing access blocks them the next time the app loads for them \u2013 restore any time. Password reset emails them a Firebase link to choose a new one. Accounts created here also appear in the Firebase console (Authentication) if you ever need to manage them there.</p></div>'+
+ '<div class="cd"><h2>What each role can open</h2>'+tbl(['Role','Apps they can open'],UROLES.map(r=>row(['<span class="bdg">'+r+'</span>',r=='Administrator'?'Everything, including Administration, settings and users':r=='Manager'?'Everything except Administration':r=='Accounts'?'Dashboard, Sales &amp; customers, Purchases &amp; vendors, Accounting':r=='Sales'?'Dashboard and Sales &amp; customers':'Dashboard, Production, Inventory'],['',''])).join(''))+'<p class="k">Anyone not in this directory signs in as Administrator (the owner). Change a role any time with Edit.</p></div>'}
+function dlgUsr(k){const e=k?decodeURIComponent(k):'',u=e?USERS().find(x=>x.email==e):null;
+ dlg('idcard',u?'Edit user':'Create user','<div class="f"><div><label>Email (used to sign in)</label><input id="u_em" type="email" value="'+(u?esc(u.email):'')+'"'+(u?' disabled':'')+'></div><div><label>Full name</label><input id="u_nm" value="'+(u?esc(u.name||''):'')+'"></div><div><label>Role</label><select id="u_rl">'+UROLES.map(r=>'<option'+(u&&u.role==r?' selected':'')+'>'+r+'</option>').join('')+'</select></div>'+(u?'':'<div><label>Password (min 6 characters)</label><input id="u_pw" type="password" autocomplete="new-password"></div>')+'</div>',
+ u?'Change the name or role. Use Reset password in the directory to email them a new one.':'They sign in with this email and password from the sign-in screen, and can change the password later.',
+ '<button class="b" onclick="usrSave(\''+kq(e)+'\')">'+(u?'Save changes':'Create user')+'</button>')}
+async function usrSave(k){const e=k?decodeURIComponent(k):'',u=e?USERS().find(x=>x.email==e):null;
+ const nm=val('u_nm').trim(),rl=val('u_rl');
+ if(u){if(u.email==whoEmail()&&rl!='Administrator'&&!confirm('You are changing YOUR OWN role to '+rl+'. You may lose access to Administration and users. Continue?'))return;
+  u.name=nm;u.role=rl;save();mclose();render();alert('User updated.');return}
+ const em=val('u_em').trim(),pw=val('u_pw')||'';
+ if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em))return alert('Enter a valid email address.');
+ if(pw.length<6)return alert('Choose a password of at least 6 characters.');
+ if(USERS().some(x=>x.email==em))return alert('That email is already in the user directory.');
+ if(em==whoEmail())return alert('You are already signed in with that email.');
+ if(!window.erpCreateUser)return alert('User management needs Firebase sign-in to be configured.');
+ try{await window.erpCreateUser(em,pw,nm)}catch(err){return alert('Could not create the sign-in: '+(err.message||err))}
+ S.set.users=USERS().concat([{email:em,name:nm,role:rl,active:true}]);
+ save();mclose();render();alert('User created. '+em+' can now sign in with the password you set.')}
+async function usrReset(k){const em=decodeURIComponent(k);
+ if(!confirm('Send a password reset email to '+em+'? They choose a new password from the link in it.'))return;
+ try{await window.erpResetPw(em);alert('Password reset email sent to '+em+' (ask them to check spam too).')}catch(e){alert('Could not send: '+(e.code||e.message||e))}}
+function usrAccess(k,on){const em=decodeURIComponent(k),u=USERS().find(x=>x.email==em);if(!u)return;
+ if(em==whoEmail()&&!on)return alert('You cannot remove your own access while signed in.');
+ if(on){u.active=true;save();render();alert(em+' can sign in again.');return}
+ if(!confirm('Remove ERP access for '+em+'? They stay in the directory and can be restored any time.'))return;
+ u.active=false;save();render();alert('Access removed for '+em+'.')}
+/* ---- settings: stacked sections ---- */
+const STABS=[['biz','Business & tax'],['rates','Production & rates'],['sizes','Brick sizes & work'],['ven','Vendors'],['data','Data & backup']];
+const stNav=()=>'<div class="setnav">'+STABS.map(([k,n])=>'<button class="'+(ST.v==k?'on':'')+'" onclick="ST.v=\''+k+'\';render()">'+n+'</button>').join('')+'</div>';
+function setCore(){let body='';
+ if(ST.v=='rates')body=stRates();else if(ST.v=='sizes')body=stSizes();else if(ST.v=='ven')body=stVen();else if(ST.v=='data')body=stData();else body=stBiz();
+ return '<div class="setwrap">'+stNav()+'<div>'+body+'</div></div>'}
+function stBiz(){const s=S.set;return '<div class="cd"><h2>Business &amp; tax</h2><div class="f"><div><label>Business name</label><input id="s_biz" value="'+esc(s.biz)+'"></div><div><label>Currency symbol</label><input id="s_cur" value="'+esc(s.cur)+'"></div><div><label>VAT % (shown on invoices)</label><input type="number" id="s_vat" step="any" value="'+(s.vat||0)+'"></div><div><label>Phone country code (for WhatsApp)</label><input id="s_cc" value="'+(s.cc||'91')+'"></div><div><label>Loading charge / brick</label><input type="number" id="s_load" step="any" value="'+s.load+'"></div><div><label>Reorder warning (days left)</label><input type="number" id="s_warn" value="'+s.warn+'"></div></div><p><button class="b" onclick="saveBiz()">Save business settings</button></p><p class="k">The business name shows on invoices and statements; VAT feeds the Tax &amp; VAT report.</p></div>'}
+function saveBiz(){const s=S.set;s.biz=val('s_biz');s.cur=val('s_cur');s.vat=num('s_vat')||0;s.cc=(val('s_cc')||'91').replace(/\D/g,'')||'91';['load','warn'].forEach(k=>s[k]=num('s_'+k));save();render();alert('Business settings saved.')}
+function stRates(){const s=S.set,rec=s.rec||{};
+ return '<div class="cd"><h2>Buckets &amp; measuring</h2><p class="k">Metal and sand are stored in cubic feet (cu ft). Trucks bring loads and each load can differ, so you enter the cu ft per load on every purchase; the defaults below are only a starting point. Production usage is entered in buckets.</p><div class="f"><div><label>Bucket size (litres)</label><input type="number" id="s_bk" step="any" value="'+s.bk+'" oninput="cvt()"></div><div><label>Metal buckets per 1 cement bag</label><input type="number" id="s_rm" step="any" value="'+s.rm+'" oninput="cvt()"></div><div><label>Sand buckets per 1 cement bag</label><input type="number" id="s_rs" step="any" value="'+s.rs+'" oninput="cvt()"></div><div><label>Default cu ft per load \u2013 metal</label><input type="number" id="s_lm" step="any" value="'+s.lc.m+'"></div><div><label>Default cu ft per load \u2013 sand</label><input type="number" id="s_ls" step="any" value="'+s.lc.s+'"></div><div><label>Reorder cover (days of stock to buy)</label><input type="number" id="s_oc" value="'+s.oc+'"></div></div><p class="k" id="cvt"><b>'+cvTxt(s.bk,s.rm,s.rs)+'</b></p><p class="k">1 cu ft = 28.3 litres. New production entries use the new values; old entries keep what they were saved with.</p></div>'+
+ '<div class="cd"><h2>Recipe per batch \u2013 stock used by one round of production</h2>'+['4','6'].map(z=>{const r=rec[z]||{n:0,c:0,m:0,s:0};return '<div class="f" style="margin-bottom:8px"><div><label>'+z+' inch: bricks (N)</label><input type="number" id="n'+z+'" value="'+r.n+'"></div><div><label>Cement bags</label><input type="number" id="c'+z+'" step="any" value="'+r.c+'"></div><div><label>Granite metal bags</label><input type="number" id="m'+z+'" step="any" value="'+r.m+'"></div><div><label>Granite sand bags</label><input type="number" id="s'+z+'" step="any" value="'+r.s+'"></div></div>'}).join('')+'<p><button class="b" onclick="saveRates()">Save production rates</button> <span class="k">Recording production deducts stock automatically using these recipes.</span></p></div>'}
+function saveRates(){const s=S.set;s.bk=num('s_bk')||15;s.rm=num('s_rm');s.rs=num('s_rs');s.oc=num('s_oc')||7;s.lc={m:num('s_lm')||1,s:num('s_ls')||1};
+ s.rec={};['4','6'].forEach(z=>s.rec[z]={n:num('n'+z)||1000,c:num('c'+z),m:num('m'+z),s:num('s'+z)});
+ save();render();alert('Production rates saved.')}
+function stSizes(){return '<div class="cd"><h2>Brick sizes and work types</h2><p class="k">Add any new brick size or other work you pay workers for. <b>Brick</b> types can be sold and use cement, metal and sand. <b>Work</b> types are only paid to workers (no materials, no sales).</p>'+tbl(['Name','Type','Pay per unit','Selling price',''],T().map(t=>row(['<input value="'+esc(t.name)+'" onchange="updT(\''+t.id+'\',\'name\',this.value)">',t.kind=='brick'?'Brick':'Work','<input type="number" step="any" value="'+t.wage+'" onchange="updT(\''+t.id+'\',\'wage\',this.value)">',t.kind=='brick'?'<input type="number" step="any" value="'+t.price+'" onchange="updT(\''+t.id+'\',\'price\',this.value)">':'\u2014','<button class="s" onclick="delT(\''+t.id+'\')">'+IC.x+'</button>'])).join(''))+'<div class="toolbar"><button class="s" onclick="dlgT2()">New size / work type</button></div><p class="k">Changes to pay or price apply to new entries only; old entries keep what they were saved with. Edits here save automatically.</p></div>'}
+function stVen(){return '<div class="cd"><h2>Vendors</h2><div class="toolbar"><button class="s" onclick="dlgVen()">New vendor</button></div>'+tbl(['Vendor','Supplies',''],S.vendors.map(v=>row([esc(v.name),v.mats.map(k=>MAT.find(x=>x[0]==k)[1]).join(', '),delB('vendors',v.id)])).join(''))+'<p class="k">Weekly payments and balances per vendor are in the Purchases &amp; vendors app.</p></div>'}
+function stData(){return '<div class="cd"><h2>Backup &amp; restore</h2><p class="k">Your data is stored in the cloud database and shared by everyone who signs in. This text is a safety copy; restoring it replaces all current data.</p><p><button class="b" onclick="expJson()">Download full backup (JSON)</button></p><textarea id="bk" rows="4">'+esc(JSON.stringify(S))+'</textarea><p><button class="b" onclick="restore()">Restore from text</button></p></div>'}
+
 /* ---- app launcher home page ---- */
 const weekDue=()=>{const e=wk,f=addD(wk,6);let due=0;
  const gn=[...new Set([...S.groups.map(g=>g.name),...S.prod.map(p=>p.grp).filter(Boolean),...S.sales.flatMap(ldrs).filter(x=>x.startsWith('G:')).map(x=>x.slice(2))])];
@@ -946,25 +1207,16 @@ const weekDue=()=>{const e=wk,f=addD(wk,6);let due=0;
  [...gn.map(x=>'G:'+x),...wn].forEach(k=>{const b=earned(k)-sum(S.wp.filter(w=>w.emp==k&&w.week==e),w=>w.amt);if(b>0.005)due+=b});
  return due};
 const appCounts=()=>{const t=today(),ms=t.slice(0,7)+'-01';
- const st=stock(),bs=bstock(),low=MAT.filter(([k])=>st[k].low).length;
  return{
   dash:[q(sum(S.prod.filter(p=>p.date==t&&p.k!='work'),p=>+p.qty||0)),'bricks today'],
   prod:[q(sum(S.prod.filter(p=>p.date>=ms&&p.date<=t),p=>+p.qty||0)),'units this month'],
-  bst:[q(sum(bs,x=>x.left)),'bricks in stock'],
-  stock:[low?low:'OK',low?'material'+(low>1?'s':'')+' low':'all in stock'],
-  sales:[S.sales.filter(s=>s.date>=ms&&s.date<=t).length,'invoices this month'],
+  inv:[m(invVal()),'stock value'],
   acct:[m(sum(recv(),x=>x.bal)),'to collect'],
   ven:[m(vOwed()),'owed to vendors'],
   emp:[EMPS().length,'on roll'],
-  pay:[m(weekDue()),'to pay this week'],
-  exp:[m(sum(S.exp.filter(e=>e.date>=ms&&e.date<=t),e=>e.amt)),'spent this month'],
-  pnl:[m(pnl(ms,t).net),'net this month'],
-  set:['','adjust rates'],
   acc:[J().length,'journal entries'],
-  inv:[m(invVal()),'stock value'],
-  tax:[+S.set.vat?m(vatQ(qList()[0]).net):'\u2014',+S.set.vat?'VAT this quarter':'set VAT rate'],
-  rol:[audit().filter(e=>e.d>=ms).length,'entries this month'],
-  int:[ACC().list.filter(x=>x.bal>0.005&&x.phone).length,'reminders to send']}};
+  rol:[USERS().filter(u=>u.active!==false).length,'users']}};
+
 let HF=''; /* launcher category filter */
 V.home=function(){const t=today(),tp=S.prod.filter(p=>p.date==t),r=recv(),mo=pnl(t.slice(0,7)+'-01',t.slice(0,7)+'-31'),ac=appCounts();
  const dt=new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
@@ -973,21 +1225,22 @@ V.home=function(){const t=today(),tp=S.prod.filter(p=>p.date==t),r=recv(),mo=pnl
  <span class="hchip">To collect<b>${m(sum(r,x=>x.bal))}</b></span>
  <span class="hchip">Month net<b>${m(mo.net)}</b></span><span class="hchip">Staff<b>${S.emp.length}</b></span></div>
  <div style="margin-top:18px"><button class="hbtn" onclick="go('dash')">Open dashboard</button></div></div>
- <div class="lchips"><button class="${HF?'':'on'}" onclick="HF='';render()">All apps</button>${MODULES.map(([cid,cn,mods])=>`<button class="${HF==cid?'on':''}" onclick="HF='${cid}';render()">${cn}<b>${mods.length}</b></button>`).join('')}</div>
+ <div class="lchips"><button class="${HF?'':'on'}" onclick="HF='';render()">All apps</button>${MODULES.filter(([cid,cn,mods])=>(!HF||HF==cid)&&mods.some(([id])=>allowed(id))).map(([cid,cn,mods])=>`<button class="${HF==cid?'on':''}" onclick="HF='${cid}';render()">${cn}<b>${mods.filter(([id])=>allowed(id)).length}</b></button>`).join('')}</div>
  <div class="lwrap">
- ${MODULES.filter(([cid])=>!HF||HF==cid).map(([cid,cname,mods])=>`<section class="appsec"><div class="appcat">${cname}<b>${mods.length} app${mods.length>1?'s':''}</b></div><div class="apps">${mods.map(([id,nm,ic])=>{const c=ac[id]||['',''];return `<button class="app" onclick="go('${id}')"><span class="ai ${IC[ic].g}">${IC[ic].s}</span><span class="an">${nm}</span><span class="ad">${SUB[id]||''}</span><span class="astat"><b>${c[0]}</b>${c[1]}</span></button>`}).join('')}</div></section>`).join('')}
+ ${MODULES.filter(([cid])=>!HF||HF==cid).map(([cid,cname,mods])=>{const vis=mods.filter(([id])=>allowed(id));if(!vis.length)return'';return`<section class="appsec"><div class="appcat">${cname}<b>${vis.length} app${vis.length>1?'s':''}</b></div><div class="apps">${vis.map(([id,nm,ic])=>{const c=ac[id]||['',''];return `<button class="app" onclick="go('${id}')"><span class="ai ${IC[ic].g}">${IC[ic].s}</span><span class="an">${nm}</span><span class="ad">${SUB[id]||''}</span><span class="astat"><b>${c[0]}</b>${c[1]}</span></button>`}).join('')}</div></section>`}).join('')}
  ${PLANNED.length?`<section class="appsec"><div class="appcat">Coming next</div><div class="apps">${PLANNED.map(([id,nm,ic,ds])=>`<div class="app off" title="Planned module"><span class="ai">${IC[ic].s}</span><span class="an">${nm}</span><span class="ad">${ds}</span><span class="soon">Planned</span></div>`).join('')}</div></section>`:''}
  </div>`};
 render();
 </script>
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getAuth,onAuthStateChanged,signInWithEmailAndPassword,signOut,sendPasswordResetEmail,createUserWithEmailAndPassword,updateProfile} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager,collection,doc,setDoc,deleteDoc,onSnapshot} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const E=id=>document.getElementById(id),cfg=window.FIREBASE_CONFIG;
 if(!cfg||String(cfg.apiKey).startsWith('PASTE')){E('lerr').textContent='Setup needed: paste your Firebase config at the top of this file.';window.doLogin=window.doReset=()=>{}}
 else{
 const app=initializeApp(cfg),auth=getAuth(app);
+const app2=initializeApp(cfg,'kk-erp-user-admin'),auth2=getAuth(app2);
 const db=initializeFirestore(app,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()}),ignoreUndefinedProperties:true});
 const COLS=window.COLS,P=c=>'units/main/'+c,synced={};
 const J=o=>JSON.stringify(o,(k,v)=>v&&typeof v==='object'&&!Array.isArray(v)?Object.fromEntries(Object.entries(v).sort(([a],[b])=>a<b?-1:a>b?1:0)):v);
@@ -1005,11 +1258,26 @@ function start(){
   if(d.exists()){const x=d.data();S.set=Object.assign({},window.DSET,x.set||{});S.emp=x.emp||[];cfgJ=J({set:S.set,emp:S.emp});if(!d.metadata.hasPendingWrites)window.softRender()}
   else if(!d.metadata.fromCache)window.cloudPush()},err))}
 onAuthStateChanged(auth,u=>{
- if(u){document.body.classList.add('in');E('who').textContent='\u2601 '+u.email+'  ';const b=document.createElement('button');b.className='s';b.textContent='Log out';b.onclick=()=>signOut(auth);E('who').appendChild(b);start();window.render()}
+ if(u){window._kkGate=0;document.body.classList.add('in');E('who').textContent='\u2601 '+u.email+'  ';const b=document.createElement('button');b.className='s';b.textContent='Log out';b.onclick=()=>signOut(auth);E('who').appendChild(b);start();window.render()}
  else{unsubs.forEach(f=>f());unsubs=[];window.resetS();document.body.classList.remove('in');E('who').textContent=''}});
 window.doLogin=()=>{E('lerr').textContent='';signInWithEmailAndPassword(auth,E('le').value.trim(),E('lp').value).catch(e=>{E('lerr').textContent=/invalid|wrong|user-not-found/.test(e.code)?'Wrong email or password.':'Sign-in failed: '+(e.code||e.message)})};
 window.doReset=()=>{const em=E('le').value.trim();if(!em){E('lerr').textContent='Type your email first, then press Forgot password.';return}
  sendPasswordResetEmail(auth,em).then(()=>{E('lerr').textContent='Password reset email sent (check spam).'}).catch(e=>{E('lerr').textContent='Could not send: '+(e.code||e.message)})};
+/* ---- front-end user management (Administration -> Users & access) ----
+   A second Firebase app instance creates sign-ins WITHOUT signing the
+   administrator out of the main session. */
+window.erpCreateUser=(email,pw,name)=>createUserWithEmailAndPassword(auth2,email,pw)
+ .then(c=>name?updateProfile(c.user,{displayName:String(name)}).catch(()=>{}):c)
+ .then(()=>signOut(auth2))
+ .catch(e=>{try{signOut(auth2).catch(()=>{})}catch(_){}
+  if(e&&e.code=='auth/email-already-in-use')throw new Error('That email already has a sign-in. Restore its access from the directory, or use Reset password instead.');
+  if(e&&e.code=='auth/weak-password')throw new Error('Password must be at least 6 characters.');
+  if(e&&e.code=='auth/invalid-email')throw new Error('That does not look like a valid email address.');
+  if(e&&e.code=='auth/operation-not-allowed')throw new Error('Email/Password sign-in is disabled in your Firebase project. Enable it in the Firebase console under Authentication > Sign-in method.');
+  throw new Error((e&&e.code)||String(e))});
+window.erpResetPw=email=>sendPasswordResetEmail(auth,email);
+window.erpSignOut=()=>signOut(auth);
+
 }
 </script>
 </body></html>
